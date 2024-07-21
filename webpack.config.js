@@ -1,44 +1,38 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-const path = require("path");
-const webpack = require("webpack");
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  target: "web",
-  devtool: "source-map",
-  entry: "./dev/index.js",
-  mode: "development",
-  //stats: { warnings: false },
+  "mode": "development",
+  entry: './src/index.ts',
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
-        exclude: /(node_modules|bower_components)/,
-        loader: "babel-loader",
-        options: { presets: ["@babel/env"] },
-      },
-      {
-        test: /\.css$/,
-        use: [],
-      },
-      {
-        test: /\.(ts)$/,
+        test: /\.tsx?$/,
+        use: 'babel-loader',
         exclude: /node_modules/,
-        use: ["ts-loader"],
       },
     ],
   },
-  resolve: { extensions: ["*", ".js", ".ts", ".json"] },
+  resolve: {
+    extensions: [ '.ts', '.js'],
+  },
   output: {
-    path: path.resolve(__dirname, "dist/dev/"),
-    publicPath: "/dist/dev/",
-    filename: "bundle.js",
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'dist'),
+    clean: true,
   },
+  plugins: [
+    new HtmlWebpackPlugin({
+      inject:false,
+      template: './dev/index.html',
+    }),
+  ],
   devServer: {
-    contentBase: path.join(__dirname, "dev/"),
+    static: {
+      directory: path.join(__dirname, 'dist'),
+    },
+    compress: true,
     port: 3000,
-    publicPath: "http://localhost:3000/dist/dev/",
-    hotOnly: true,
+    open: true,
   },
-  plugins: [new webpack.HotModuleReplacementPlugin()],
-  // ignoreWarnings: [/Failed to parse source map/],
 };
