@@ -1,29 +1,38 @@
-# Foobar
+# postal-code-validation
 
-Foobar is a Python library for dealing with word pluralization.
+`postal-code-validation` is a JavaScript based postal code validation package.
 
 ## Installation
 
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
 
 ```bash
-pip install foobar
+npm install postal-code-validation
 ```
 
 ## Usage
 
 ```python
-import foobar
+import {postalValidation} from 'postal-code-validation'
 
-# returns 'words'
-foobar.pluralize('word')
+# destructure from postalValidation
+const { countryName, exampleMask } = postalValidation(countryCode);
 
-# returns 'geese'
-foobar.pluralize('goose')
-
-# returns 'phenomenon'
-foobar.singularize('phenomena')
+console.log(countryName, exampleMask)
+United States, #####, [#####-####]
 ```
+
+## Roadmap
+
+- [x] Initial release
+- [ ] Add unit test for initial release
+- [ ] Moving from json file's examples to regex pattern
+- [ ] Write unit tests for all functions
+- [ ] Add examples
+- [ ] Create a GitHub Pages site for documentation
+- [ ] Accept custom resource file and override default json file
+- [ ] Extend postal codes to state/province
+- [ ] Return state/province name from based on regex
 
 ## Contributing
 
