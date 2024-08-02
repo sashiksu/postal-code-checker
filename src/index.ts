@@ -1,2 +1,3 @@
-const message: string = 'Hello, World !';
-console.log(message);
+import { getCountryByCode } from "./utils";
+
+export default getCountryByCode;
