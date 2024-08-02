@@ -1,3 +1,13 @@
-import { getCountryByCode } from "./utils";
+import { Country, CountryCode, getAllCountries, getCountryByCode, validatePostalCode } from "./utils";
 
-export default getCountryByCode;
+export const usePostalCodeValidation = () => {
+  return {
+    getCountryByCode,
+    getAllCountries,
+    validatePostalCode,
+  };
+};
+
+export { getAllCountries, getCountryByCode, validatePostalCode };
+export type { Country, CountryCode };
+
