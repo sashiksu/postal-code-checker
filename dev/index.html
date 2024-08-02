@@ -5,9 +5,26 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Live Demo for Developers</title>
-  <styles>
-  
-  </styles>
+  <style>
+    @keyframes zoomInOutAnimation {
+
+      0%,
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      50% {
+        transform: scale(1.4);
+        opacity: 0.7;
+      }
+    }
+
+    .ant-form-item-tooltip {
+      padding-left: 5px;
+      animation: zoomInOutAnimation 2s infinite;
+    }
+  </style>
 </head>
 
 <body>

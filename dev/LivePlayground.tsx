@@ -1,5 +1,5 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
-import { Input, Select } from "antd";
+import { Alert, Form, Input, Select } from "antd";
 import React, { ChangeEvent, useState } from "react";
 import { Country, CountryCode, usePostalCodeValidation } from "../src/index";
 
@@ -54,14 +54,42 @@ const LivePlayground = () => {
           boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
         }}
       >
-        <Select
-          defaultValue={selectedCountry?.code ?? "Select"}
-          onChange={handleCountryChange}
-          options={countriesOptions}
-          filterOption={true}
-          style={{ width: "100%" }}
-          size="large"
-        />
+        <Form layout="vertical">
+          <Form.Item label="Country">
+            <Select
+              defaultValue={selectedCountry?.code ?? "Select"}
+              onChange={handleCountryChange}
+              options={countriesOptions}
+              filterOption={true}
+              style={{ width: "100%" }}
+              size="large"
+            />
+          </Form.Item>
+          <Form.Item
+            label="Postal Code"
+            tooltip={
+              isPostalCodeValid === false
+                ? {
+                    title: isPostalCodeValid === false ? <TooltipContent selectedCountry={selectedCountry} /> : null,
+                    icon: <InfoCircleOutlined />,
+                    placement: "right",
+                    overlayInnerStyle: { width: "300px" },
+                  }
+                : null
+            }
+          >
+            <Input
+              value={postalCode}
+              placeholder="Enter postal code here"
+              size="large"
+              status={isPostalCodeValid === false ? "error" : undefined}
+              onChange={handlePostalCodeChange}
+            />
+          </Form.Item>
+          {isPostalCodeValid === false ? (
+            <Alert type="error" message={`Invalid postal code for ${selectedCountry?.country}`} banner />
+          ) : null}
+        </Form>
         <pre
           style={{
             marginTop: "20px",
@@ -74,26 +102,25 @@ const LivePlayground = () => {
         >
           {JSON.stringify(selectedCountry, null, 2)}
         </pre>
-
-        <div
-          style={{
-            marginTop: "20px",
-            textAlign: "center",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "10px",
-          }}
-        >
-          <Input
-            value={postalCode}
-            placeholder="Type Postal Code Here"
-            size="large"
-            onChange={handlePostalCodeChange}
-          />
-          {isPostalCodeValid === null || isPostalCodeValid ? null : <InfoCircleOutlined size={16} />}
-        </div>
       </div>
+    </div>
+  );
+};
+
+const TooltipContent = (props: any) => {
+  const { selectedCountry } = props;
+  if (!selectedCountry) {
+    return null;
+  }
+  return (
+    <div>
+      <p>
+        Supported postal code for <b>{selectedCountry.country}</b>
+      </p>
+      <ul>
+        {selectedCountry &&
+          selectedCountry.example.map((example: string, index: number) => <li key={index}>{example}</li>)}
+      </ul>
     </div>
   );
 };
