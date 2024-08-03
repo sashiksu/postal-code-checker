@@ -1,6 +1,14 @@
 # postal-code-checker
 
-`postal-code-checker` is a JavaScript based postal code validation package.
+`postal-code-checker` is a comprehensive JavaScript/TypeScript package for validating postal codes across multiple countries. It provides an easy-to-use API for country selection and postal code validation, making it ideal for forms and address validation in web applications.
+
+## Features
+
+- Supports postal code validation for over 200 countries
+- Provides country selection functionality
+- Includes example postal codes for supported countries
+- TypeScript support with type definitions
+- Lightweight and easy to integrate
 
 ## Installation
 
@@ -10,67 +18,117 @@ npm install postal-code-checker
 
 ## Usage
 
-The `usePostalCodeValidation` hook provides functions for country selection and postal code validation. Here's how to use it:
+### Basic Usage
 
 ```typescript
-import { usePostalCodeValidation } from "your-package-name";
-const YourComponent = () => {
+import { usePostalCodeValidation } from "postal-code-checker";
+
+const { validatePostalCode, getCountryByCode, getAllCountries } = usePostalCodeValidation();
+
+// Validate a postal code
+const isValid = validatePostalCode("US", "12345"); // Returns true
+
+// Get country information
+const country = getCountryByCode("US");
+console.log(country.countryName); // "United States of America"
+
+// Get all available countries
+const countries = getAllCountries();
+```
+
+### React Example
+
+```typescript
+import React, { useState } from "react";
+import { usePostalCodeValidation, Country, CountryCode } from "postal-code-checker";
+
+const PostalCodeValidator: React.FC = () => {
   const { validatePostalCode, getCountryByCode, getAllCountries } = usePostalCodeValidation();
+  const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
+  const [postalCode, setPostalCode] = useState<string>("");
+  const [isValid, setIsValid] = useState<boolean | null>(null);
 
-  // Get all countries
-  const countries = getAllCountries();
+  const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const country = getCountryByCode(e.target.value as CountryCode);
+    setSelectedCountry(country);
+    setIsValid(null);
+    setPostalCode("");
+  };
 
-  // Get a specific country by code
-  const country = getCountryByCode("US");
+  const handlePostalCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const code = e.target.value;
+    setPostalCode(code);
+    if (selectedCountry) {
+      setIsValid(validatePostalCode(selectedCountry.countryCode, code));
+    }
+  };
 
-  // Validate a postal code
-  const isValid = validatePostalCode("US", "12345");
+  return (
+    <div>
+      <select onChange={handleCountryChange}>
+        <option value="">Select a country</option>
+        {getAllCountries().map((country) => (
+          <option key={country.countryCode} value={country.countryCode}>
+            {country.countryName}
+          </option>
+        ))}
+      </select>
+      <input type="text" value={postalCode} onChange={handlePostalCodeChange} placeholder="Enter postal code" />
+      {isValid !== null && <p>{isValid ? "Valid postal code" : "Invalid postal code"}</p>}
+    </div>
+  );
 };
+
+export default PostalCodeValidator;
 ```
 
-## Available Functions
+## API Reference
 
-1. `getAllCountries()`: Returns an array of all available countries.
-2. `getCountryByCode(code: CountryCode)`: Returns a country object for the given country code.
-3. `validatePostalCode(countryCode: CountryCode, postalCode: string)`: Validates a postal code for the specified country.
+`usePostalCodeValidation()`
 
-## Example: Country Selection and Postal Code Validation in React
+Returns an object with the following methods:
+
+- `validatePostalCode(countryCode: CountryCode, postalCode: string): boolean`
+- `getCountryByCode(countryCode: CountryCode): Country | null`
+- `getAllCountries(): Array<{ countryName: string, countryCode: CountryCode }>`
+
+## Types
 
 ```typescript
-const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
-const [isPostalCodeValid, setIsPostalCodeValid] = useState<boolean | null>(null);
-const [postalCode, setPostalCode] = useState<string>("");
+type CountryCode = string; // ISO 3166-1 alpha-2 country code
 
-const handleCountryChange = (value: string) => {
-  const country = getCountryByCode(value as CountryCode);
-  setSelectedCountry(country);
-  setIsPostalCodeValid(null);
-  setPostalCode("");
-};
-
-const handlePostalCodeChange = (e: ChangeEvent<HTMLInputElement>) => {
-  const postalCode = e.target.value;
-  setPostalCode(postalCode);
-  if (selectedCountry) {
-    const isValid = validatePostalCode(selectedCountry.code, postalCode);
-    setIsPostalCodeValid(isValid);
-  }
+type Country = {
+  postalCodeRegex: string;
+  examplePostalCodes: string[];
+  isGenericRegex: boolean;
+  countryName: string;
+  countryCode: CountryCode;
 };
 ```
-
-This example demonstrates how to use the hook for country selection and real-time postal code validation in a form.
 
 ## Roadmap
 
-- [x] Initial release
-- [ ] Add unit test for initial release
-- [ ] Moving from json file's examples to regex pattern
-- [ ] Write unit tests for all functions
-- [ ] Add examples
-- [ ] Create a GitHub Pages site for documentation
-- [ ] Accept custom resource file and override default json file
-- [ ] Extend postal codes to state/province
-- [ ] Return state/province name from based on regex
+- [ ] Add unit tests for all utility functions
+- [ ] Implement more specific regex patterns for countries currently using generic patterns
+- [ ] Add support for state/province validation
+- [ ] Create a demo website with interactive examples
+- [ ] Implement address formatting for different countries
+- [ ] Add support for custom regex patterns and country data
+- [ ] Optimize package size and performance
+- [ ] Add internationalization support for country names and error messages
+- [ ] Implement reverse lookup functionality (postal code to country/region)
+- [ ] Integrate geolocation data for postal codes
+- [ ] Add postal code validation with additional context (city, region)
+- [ ] Implement custom regex support for users
+- [ ] Add postal code generation feature for testing
+- [ ] Implement partial matching and suggestion functionality
+- [ ] Add historical postal code validation
+- [ ] Integrate with popular address autocomplete APIs
+- [ ] Develop an offline mode with a subset of countries
+- [ ] Implement postal code distance calculation
+- [ ] Add batch validation for multiple postal codes
+- [ ] Allow custom error messages for different validation scenarios
+- [ ] Implement postal code type identification (residential, commercial, etc.)
 
 ## Contributing
 
