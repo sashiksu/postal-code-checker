@@ -41,7 +41,7 @@ const LivePlayground: FC = () => {
         <Form layout="vertical">
           <Form.Item label="Country">
             <Select
-              defaultValue={selectedCountry?.countryCode.toString() ?? "Select"}
+              defaultValue={selectedCountry?.countryCode ?? "Select"}
               onChange={handleCountryChange}
               options={countriesOptions}
               showSearch={true}

@@ -1,3 +1,3 @@
 import { COUNTRIES } from "../assets/index";
 
-export type CountryCode = keyof typeof COUNTRIES;
+export type CountryCode = Extract<keyof typeof COUNTRIES, string>;
