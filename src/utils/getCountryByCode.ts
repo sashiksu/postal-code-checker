@@ -1,7 +1,7 @@
 import { Country } from "../types/Country";
-import { CountryCode } from "../types/CountryCode";
 
-import COUNTRIES from "./output.json";
+import { COUNTRIES } from "../assets/index";
+import { CountryCode } from "../types/CountryCode";
 
 export const getCountryByCode = (countryCode: CountryCode): Country | null => {
   const country = COUNTRIES[countryCode];

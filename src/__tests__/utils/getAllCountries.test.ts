@@ -1,5 +1,5 @@
+import { COUNTRIES } from "../../assets/index";
 import { getAllCountries } from "../../utils/getAllCountries";
-import COUNTRIES from "../../utils/output.json";
 
 describe("getAllCountries()", () => {
   it("Should return an array of CountryOption objects", () => {

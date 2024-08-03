@@ -1,3 +1,3 @@
-import COUNTRIES from "../utils/output.json";
+import { COUNTRIES } from "../assets/index";
 
 export type CountryCode = keyof typeof COUNTRIES;
