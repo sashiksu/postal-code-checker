@@ -44,7 +44,8 @@ const LivePlayground: FC = () => {
               defaultValue={selectedCountry?.countryCode ?? "Select"}
               onChange={handleCountryChange}
               options={countriesOptions}
-              filterOption={true}
+              showSearch={true}
+              filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
               style={{ width: "100%" }}
               size="large"
             />
