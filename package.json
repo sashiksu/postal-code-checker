@@ -7,7 +7,7 @@
   "types": "./dist/esm/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/postal-code-checker.git"
+    "url": "https://github.com/sashiksu/postal-code-checker.git"
   },
   "scripts": {
     "start": "webpack serve --open --config webpack.config.js",
