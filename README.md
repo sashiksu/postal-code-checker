@@ -21,9 +21,9 @@ npm install postal-code-checker
 ### Basic Usage
 
 ```typescript
-import { usePostalCodeValidation } from "postal-code-checker";
+import { usePostalCodeValidation, getCountryByCode, getAllCountries } from "postal-code-checker";
 
-const { validatePostalCode, getCountryByCode, getAllCountries } = usePostalCodeValidation();
+const { validatePostalCode } = usePostalCodeValidation();
 
 // Validate a postal code
 const isValid = validatePostalCode("US", "12345"); // Returns true
@@ -39,23 +39,23 @@ const countries = getAllCountries();
 ### React Example
 
 ```typescript
-import { FC, useState } from "react";
-import { usePostalCodeValidation, Country, CountryCode } from "postal-code-checker";
+import { ChangeEvent, FC, useState } from "react";
+import { usePostalCodeValidation, getCountryByCode, getAllCountries, Country, CountryCode } from "postal-code-checker";
 
 const PostalCodeValidator: FC = () => {
-  const { validatePostalCode, getCountryByCode, getAllCountries } = usePostalCodeValidation();
+  const { validatePostalCode } = usePostalCodeValidation();
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
   const [postalCode, setPostalCode] = useState<string>("");
   const [isValid, setIsValid] = useState<boolean | null>(null);
 
-  const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleCountryChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const country = getCountryByCode(e.target.value as CountryCode);
     setSelectedCountry(country);
     setIsValid(null);
     setPostalCode("");
   };
 
-  const handlePostalCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePostalCodeChange = (e: ChangeEvent<HTMLInputElement>) => {
     const code = e.target.value;
     setPostalCode(code);
     if (selectedCountry) {
@@ -109,6 +109,7 @@ type Country = {
 ## Our Roadmap
 
 - [ ] Use regex pattern information to generate examples and drop hard coded examples
+- [ ] Move to pure css styles at dev sandbox (live dev playground) & drop antd library usage to reduce package size
 - [ ] Implement more specific regex patterns for countries currently using generic patterns
 - [ ] Add support for state/province validation
 - [ ] Create a demo website with interactive examples

@@ -1,6 +1,6 @@
-import React from "react";
+import { CSSProperties } from "react";
 
-export const Container: React.CSSProperties = {
+export const Container: CSSProperties = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
@@ -9,7 +9,7 @@ export const Container: React.CSSProperties = {
   backgroundColor: "#f0f2f5",
 };
 
-export const FormWrapper: React.CSSProperties = {
+export const FormWrapper: CSSProperties = {
   textAlign: "center",
   margin: "20px",
   maxWidth: "400px",
@@ -20,7 +20,7 @@ export const FormWrapper: React.CSSProperties = {
   boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
 };
 
-export const CodeBlock: React.CSSProperties = {
+export const CodeBlock: CSSProperties = {
   marginTop: "20px",
   textAlign: "left",
   backgroundColor: "#f6f8fa",
