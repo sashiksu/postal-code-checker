@@ -1,10 +1,14 @@
 {
-  "name": "postal-code-validation",
+  "name": "postal-code-checker",
   "version": "1.0.0",
-  "description": "Foobar is a Python library for dealing with word pluralization.",
+  "description": "A package for validating postal codes from various countries.",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/esm/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/postal-code-checker.git"
+  },
   "scripts": {
     "start": "webpack serve --open --config webpack.config.js",
     "clean": "rimraf dist",
@@ -19,9 +23,20 @@
     "build-new": "webpack",
     "watch": "nodemon --watch src --ext ts,tsx --exec \"npm run build\""
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "postal",
+    "code",
+    "checker",
+    "validator",
+    "zipcode",
+    "validation"
+  ],
+  "author": "Sashika Suraweera",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sashiksu/postal-code-checker/issues"
+  },
+  "homepage": "https://github.com/sashiksu/postal-code-checker#readme",
   "devDependencies": {
     "@ant-design/icons": "^5.4.0",
     "@babel/core": "^7.24.9",

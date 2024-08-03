@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require("path");
 const webpack = require("webpack");
 
@@ -7,7 +6,6 @@ module.exports = {
   devtool: "source-map",
   entry: "./dev/index.ts",
   mode: "development",
-  //stats: { warnings: false },
   module: {
     rules: [
       {
@@ -40,5 +38,4 @@ module.exports = {
     hot: true,
   },
   plugins: [new webpack.HotModuleReplacementPlugin()],
-  // ignoreWarnings: [/Failed to parse source map/],
 };

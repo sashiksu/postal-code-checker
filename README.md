@@ -1,11 +1,11 @@
-# postal-code-validation
+# postal-code-checker
 
-`postal-code-validation` is a JavaScript based postal code validation package.
+`postal-code-checker` is a JavaScript based postal code validation package.
 
 ## Installation
 
 ```bash
-npm install postal-code-validation
+npm install postal-code-checker
 ```
 
 ## Usage
