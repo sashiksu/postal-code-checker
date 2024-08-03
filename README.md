@@ -39,10 +39,10 @@ const countries = getAllCountries();
 ### React Example
 
 ```typescript
-import React, { useState } from "react";
+import { FC, useState } from "react";
 import { usePostalCodeValidation, Country, CountryCode } from "postal-code-checker";
 
-const PostalCodeValidator: React.FC = () => {
+const PostalCodeValidator: FC = () => {
   const { validatePostalCode, getCountryByCode, getAllCountries } = usePostalCodeValidation();
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
   const [postalCode, setPostalCode] = useState<string>("");
@@ -106,9 +106,9 @@ type Country = {
 };
 ```
 
-## Roadmap
+## Our Roadmap
 
-- [ ] Add unit tests for all utility functions
+- [ ] Use regex pattern information to generate examples and drop hard coded examples
 - [ ] Implement more specific regex patterns for countries currently using generic patterns
 - [ ] Add support for state/province validation
 - [ ] Create a demo website with interactive examples
@@ -129,6 +129,7 @@ type Country = {
 - [ ] Add batch validation for multiple postal codes
 - [ ] Allow custom error messages for different validation scenarios
 - [ ] Implement postal code type identification (residential, commercial, etc.)
+- [ ] Add unit tests for all utility functions
 
 ## Contributing
 
