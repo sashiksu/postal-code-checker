@@ -2,6 +2,7 @@
 
 `postal-code-checker` is a comprehensive JavaScript/TypeScript package for validating postal codes across multiple countries. It provides an easy-to-use API for country selection and postal code validation, making it ideal for forms and address validation in web applications.
 
+
 ## Features
 
 - Supports postal code validation for over 200 countries
@@ -15,6 +16,7 @@
 ```bash
 npm install postal-code-checker
 ```
+
 
 ## Usage
 
@@ -35,6 +37,7 @@ console.log(country.countryName); // "United States of America"
 // Get all available countries
 const countries = getAllCountries();
 ```
+
 
 ### React Example
 
@@ -82,6 +85,7 @@ const PostalCodeValidator: FC = () => {
 export default PostalCodeValidator;
 ```
 
+
 ## API Reference
 
 `usePostalCodeValidation()`
@@ -91,6 +95,7 @@ Returns an object with the following methods:
 - `validatePostalCode(countryCode: CountryCode, postalCode: string): boolean`
 - `getCountryByCode(countryCode: CountryCode): Country | null`
 - `getAllCountries(): Array<{ countryName: string, countryCode: CountryCode }>`
+
 
 ## Types
 
@@ -105,6 +110,7 @@ type Country = {
   countryCode: CountryCode;
 };
 ```
+
 
 ## Our Roadmap
 
@@ -132,12 +138,24 @@ type Country = {
 - [ ] Implement postal code type identification (residential, commercial, etc.)
 - [ ] Add unit tests for all utility functions
 
+
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first
 to discuss what you would like to change.
 
 Please make sure to update tests as appropriate.
+
+
+## Data Sources
+
+Postal code data used in this project is sourced from the European Central Bank (ECB).
+
+Note : This data has been processed and reformatted for use in this project.
+
+- Source: [\[ECB\]](https://www.ecb.europa.eu/)
+- Retrieved on: 4th AUG 2024
+
 
 ## License
 

@@ -1,3 +1,12 @@
+/**
+ * Postal code data sourced from the European Central Bank (ECB).
+ * Source: https://www.ecb.europa.eu/stats/ecb_statistics/anacredit/html/index.en.html
+ * Retrieved on: 4th AUG 2024
+ *
+ * This data has been processed and reformatted for use in this project.
+ * This data is used in accordance with the ECB's terms of use and data policies.
+ */
+
 import { PostalCodeData } from "../types/PostalCodeData";
 
 export const COUNTRIES: PostalCodeData = {
