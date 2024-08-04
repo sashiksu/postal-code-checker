@@ -15,7 +15,13 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: "14"
+          node-version: "20"
+
+      - name: Debug - List directory contents
+        run: ls -la
+
+      - name: Debug - Display package.json content
+        run: cat package.json
 
       - name: Install dependencies
         run: npm ci
