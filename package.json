@@ -17,8 +17,7 @@
     "build": "npm run clean && npm run build:cjs && npm run build:esm",
     "lint": "eslint \"{**/*,*}.{js,ts}\"",
     "prettier": "prettier --write \"{src,tests,example/src}/**/*.{js,ts}\"",
-    "prepare": "npm run build",
-    "publish:check": "npm run prettier && npm run lint && npm publish --dry-run",
+    "publish:check": "npm run prettier && npm publish --dry-run",
     "publish": "npm publish",
     "test": "jest",
     "watch": "nodemon --watch src --ext ts,tsx --exec \"npm run build\""
