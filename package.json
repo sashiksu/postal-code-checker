@@ -1,6 +1,6 @@
 {
   "name": "postal-code-checker",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "A package for validating postal codes from various countries.",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",

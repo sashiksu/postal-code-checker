@@ -84,13 +84,19 @@ export default PostalCodeValidator;
 
 ## API Reference
 
-`usePostalCodeValidation()`
+### `usePostalCodeValidation()`
 
 Returns an object with the following methods:
 
 - `validatePostalCode(countryCode: CountryCode, postalCode: string): boolean`
+
+### Util Functions
+
+Returns an object with the following methods:
+
 - `getCountryByCode(countryCode: CountryCode): Country | null`
 - `getAllCountries(): Array<{ countryName: string, countryCode: CountryCode }>`
+
 
 ## Types
 
