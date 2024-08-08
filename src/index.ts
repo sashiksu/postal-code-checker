@@ -6,4 +6,3 @@ export { usePostalCodeValidation } from "./utils/usePostalCodeValidation";
 // Exporting types
 export type { Country } from "./types/Country";
 export type { CountryCode } from "./types/CountryCode";
-
