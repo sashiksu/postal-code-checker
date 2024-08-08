@@ -1,6 +1,6 @@
 {
   "name": "postal-code-checker",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A package for validating postal codes from various countries.",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -20,6 +20,7 @@
     "publish:check": "npm run prettier && npm publish --dry-run",
     "publish": "npm publish",
     "test": "jest",
+    "prepare": "npm run build",
     "watch": "nodemon --watch src --ext ts,tsx --exec \"npm run build\""
   },
   "keywords": [
@@ -35,6 +36,11 @@
   "bugs": {
     "url": "https://github.com/sashiksu/postal-code-checker/issues"
   },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
   "homepage": "https://github.com/sashiksu/postal-code-checker#readme",
   "devDependencies": {
     "@ant-design/icons": "^5.4.0",
