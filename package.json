@@ -1,27 +1,30 @@
 {
   "name": "postal-code-checker",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A package for validating postal codes from various countries.",
+  "author": "Sashika Suraweera",
+  "license": "MIT",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/esm/index.d.ts",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/sashiksu/postal-code-checker.git"
-  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
   "scripts": {
     "start": "webpack serve --open --config webpack.config.js",
     "clean": "rimraf dist",
-    "build:cjs": "tsc -p tsconfig.cjs.json",
-    "build:esm": "tsc -p tsconfig.esm.json",
     "build": "npm run clean && npm run build:cjs && npm run build:esm",
+    "build:cjs": "tsc -p tsconfig.cjs.json && rimraf dist/cjs/__tests__",
+    "build:esm": "tsc -p tsconfig.esm.json && rimraf dist/cjs/__tests__",
     "lint": "eslint \"{**/*,*}.{js,ts}\"",
     "prettier": "prettier --write \"{src,tests,example/src}/**/*.{js,ts}\"",
-    "publish:check": "npm run prettier && npm publish --dry-run",
-    "publish": "npm publish",
     "test": "jest",
     "prepare": "npm run build",
-    "watch": "nodemon --watch src --ext ts,tsx --exec \"npm run build\""
+    "watch": "nodemon --watch src --ext ts,tsx --exec \"npm run build\"",
+    "publish:check": "npm run prettier && npm publish --dry-run",
+    "publish": "npm publish"
   },
   "keywords": [
     "postal",
@@ -31,16 +34,13 @@
     "zipcode",
     "validation"
   ],
-  "author": "Sashika Suraweera",
-  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sashiksu/postal-code-checker.git"
+  },
   "bugs": {
     "url": "https://github.com/sashiksu/postal-code-checker/issues"
   },
-  "files": [
-    "dist",
-    "LICENSE",
-    "README.md"
-  ],
   "homepage": "https://github.com/sashiksu/postal-code-checker#readme",
   "devDependencies": {
     "@ant-design/icons": "^5.4.0",
