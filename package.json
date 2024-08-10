@@ -1,12 +1,12 @@
 {
   "name": "postal-code-checker",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "A package for validating postal codes from various countries.",
   "author": "Sashika Suraweera",
   "license": "MIT",
   "main": "./dist/index.cjs.js",
   "module": "./dist/index.esm.js",
-  "types": "./dist/types/index.d.ts",
+  "types": "dist/index.d.ts",
   "files": [
     "dist",
     "LICENSE"
@@ -14,7 +14,7 @@
   "scripts": {
     "start": "webpack serve --open --config webpack.config.js",
     "clean": "rimraf dist",
-    "build": "rollup -c --bundleConfigAsCjs && tsc --emitDeclarationOnly",
+    "build": "rollup -c --bundleConfigAsCjs && tsc --emitDeclarationOnly && node scripts/combine-dts.js",
     "build:cjs": "tsc -p tsconfig.cjs.json && rimraf dist/cjs/__tests__",
     "build:esm": "tsc -p tsconfig.esm.json && rimraf dist/cjs/__tests__",
     "lint": "eslint \"{**/*,*}.{js,ts}\"",
