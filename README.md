@@ -40,7 +40,7 @@ const countries = getAllCountries();
 
 </details>
 
-### React TypeScript Example
+### React TypeScript Example (TSX)
 
 <details>
   <summary>Expand Code</summary>
@@ -91,7 +91,7 @@ export default PostalCodeValidator;
 
 </details>
 
-### React Example
+### React Example (JSX)
 
 <details>
   <summary>Expand Code</summary>
