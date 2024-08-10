@@ -21,7 +21,7 @@ npm install postal-code-checker
 ### Basic Example
 
 <details open>
-  <summary> 📋 Expand Code</summary>
+  <summary> 📋 Code</summary>
 
 ```javascript
 // Import according to your requirement, we support both ES6 and CommonJS
@@ -232,7 +232,44 @@ type Country = {
 Pull requests are welcome. For major changes, please open an issue first
 to discuss what you would like to change.
 
-Please make sure to update tests as appropriate.
+Pull requests are welcome. For major changes, please open an issue first
+to discuss what you would like to change.
+
+When contributing, please follow these guidelines:
+
+1. Always start by checking out from the `master` branch:
+
+   ```
+   git checkout master
+   git pull
+   git checkout -b your-branch-name
+   ```
+
+2. Use meaningful names for your branches. Follow these patterns:
+
+   - For bug fixes:
+
+     ```
+     bugfix/short-description-of-the-fix
+     ```
+
+     Example: `bugfix/fix-null-return-australia-code`
+
+   - For new features or improvements:
+     ```
+     feature/short-description-of-feature
+     ```
+     Example: `feature/add-getAllCountries-unit-test`
+
+3. Please make sure to update tests as appropriate.
+
+4. Ensure your code follows the project's coding standards and conventions.
+
+5. Write clear, concise commit messages describing your changes.
+
+6. Update or add unit tests to cover your changes.
+
+We appreciate your contributions to making `postal-code-checker` better!
 
 ## 📊 Data Sources
 
