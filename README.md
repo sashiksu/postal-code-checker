@@ -233,37 +233,47 @@ Pull requests are welcome.
 
 When contributing, please follow these guidelines:
 
-1. Always start by checking out from the `master` branch:
+1.  Always start by checking out from the `master` branch:
+    <details>
+       <summary> 📋 Show More</summary>
 
-   ```
-   git checkout master
-   git pull
-   git checkout -b your-branch-name
-   ```
+    ```
+    git checkout master
+    git pull
+    git checkout -b your-branch-name
+    ```
 
-2. Use meaningful names for your branches. Follow these patterns:
+    </details>
 
-   - For bug fixes:
+2.  Use meaningful names for your branches. Follow these patterns:
+    <details>
+      <summary> 📋 Show Examples</summary>
 
-     ```
-     bugfix/short-description-of-the-fix
-     ```
+    - For bug fixes:
 
-     Example: `bugfix/fix-null-return-australia-code`
+      ```
+      bugfix/short-description-of-the-fix
+      ```
 
-   - For new features or improvements:
-     ```
-     feature/short-description-of-feature
-     ```
-     Example: `feature/add-getAllCountries-unit-test`
+      Example: `bugfix/fix-null-return-australia-code`
 
-3. Please make sure to update tests as appropriate.
+    - For new features or improvements:
 
-4. Ensure your code follows the project's coding standards and conventions.
+      ```
+      feature/short-description-of-feature
+      ```
 
-5. Write clear, concise commit messages describing your changes.
+      Example: `feature/add-getAllCountries-unit-test`
 
-6. Update or add unit tests to cover your changes.
+    </details>
+
+3.  Please make sure to update tests as appropriate.
+
+4.  Ensure your code follows the project's coding standards and conventions.
+
+5.  Write clear, concise commit messages describing your changes.
+
+6.  Update or add unit tests to cover your changes.
 
 We appreciate your contributions to making `postal-code-checker` better!
 
