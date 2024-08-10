@@ -46,29 +46,6 @@ jobs:
           echo "Build completed. Dist folder contents:"
           ls -la dist
 
-      - name: Bump version
-        id: bump_version
-        run: |
-          OLD_VERSION=$(npm version --json | jq -r '.["postal-code-checker"]')
-          echo "Old version: $OLD_VERSION"
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          npm version patch -m "Bump version to %s"
-          NEW_VERSION=$(npm version --json | jq -r '.["postal-code-checker"]')
-          echo "New version: $NEW_VERSION"
-          echo "old_version=$OLD_VERSION" >> $GITHUB_OUTPUT
-          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
-
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v5
-        with:
-          token: ${{ secrets.GH_WORKFLOW_TOKEN }}
-          commit-message: "Bump version: ${{ steps.bump_version.outputs.old_version }} → ${{ steps.bump_version.outputs.new_version }}"
-          title: "Bump version: ${{ steps.bump_version.outputs.old_version }} → ${{ steps.bump_version.outputs.new_version }}"
-          body: "Automated version bump from ${{ steps.bump_version.outputs.old_version }} to ${{ steps.bump_version.outputs.new_version }}"
-          branch: version-bump
-          base: master
-
       - name: Publish to npm
         run: |
           echo "Publishing to npm..."
