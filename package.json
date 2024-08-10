@@ -1,6 +1,6 @@
 {
   "name": "postal-code-checker",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "A package for validating postal codes from various countries.",
   "author": "Sashika Suraweera",
   "license": "MIT",
@@ -9,8 +9,7 @@
   "types": "./dist/types/index.d.ts",
   "files": [
     "dist",
-    "LICENSE",
-    "README.md"
+    "LICENSE"
   ],
   "scripts": {
     "start": "webpack serve --open --config webpack.config.js",
