@@ -1,0 +1,63 @@
+name: Publish Package
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Debug - Environment Info
+        run: |
+          echo "Node version: $(node -v)"
+          echo "NPM version: $(npm -v)"
+          echo "Current directory: $(pwd)"
+          echo "Repository files:"
+          ls -la
+
+      - name: Install dependencies
+        run: |
+          echo "Installing dependencies..."
+          npm ci
+          echo "Dependencies installed. Node modules:"
+          ls -la node_modules
+
+      - name: Run tests
+        run: |
+          echo "Running tests..."
+          npm test
+          echo "Tests completed."
+
+      - name: Build
+        run: |
+          echo "Building project..."
+          npm run build
+          echo "Build completed. Dist folder contents:"
+          ls -la dist
+
+      - name: Publish to npm
+        run: |
+          echo "Publishing to npm..."
+          npm publish --access public
+          echo "Package published. Current npm info:"
+          npm info postal-code-checker
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTOMATION_TOKEN }}
+
+      - name: Debug - Final Check
+        run: |
+          echo "Workflow completed. Final repository state:"
+          git status
+          echo "Final package.json content:"
+          cat package.json

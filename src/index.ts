@@ -1,8 +1,12 @@
-// Exporting utilities
-export { getAllCountries } from "./utils/getAllCountries";
-export { getCountryByCode } from "./utils/getCountryByCode";
-export { usePostalCodeValidation } from "./utils/usePostalCodeValidation";
+// Export everything from assets
+export * from "./assets";
 
-// Exporting types
-export type { Country } from "./types/Country";
-export type { CountryCode } from "./types/CountryCode";
+// Export types
+export * from "./types/Country";
+export * from "./types/CountryCode";
+
+// Export utilities
+export * from "./utils/getAllCountries";
+export * from "./utils/getCountryByCode";
+export * from "./utils/usePostalCodeValidation";
+
