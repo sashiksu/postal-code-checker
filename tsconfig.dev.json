@@ -1,0 +1,11 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "emitDeclarationOnly": false,
+        "noEmit": false
+    },
+    "include": [
+        "dev/**/*",
+        "src/**/*"
+    ]
+}
