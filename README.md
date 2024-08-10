@@ -18,11 +18,13 @@ npm install postal-code-checker
 
 ## Usage
 
-### Basic Usage
+### NodeJS Example
 
-```typescript
-import { usePostalCodeValidation, getCountryByCode, getAllCountries } from "postal-code-checker";
+<details>
+  <summary>Expand Code</summary>
 
+```javascript
+const { usePostalCodeValidation } = require("postal-code-checker");
 const { validatePostalCode } = usePostalCodeValidation();
 
 // Validate a postal code
@@ -36,7 +38,12 @@ console.log(country.countryName); // "United States of America"
 const countries = getAllCountries();
 ```
 
-### React Example
+</details>
+
+### React TypeScript Example
+
+<details>
+  <summary>Expand Code</summary>
 
 ```typescript
 import { ChangeEvent, FC, useState } from "react";
@@ -82,6 +89,59 @@ const PostalCodeValidator: FC = () => {
 export default PostalCodeValidator;
 ```
 
+</details>
+
+### React Example
+
+<details>
+  <summary>Expand Code</summary>
+
+```javascript
+import { useState } from "react";
+import { usePostalCodeValidation, getCountryByCode, getAllCountries, Country, CountryCode } from "postal-code-checker";
+
+const PostalCodeValidator = () => {
+  const { validatePostalCode } = usePostalCodeValidation();
+  const [selectedCountry, setSelectedCountry] = useState(null);
+  const [postalCode, setPostalCode] = useState("");
+  const [isValid, setIsValid] = useState(null);
+
+  const handleCountryChange = (e) => {
+    const country = getCountryByCode(e.target.value);
+    setSelectedCountry(country);
+    setIsValid(null);
+    setPostalCode("");
+  };
+
+  const handlePostalCodeChange = (e) => {
+    const code = e.target.value;
+    setPostalCode(code);
+    if (selectedCountry) {
+      setIsValid(validatePostalCode(selectedCountry.countryCode, code));
+    }
+  };
+
+  return (
+    <div>
+      <select onChange={handleCountryChange}>
+        <option value="">Select a country</option>
+        {getAllCountries().map((country) => (
+          <option key={country.countryCode} value={country.countryCode}>
+            {country.countryName}
+          </option>
+        ))}
+      </select>
+      <input type="text" value={postalCode} onChange={handlePostalCodeChange} placeholder="Enter postal code" />
+      {isValid !== null && <p>{isValid ? "Valid postal code" : "Invalid postal code"}</p>}
+    </div>
+  );
+};
+
+export default PostalCodeValidator;
+```
+
+</details>
+
 ## API Reference
 
 ### `usePostalCodeValidation()`
@@ -96,7 +156,6 @@ Returns an object with the following methods:
 
 - `getCountryByCode(countryCode: CountryCode): Country | null`
 - `getAllCountries(): Array<{ countryName: string, countryCode: CountryCode }>`
-
 
 ## Types
 
@@ -132,14 +191,12 @@ type Country = {
 - [ ] Accept custom resource as config and override/merge inbuilt resource
 - [ ] Add unit tests for all utility functions
 
-
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first
 to discuss what you would like to change.
 
 Please make sure to update tests as appropriate.
-
 
 ## Data Sources
 
