@@ -1,12 +1,12 @@
 {
   "name": "postal-code-checker",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A package for validating postal codes from various countries.",
   "author": "Sashika Suraweera",
   "license": "MIT",
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.js",
-  "types": "./dist/esm/index.d.ts",
+  "main": "./dist/index.cjs.js",
+  "module": "./dist/index.esm.js",
+  "types": "./dist/types/index.d.ts",
   "files": [
     "dist",
     "LICENSE",
@@ -15,7 +15,7 @@
   "scripts": {
     "start": "webpack serve --open --config webpack.config.js",
     "clean": "rimraf dist",
-    "build": "npm run clean && npm run build:cjs && npm run build:esm",
+    "build": "rollup -c --bundleConfigAsCjs && tsc --emitDeclarationOnly",
     "build:cjs": "tsc -p tsconfig.cjs.json && rimraf dist/cjs/__tests__",
     "build:esm": "tsc -p tsconfig.esm.json && rimraf dist/cjs/__tests__",
     "lint": "eslint \"{**/*,*}.{js,ts}\"",
@@ -23,8 +23,7 @@
     "test": "jest",
     "prepare": "npm run build",
     "watch": "nodemon --watch src --ext ts,tsx --exec \"npm run build\"",
-    "publish:check": "npm run prettier && npm publish --dry-run",
-    "publish": "npm publish"
+    "publish": "npm run prettier &&  npm publish --access public"
   },
   "keywords": [
     "postal",
@@ -32,7 +31,11 @@
     "checker",
     "validator",
     "zipcode",
-    "validation"
+    "validation",
+    "postal code",
+    "validation",
+    "typescript",
+    "npmpackage"
   ],
   "repository": {
     "type": "git",
@@ -47,6 +50,9 @@
     "@babel/core": "^7.24.9",
     "@babel/preset-env": "^7.24.8",
     "@babel/preset-typescript": "^7.24.7",
+    "@rollup/plugin-commonjs": "^26.0.1",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-typescript": "^11.1.6",
     "@types/jest": "^29.5.12",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
@@ -60,6 +66,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "rimraf": "^6.0.1",
+    "rollup": "^4.20.0",
     "ts-jest": "^29.2.4",
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
