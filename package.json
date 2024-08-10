@@ -9,8 +9,7 @@
   "types": "./dist/types/index.d.ts",
   "files": [
     "dist",
-    "LICENSE",
-    "README.md"
+    "LICENSE"
   ],
   "scripts": {
     "start": "webpack serve --open --config webpack.config.js",
