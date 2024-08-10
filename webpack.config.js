@@ -11,13 +11,22 @@ module.exports = {
       {
         test: /\.(js|jsx)$/,
         exclude: /(node_modules|bower_components)/,
-        loader: "babel-loader",
-        options: { presets: ["@babel/env"] },
+        use: {
+          loader: "babel-loader",
+          options: { presets: ["@babel/env"] },
+        },
       },
       {
         test: /\.(ts|tsx)$/,
-        use: "ts-loader",
         exclude: /node_modules/,
+        use: [
+          {
+            loader: "ts-loader",
+            options: {
+              configFile: "tsconfig.dev.json",
+            },
+          },
+        ],
       },
     ],
   },
@@ -35,7 +44,6 @@ module.exports = {
     devMiddleware: {
       publicPath: "http://localhost:3000/dist/dev/",
     },
-    hot: true,
   },
   plugins: [new webpack.HotModuleReplacementPlugin()],
 };
