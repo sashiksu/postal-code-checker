@@ -62,7 +62,7 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_WORKFLOW_TOKEN }}
           commit-message: "Bump version: ${{ steps.bump_version.outputs.old_version }} → ${{ steps.bump_version.outputs.new_version }}"
           title: "Bump version: ${{ steps.bump_version.outputs.old_version }} → ${{ steps.bump_version.outputs.new_version }}"
           body: "Automated version bump from ${{ steps.bump_version.outputs.old_version }} to ${{ steps.bump_version.outputs.new_version }}"
