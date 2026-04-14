@@ -221,7 +221,7 @@ export const COUNTRIES: PostalCodeData = {
     country: "Belize",
   },
   CA: {
-    regex: "/^([A-Z][0-9][A-Z] [0-9][A-Z][0-9])$/",
+    regex: "/^([ABCEGHJ-NPRSTVXY][0-9][ABCEGHJ-NPRSTV-Z] [0-9][ABCEGHJ-NPRSTV-Z][0-9])$/",
     example: ["K1A 0T6"],
     isGenericRegex: false,
     country: "Canada",
