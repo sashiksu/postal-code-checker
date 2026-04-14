@@ -8,4 +8,5 @@ export * from "./types/CountryCode";
 // Export utilities
 export * from "./utils/getAllCountries";
 export * from "./utils/getCountryByCode";
+export * from "./utils/validatePostalCode";
 export * from "./utils/usePostalCodeValidation";
