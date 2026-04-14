@@ -9,4 +9,5 @@ export * from "./types/CountryCode";
 export * from "./utils/getAllCountries";
 export * from "./utils/getCountryByCode";
 export * from "./utils/validatePostalCode";
+export * from "./utils/validatePostalCodes";
 export * from "./utils/usePostalCodeValidation";
