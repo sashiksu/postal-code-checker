@@ -1,5 +1,11 @@
 # 📮 postal-code-checker — Postal Code & ZIP Code Validator for 200+ Countries (TypeScript, ESM/CJS) 📮
 
+[![npm version](https://img.shields.io/npm/v/postal-code-checker.svg)](https://www.npmjs.com/package/postal-code-checker)
+[![npm downloads](https://img.shields.io/npm/dm/postal-code-checker.svg)](https://www.npmjs.com/package/postal-code-checker)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/postal-code-checker.svg)](https://bundlephobia.com/package/postal-code-checker)
+[![types](https://img.shields.io/npm/types/postal-code-checker.svg)](https://www.npmjs.com/package/postal-code-checker)
+[![license](https://img.shields.io/npm/l/postal-code-checker.svg)](https://github.com/sashiksu/postal-code-checker/blob/master/LICENSE)
+
 `postal-code-checker` is a lightweight JavaScript / TypeScript library for **postal code and ZIP code validation** across **200+ countries** using ISO 3166-1 country codes. Zero runtime dependencies, ESM + CommonJS, first-class TypeScript types — drop it into any React, Next.js, Vue, Angular, Node.js, or plain-JS form to validate international addresses.
 
 ## ✨ Features
@@ -209,6 +215,15 @@ type Country = {
 
 ## 🗺️ Our Roadmap
 
+### ✅ Shipped
+
+- [x] Add unit tests for all utility functions _(1.1.0)_
+- [x] Add batch validation for multiple postal codes _(1.1.0)_
+- [x] Case-insensitive and whitespace-tolerant input handling _(1.1.0)_
+- [x] ISO 3166-1 alpha-3 country code support _(1.1.0)_
+
+### 🔜 Planned
+
 - [ ] Use regex pattern information to generate examples and drop hard coded examples from resource to reduce package size
 - [ ] Move to pure css styles at dev sandbox (live dev playground) & drop antd library usage to reduce package size
 - [ ] Implement more specific regex patterns for countries currently using generic patterns
@@ -221,11 +236,9 @@ type Country = {
 - [ ] Add postal code validation with additional context (city, region)
 - [ ] Implement partial matching and suggestion functionality
 - [ ] Add historical postal code validation
-- [ ] Add batch validation for multiple postal codes
 - [ ] Allow custom error messages for different validation scenarios
 - [ ] Implement postal code type identification (residential, commercial, etc.)
 - [ ] Accept custom resource as config and override/merge inbuilt resource
-- [ ] Add unit tests for all utility functions
 
 ## 🤝 Contributing
 
