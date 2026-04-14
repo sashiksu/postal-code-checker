@@ -6,15 +6,17 @@
 [![types](https://img.shields.io/npm/types/postal-code-checker.svg)](https://www.npmjs.com/package/postal-code-checker)
 [![license](https://img.shields.io/npm/l/postal-code-checker.svg)](https://github.com/sashiksu/postal-code-checker/blob/master/LICENSE)
 
-`postal-code-checker` is a lightweight JavaScript / TypeScript library for **postal code and ZIP code validation** across **200+ countries** using ISO 3166-1 country codes. Zero runtime dependencies, ESM + CommonJS, first-class TypeScript types — drop it into any React, Next.js, Vue, Angular, Node.js, or plain-JS form to validate international addresses.
+`postal-code-checker` validates postal codes and ZIP codes for **200+ countries** using ISO 3166-1 country codes. It's TypeScript-first, ships as both ESM and CommonJS, and has **zero runtime dependencies** — drop it into any React, Next.js, Vue, Angular, Node.js, or plain-JS project without dragging in a tree of transitive packages.
 
-## ✨ Features
+## 💡 Why postal-code-checker?
 
-- 🌍 Supports postal code validation for over 200 countries
-- 🔍 Provides country selection functionality
-- 📝 Includes example postal codes for supported countries
-- 🚀 TypeScript support with type definitions
-- 🪶 Lightweight and easy to integrate
+- 🪶 **Zero runtime dependencies** — one install, nothing else pulled in. Keeps your `node_modules` small and your supply-chain surface minimal. No Dependabot alerts from transitive deps you didn't ask for.
+- 🌍 **200+ countries out of the box** — validate using either ISO 3166-1 **alpha-2** (`"US"`) or **alpha-3** (`"USA"`) codes.
+- 🚀 **TypeScript-first** — ships with `.d.ts` types built in. No separate `@types/*` package to install.
+- 📦 **Works everywhere JavaScript runs** — React, Next.js, Vue, Angular, Svelte, Node.js, Deno, Bun, plain browser JS. No framework assumptions.
+- 🔤 **Forgiving input** — case-insensitive and trims surrounding whitespace, so messy user input doesn't need to be cleaned up before validation.
+- 📋 **Batch-friendly** — validate a single code or an array of them with the same ergonomic API.
+- ⚡️ **Dual ESM + CommonJS** — modern `import` and legacy `require()` both work out of the box.
 
 ## ✨ What's New in 1.1.0
 
@@ -200,10 +202,6 @@ export default PostalCodeValidator;
 ```
 
 </details>
-
-## 🔧 Compatibility
-
-Apart from the usage examples shown above, this package can be seamlessly integrated with any JavaScript framework or library, including but not limited to Angular, Vue.js, Next.js, and many more. The flexible design of `postal-code-checker` ensures it can be easily incorporated into your project, regardless of your chosen tech stack.
 
 ## 📚 API Reference
 
