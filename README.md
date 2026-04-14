@@ -1,6 +1,6 @@
-# 📮 postal-code-checker 📮
+# 📮 postal-code-checker — Postal Code & ZIP Code Validator for 200+ Countries (TypeScript, ESM/CJS) 📮
 
-`postal-code-checker` is a comprehensive JavaScript/TypeScript package for validating postal codes across multiple countries. It provides an easy-to-use API for country selection and postal code validation, making it ideal for forms and address validation in web applications.
+`postal-code-checker` is a lightweight JavaScript / TypeScript library for **postal code and ZIP code validation** across **200+ countries** using ISO 3166-1 country codes. Zero runtime dependencies, ESM + CommonJS, first-class TypeScript types — drop it into any React, Next.js, Vue, Angular, Node.js, or plain-JS form to validate international addresses.
 
 ## ✨ Features
 
