@@ -1,6 +1,6 @@
 {
   "name": "postal-code-checker",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "A package for validating postal codes from various countries.",
   "author": "Sashika Suraweera",
   "license": "MIT",
@@ -24,7 +24,7 @@
     "test": "jest",
     "prepare": "npm run build",
     "watch": "nodemon --watch src --ext ts,tsx --exec \"npm run build\"",
-    "publish": "npm run prettier &&  npm publish --access public"
+    "release": "npm run prettier && npm publish --access public"
   },
   "keywords": [
     "postal-code",
