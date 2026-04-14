@@ -22,6 +22,20 @@ describe("validatePostalCode()", () => {
     expect(validatePostalCode("CA", "D1A 0T6")).toBe(false);
   });
 
+  describe("ISO 3166-1 alpha-3 country codes (1.1.0)", () => {
+    it.each([
+      ["USA", "12345"],
+      ["CAN", "K1A 0T6"],
+      ["GBR", "SW1A 1AA"],
+    ])("Should validate using alpha-3 code %s with postal %s", (cc, code) => {
+      expect(validatePostalCode(cc as CountryCode, code)).toBe(true);
+    });
+
+    it("Should return false for unknown alpha-3 code", () => {
+      expect(validatePostalCode("XXX" as CountryCode, "12345")).toBe(false);
+    });
+  });
+
   describe("Input normalization (1.1.0)", () => {
     it.each([
       ["CA", "k1a 0t6"],
