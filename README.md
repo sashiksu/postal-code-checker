@@ -293,21 +293,11 @@ type Country = {
 
 ### 🔜 Planned
 
-- [ ] Use regex pattern information to generate examples and drop hard coded examples from resource to reduce package size
-- [ ] Move to pure css styles at dev sandbox (live dev playground) & drop antd library usage to reduce package size
 - [ ] Implement more specific regex patterns for countries currently using generic patterns
-- [ ] Add support for state/province validation for countries
-- [ ] Create a demo website with interactive examples
-- [ ] Add support for custom regex patterns and country data
-- [ ] Optimize package size and performance
-- [ ] Add internationalization support for country names
-- [ ] Implement reverse lookup functionality (postal code to country/region)
-- [ ] Add postal code validation with additional context (city, region)
-- [ ] Implement partial matching and suggestion functionality
-- [ ] Add historical postal code validation
-- [ ] Allow custom error messages for different validation scenarios
-- [ ] Implement postal code type identification (residential, commercial, etc.)
 - [ ] Accept custom resource as config and override/merge inbuilt resource
+- [ ] Add support for custom regex patterns and country data
+- [ ] Optimize package size and performance (including generating examples from regex to drop hard-coded examples)
+- [ ] Create a demo website with interactive examples
 
 ## 🤝 Contributing
 
