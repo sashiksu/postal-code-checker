@@ -16,6 +16,14 @@
 - 🚀 TypeScript support with type definitions
 - 🪶 Lightweight and easy to integrate
 
+## ✨ What's New in 1.1.0
+
+- 🪄 **New top-level `validatePostalCode` API** — no factory function, no destructuring.
+- 🔤 **Case-insensitive and whitespace-tolerant input** — `"k1a 0t6"` and `" K1A 0T6 "` now both validate correctly.
+- 🌐 **ISO 3166-1 alpha-3 country codes** — use `"USA"`, `"GBR"`, `"CAN"` interchangeably with 2-letter codes.
+- 📦 **Batch validation helper** — validate many postal codes against one country in a single call.
+- ⚠️ **`usePostalCodeValidation` is deprecated** — still works and will continue to work until 2.0. See [Migration Guide](#-migration-guide).
+
 ## 📦 Installation
 
 ```bash
@@ -30,21 +38,20 @@ npm install postal-code-checker
   <summary> 📋 Code</summary>
 
 ```javascript
-// Import according to your requirement, we support both ES6 and CommonJS
-import { usePostalCodeValidation, getCountryByCode, getAllCountries, Country, CountryCode } from "postal-code-checker";
-// OR
-const {
-  usePostalCodeValidation,
-  getCountryByCode,
-  getAllCountries,
-  Country,
-  CountryCode,
-} = require("postal-code-checker");
-
-const { validatePostalCode } = usePostalCodeValidation();
+// ES6 / TypeScript
+import { validatePostalCode, getCountryByCode, getAllCountries } from "postal-code-checker";
+// OR CommonJS
+const { validatePostalCode, getCountryByCode, getAllCountries } = require("postal-code-checker");
 
 // Validate a postal code
-const isValid = validatePostalCode("US", "12345"); // Returns true
+const isValid = validatePostalCode("US", "12345"); // true
+
+// ISO 3166-1 alpha-3 codes also work
+validatePostalCode("USA", "12345"); // true
+
+// Input is case-insensitive and whitespace-tolerant
+validatePostalCode("CA", "k1a 0t6"); // true
+validatePostalCode("CA", "  K1A 0T6 "); // true
 
 // Get country information
 const country = getCountryByCode("US");
@@ -56,17 +63,33 @@ const countries = getAllCountries();
 
 </details>
 
+### Batch Validation
+
+<details>
+  <summary> 📋 Expand Code</summary>
+
+```javascript
+import { validatePostalCodes } from "postal-code-checker";
+
+validatePostalCodes("US", ["12345", "90210", "abc"]);
+// → [true, true, false]
+```
+
+Useful for CSV imports, address-book uploads, or form arrays where many
+codes share the same country.
+
+</details>
+
 ### NodeJS Example
 
 <details>
   <summary> 📋 Expand Code</summary>
 
 ```javascript
-const { usePostalCodeValidation } = require("postal-code-checker");
-const { validatePostalCode } = usePostalCodeValidation();
+const { validatePostalCode, getCountryByCode, getAllCountries } = require("postal-code-checker");
 
 // Validate a postal code
-const isValid = validatePostalCode("US", "12345"); // Returns true
+const isValid = validatePostalCode("US", "12345"); // true
 
 // Get country information
 const country = getCountryByCode("US");
@@ -85,10 +108,9 @@ const countries = getAllCountries();
 
 ```typescript
 import { ChangeEvent, FC, useState } from "react";
-import { usePostalCodeValidation, getCountryByCode, getAllCountries, Country, CountryCode } from "postal-code-checker";
+import { validatePostalCode, getCountryByCode, getAllCountries, Country, CountryCode } from "postal-code-checker";
 
 const PostalCodeValidator: FC = () => {
-  const { validatePostalCode } = usePostalCodeValidation();
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
   const [postalCode, setPostalCode] = useState<string>("");
   const [isValid, setIsValid] = useState<boolean | null>(null);
@@ -136,10 +158,9 @@ export default PostalCodeValidator;
 
 ```javascript
 import { useState } from "react";
-import { usePostalCodeValidation, getCountryByCode, getAllCountries } from "postal-code-checker";
+import { validatePostalCode, getCountryByCode, getAllCountries } from "postal-code-checker";
 
 const PostalCodeValidator = () => {
-  const { validatePostalCode } = usePostalCodeValidation();
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [postalCode, setPostalCode] = useState("");
   const [isValid, setIsValid] = useState(null);
@@ -186,23 +207,73 @@ Apart from the usage examples shown above, this package can be seamlessly integr
 
 ## 📚 API Reference
 
-### `usePostalCodeValidation()`
+### `validatePostalCode(countryCode, postalCode): boolean`
 
-Returns an object with the following methods:
+Validates a single postal code against a country. Accepts both alpha-2 and
+alpha-3 ISO 3166-1 codes, and normalizes the postal-code input by trimming
+surrounding whitespace and uppercasing letters before matching.
 
-- `validatePostalCode(countryCode: CountryCode, postalCode: string): boolean`
+### `validatePostalCodes(countryCode, postalCodes): boolean[]`
 
-### Util Functions
+Validates an array of postal codes against one country and returns an
+index-aligned array of boolean results.
 
-Returns an object with the following methods:
+### `getCountryByCode(countryCode): Country | null`
 
-- `getCountryByCode(countryCode: CountryCode): Country | null`
-- `getAllCountries(): Array<{ countryName: string, countryCode: CountryCode }>`
+Returns the full country record (regex, example codes, name, 2-letter code)
+or `null` if the country is unknown. Accepts alpha-2 or alpha-3 codes.
+
+### `getAllCountries(): CountryOption[]`
+
+Returns an array of `{ countryName, countryCode }` for every supported
+country.
+
+### `usePostalCodeValidation()` _(deprecated since 1.1.0)_
+
+Returns an object with a `validatePostalCode` method. Retained for backward
+compatibility; delegates to the top-level `validatePostalCode`. Will be
+removed in 2.0.
+
+## 🔄 Migration Guide
+
+### From `usePostalCodeValidation` (v1.0.x) → `validatePostalCode` (v1.1.0+)
+
+**Before:**
+
+```js
+import { usePostalCodeValidation } from "postal-code-checker";
+
+const { validatePostalCode } = usePostalCodeValidation();
+const isValid = validatePostalCode("US", "12345");
+```
+
+**After:**
+
+```js
+import { validatePostalCode } from "postal-code-checker";
+
+const isValid = validatePostalCode("US", "12345");
+```
+
+### Why the change?
+
+The `usePostalCodeValidation` name followed the React hook naming
+convention, which confused non-React users and could trigger React's
+`react-hooks/rules-of-hooks` lint rule even though the function is not an
+actual hook. The new direct API works identically in React, Node.js, Vue,
+Angular, Svelte, or plain JavaScript — no hook semantics apply.
+
+### Backward compatibility
+
+`usePostalCodeValidation` still exists in 1.1.0 and delegates to the new
+implementation, so existing code keeps working and automatically benefits
+from 1.1.0 improvements (case-insensitive input, alpha-3 support). It will
+be removed in 2.0, giving you a full major-version window to migrate.
 
 ## 🏷️ Types
 
 ```typescript
-type CountryCode = string; // ISO 3166-1 alpha-2 country code
+type CountryCode = string; // ISO 3166-1 alpha-2 (e.g. "US") or alpha-3 (e.g. "USA")
 
 type Country = {
   postalCodeRegex: string;
