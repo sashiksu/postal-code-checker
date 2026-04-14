@@ -21,6 +21,24 @@ describe("validatePostalCode()", () => {
   it("Should reject a Canadian postal code with disallowed letters", () => {
     expect(validatePostalCode("CA", "D1A 0T6")).toBe(false);
   });
+
+  describe("Input normalization (1.1.0)", () => {
+    it.each([
+      ["CA", "k1a 0t6"],
+      ["CA", "K1a 0T6"],
+      ["GB", "sw1a 1aa"],
+    ])("Should accept lowercase input: %s %s", (cc, code) => {
+      expect(validatePostalCode(cc as CountryCode, code)).toBe(true);
+    });
+
+    it.each([
+      ["US", "  12345  "],
+      ["CA", "  K1A 0T6 "],
+      ["CA", " K1A 0T6"],
+    ])("Should accept surrounding whitespace: %s '%s'", (cc, code) => {
+      expect(validatePostalCode(cc as CountryCode, code)).toBe(true);
+    });
+  });
 });
 
 describe("usePostalCodeValidation() → validatePostalCode delegation", () => {

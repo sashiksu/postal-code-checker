@@ -52,8 +52,12 @@ describe("usePostalCodeValidation()", () => {
       expect(validatePostalCode("CA", "K1A0T6")).toBe(false);
     });
 
-    it("Should reject lowercase", () => {
-      expect(validatePostalCode("CA", "k1a 0t6")).toBe(false);
+    it("Should accept lowercase (normalized to uppercase in 1.1.0)", () => {
+      expect(validatePostalCode("CA", "k1a 0t6")).toBe(true);
+    });
+
+    it("Should accept surrounding whitespace (trimmed in 1.1.0)", () => {
+      expect(validatePostalCode("CA", "  K1A 0T6  ")).toBe(true);
     });
   });
 });
