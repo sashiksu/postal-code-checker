@@ -42,4 +42,42 @@ describe("getCountryByCode()", () => {
       expect(getCountryByCode("XXX")).toBeNull();
     });
   });
+
+  describe("Edge cases", () => {
+    it.each(["", "U", "XXXX", "123", "U1"])(
+      "Should return null for malformed code: '%s'",
+      (bad) => {
+        expect(getCountryByCode(bad as CountryCode)).toBeNull();
+      }
+    );
+
+    it("Should always return an uppercase alpha-2 code in the result", () => {
+      const variants = ["us", "US", "Us", "usa", "USA", "uSa"];
+      for (const v of variants) {
+        const res = getCountryByCode(v as CountryCode);
+        expect(res).not.toBeNull();
+        expect(res?.countryCode).toBe("US");
+      }
+    });
+
+    it("Should expose all five fields on a successful lookup", () => {
+      const res = getCountryByCode("GB");
+      expect(res).not.toBeNull();
+      expect(res).toEqual(
+        expect.objectContaining({
+          countryCode: expect.any(String),
+          countryName: expect.any(String),
+          postalCodeRegex: expect.any(String),
+          examplePostalCodes: expect.any(Array),
+          isGenericRegex: expect.any(Boolean),
+        })
+      );
+    });
+
+    it("Should preserve regex slash-wrapping in the returned data", () => {
+      const res = getCountryByCode("US");
+      expect(res?.postalCodeRegex.startsWith("/")).toBe(true);
+      expect(res?.postalCodeRegex.endsWith("/")).toBe(true);
+    });
+  });
 });

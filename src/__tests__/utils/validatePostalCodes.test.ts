@@ -21,4 +21,27 @@ describe("validatePostalCodes()", () => {
   it("Should accept alpha-3 country code", () => {
     expect(validatePostalCodes("USA", ["12345", "90210"])).toEqual([true, true]);
   });
+
+  describe("Edge cases", () => {
+    it("Should preserve input order in the result", () => {
+      const input = ["12345", "bad", "90210", "also-bad", "00501"];
+      expect(validatePostalCodes("US", input)).toEqual([true, false, true, false, true]);
+    });
+
+    it("Should return the same length array as the input", () => {
+      const input = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"];
+      expect(validatePostalCodes("US", input)).toHaveLength(input.length);
+    });
+
+    it("Should treat empty strings as invalid", () => {
+      expect(validatePostalCodes("US", ["", "12345", ""])).toEqual([false, true, false]);
+    });
+
+    it("Should not mutate the input array", () => {
+      const input = ["12345", "90210"];
+      const snapshot = [...input];
+      validatePostalCodes("US", input);
+      expect(input).toEqual(snapshot);
+    });
+  });
 });
