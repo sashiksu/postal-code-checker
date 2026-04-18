@@ -11,7 +11,8 @@
     "dist/index.cjs.js",
     "dist/index.esm.js",
     "dist/index.d.ts",
-    "LICENSE"
+    "LICENSE",
+    "NOTICE"
   ],
   "scripts": {
     "start": "webpack serve --open --config webpack.config.js",
