@@ -23,7 +23,7 @@ describe("COUNTRIES data integrity", () => {
           example: expect.any(Array),
           isGenericRegex: expect.any(Boolean),
           country: expect.any(String),
-        })
+        }),
       );
     });
 
@@ -98,20 +98,16 @@ describe("Generic regex behavior", () => {
   // fallback. The conditional keeps the suite green in that happy case
   // without hiding the stat.
   it("Should report a generic-regex count for observability", () => {
-     
     console.log(`isGenericRegex === true for ${generics.length}/${ENTRIES.length} countries`);
     expect(generics.length).toBeGreaterThanOrEqual(0);
   });
 
   if (generics.length > 0) {
-    it.each(generics)(
-      "%s generic regex should accept a single character and reject empty input",
-      (_code, entry) => {
-        const hasEmpty = entry.patterns.some((p) => new RegExp(p.slice(1, -1)).test(""));
-        const hasSingleChar = entry.patterns.some((p) => new RegExp(p.slice(1, -1)).test("X"));
-        expect(hasSingleChar).toBe(true);
-        expect(hasEmpty).toBe(false);
-      }
-    );
+    it.each(generics)("%s generic regex should accept a single character and reject empty input", (_code, entry) => {
+      const hasEmpty = entry.patterns.some((p) => new RegExp(p.slice(1, -1)).test(""));
+      const hasSingleChar = entry.patterns.some((p) => new RegExp(p.slice(1, -1)).test("X"));
+      expect(hasSingleChar).toBe(true);
+      expect(hasEmpty).toBe(false);
+    });
   }
 });

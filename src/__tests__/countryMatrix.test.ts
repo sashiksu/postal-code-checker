@@ -22,12 +22,10 @@ const isKnownFailing = (code: string, example: string): boolean =>
   KNOWN_FAILING_EXAMPLES.some((kf) => kf.code === code && kf.example === example);
 
 const ALL_CASES: Case[] = Object.entries(COUNTRIES).flatMap(([code, entry]) =>
-  entry.example.map((example) => ({ code, example, country: entry.country }))
+  entry.example.map((example) => ({ code, example, country: entry.country })),
 );
 
-const VALID_CASES: Case[] = ALL_CASES.filter(
-  ({ code, example }) => !isKnownFailing(code, example)
-);
+const VALID_CASES: Case[] = ALL_CASES.filter(({ code, example }) => !isKnownFailing(code, example));
 
 describe("Country matrix (behavior snapshot)", () => {
   it("Should have at least one example case to validate", () => {
@@ -37,19 +35,16 @@ describe("Country matrix (behavior snapshot)", () => {
   });
 
   if (VALID_CASES.length > 0) {
-    it.each(VALID_CASES)(
-      "VALID  $code ($country) → '$example'",
-      ({ code, example }) => {
-        expect(validatePostalCode(code as CountryCode, example)).toBe(true);
-      }
-    );
+    it.each(VALID_CASES)("VALID  $code ($country) → '$example'", ({ code, example }) => {
+      expect(validatePostalCode(code as CountryCode, example)).toBe(true);
+    });
   }
 
   it.each(KNOWN_FAILING_EXAMPLES)(
     "KNOWN-FAILING $code → '$example' (baseline — update list if this turns green)",
     ({ code, example }) => {
       expect(validatePostalCode(code as CountryCode, example)).toBe(false);
-    }
+    },
   );
 });
 

@@ -12,7 +12,7 @@ describe("getCountryByCode()", () => {
         isGenericRegex: false,
         countryName: expect.any(String),
         countryCode: "US",
-      })
+      }),
     );
     expect(result?.postalCodePatterns.length).toBeGreaterThan(0);
   });
@@ -48,12 +48,9 @@ describe("getCountryByCode()", () => {
   });
 
   describe("Edge cases", () => {
-    it.each(["", "U", "XXXX", "123", "U1"])(
-      "Should return null for malformed code: '%s'",
-      (bad) => {
-        expect(getCountryByCode(bad as CountryCode)).toBeNull();
-      }
-    );
+    it.each(["", "U", "XXXX", "123", "U1"])("Should return null for malformed code: '%s'", (bad) => {
+      expect(getCountryByCode(bad as CountryCode)).toBeNull();
+    });
 
     it("Should always return an uppercase alpha-2 code in the result", () => {
       const variants = ["us", "US", "Us", "usa", "USA", "uSa"];
@@ -74,7 +71,7 @@ describe("getCountryByCode()", () => {
           postalCodePatterns: expect.any(Array),
           examplePostalCodes: expect.any(Array),
           isGenericRegex: expect.any(Boolean),
-        })
+        }),
       );
     });
 
