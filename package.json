@@ -23,6 +23,7 @@
     "lint": "eslint \"{**/*,*}.{js,ts}\"",
     "prettier": "prettier --write \"{src,tests,example/src}/**/*.{js,ts}\"",
     "test": "jest",
+    "sync:data": "ts-node scripts/sync-postal-data.ts",
     "prepare": "npm run build",
     "watch": "nodemon --watch src --ext ts,tsx --exec \"npm run build\"",
     "release": "npm run prettier && npm publish --access public"
