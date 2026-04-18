@@ -157,9 +157,16 @@ async function fetchOne(cc: string): Promise<SyncResult> {
   };
 }
 
+// Emit arrays in the same shape prettier produces: `["a", "b"]` with a space
+// after each comma. `JSON.stringify` would give `["a","b"]`, which prettier
+// would then rewrite on next format — making sync:check falsely report drift.
+function stringifyArray(arr: string[]): string {
+  return `[${arr.map((s) => JSON.stringify(s)).join(", ")}]`;
+}
+
 function serializeEntry(r: SyncResult): string {
-  const patternsJson = JSON.stringify(r.patterns);
-  const exampleJson = JSON.stringify(r.example);
+  const patternsJson = stringifyArray(r.patterns);
+  const exampleJson = stringifyArray(r.example);
   const countryJson = JSON.stringify(r.country);
   return `  ${r.code}: { patterns: ${patternsJson}, example: ${exampleJson}, isGenericRegex: ${r.isGenericRegex}, country: ${countryJson} },`;
 }
@@ -196,7 +203,7 @@ async function main(): Promise<void> {
     results.push(res);
     const tail = res.reason ? ` (${res.reason})` : "";
     const label = res.status.toUpperCase().padEnd(4);
-    // eslint-disable-next-line no-console
+     
     console.log(`${label} ${cc}${tail}`);
   }
 
@@ -204,7 +211,7 @@ async function main(): Promise<void> {
   const skip = results.filter((r) => r.status === "skip").length;
   const fail = results.filter((r) => r.status === "fail").length;
 
-  // eslint-disable-next-line no-console
+   
   console.log(
     `\n${ok} succeeded, ${skip} skipped (no postal-code system), ${fail} failed`
   );
@@ -222,23 +229,23 @@ async function main(): Promise<void> {
     // run, but the actual data is what we want to compare.
     const stripDate = (s: string) => s.replace(/^\/\/ Snapshot date:.*$/m, "");
     if (stripDate(current) !== stripDate(serialized)) {
-      // eslint-disable-next-line no-console
+       
       console.error(
         "\nERROR: src/assets/index.ts is out of sync with upstream. Run `npm run sync:data` and commit the result."
       );
       process.exit(1);
     }
-    // eslint-disable-next-line no-console
+     
     console.log("\nOK: src/assets/index.ts is in sync with upstream.");
   } else {
     fs.writeFileSync(OUT_PATH, serialized);
-    // eslint-disable-next-line no-console
+     
     console.log(`\nWrote ${OUT_PATH}`);
   }
 }
 
 main().catch((err) => {
-  // eslint-disable-next-line no-console
+   
   console.error(err);
   process.exit(1);
 });

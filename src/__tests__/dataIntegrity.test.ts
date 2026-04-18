@@ -98,7 +98,7 @@ describe("Generic regex behavior", () => {
   // fallback. The conditional keeps the suite green in that happy case
   // without hiding the stat.
   it("Should report a generic-regex count for observability", () => {
-    // eslint-disable-next-line no-console
+     
     console.log(`isGenericRegex === true for ${generics.length}/${ENTRIES.length} countries`);
     expect(generics.length).toBeGreaterThanOrEqual(0);
   });
