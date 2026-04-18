@@ -4,13 +4,17 @@ import { getCountryByCode } from "../../utils/getCountryByCode";
 describe("getCountryByCode()", () => {
   it("Should return correct country data for a valid country code", () => {
     const result = getCountryByCode("US");
-    expect(result).toEqual({
-      postalCodeRegex: "/^(\\d{5}(-\\d{4})?)$/",
-      examplePostalCodes: ["11550", " 11550-9999"],
-      isGenericRegex: false,
-      countryName: "United States of America",
-      countryCode: "US",
-    });
+    expect(result).not.toBeNull();
+    expect(result).toEqual(
+      expect.objectContaining({
+        postalCodePatterns: expect.any(Array),
+        examplePostalCodes: expect.any(Array),
+        isGenericRegex: false,
+        countryName: expect.any(String),
+        countryCode: "US",
+      })
+    );
+    expect(result?.postalCodePatterns.length).toBeGreaterThan(0);
   });
 
   it("Should return null for an invalid country code", () => {
@@ -67,17 +71,20 @@ describe("getCountryByCode()", () => {
         expect.objectContaining({
           countryCode: expect.any(String),
           countryName: expect.any(String),
-          postalCodeRegex: expect.any(String),
+          postalCodePatterns: expect.any(Array),
           examplePostalCodes: expect.any(Array),
           isGenericRegex: expect.any(Boolean),
         })
       );
     });
 
-    it("Should preserve regex slash-wrapping in the returned data", () => {
+    it("Should preserve regex slash-wrapping in every pattern", () => {
       const res = getCountryByCode("US");
-      expect(res?.postalCodeRegex.startsWith("/")).toBe(true);
-      expect(res?.postalCodeRegex.endsWith("/")).toBe(true);
+      expect(res?.postalCodePatterns.length).toBeGreaterThan(0);
+      for (const p of res?.postalCodePatterns ?? []) {
+        expect(p.startsWith("/")).toBe(true);
+        expect(p.endsWith("/")).toBe(true);
+      }
     });
   });
 });

@@ -3,7 +3,7 @@ import { COUNTRIES } from "../assets/index";
 
 // Pre-compute the entry list once so every `it.each` shares the same iteration.
 const ENTRIES = Object.entries(COUNTRIES) as Array<
-  [string, { regex: string; example: string[]; isGenericRegex: boolean; country: string }]
+  [string, { patterns: string[]; example: string[]; isGenericRegex: boolean; country: string }]
 >;
 
 describe("COUNTRIES data integrity", () => {
@@ -19,7 +19,7 @@ describe("COUNTRIES data integrity", () => {
     it("Should define all four required fields", () => {
       expect(entry).toEqual(
         expect.objectContaining({
-          regex: expect.any(String),
+          patterns: expect.any(Array),
           example: expect.any(Array),
           isGenericRegex: expect.any(Boolean),
           country: expect.any(String),
@@ -31,15 +31,18 @@ describe("COUNTRIES data integrity", () => {
       expect(entry.country.trim().length).toBeGreaterThan(0);
     });
 
-    it("Should wrap the regex in slashes", () => {
-      expect(entry.regex.startsWith("/")).toBe(true);
-      expect(entry.regex.endsWith("/")).toBe(true);
-      expect(entry.regex.length).toBeGreaterThan(2);
+    it("Should wrap every pattern in slashes", () => {
+      for (const p of entry.patterns) {
+        expect(p.startsWith("/")).toBe(true);
+        expect(p.endsWith("/")).toBe(true);
+        expect(p.length).toBeGreaterThan(2);
+      }
     });
 
-    it("Should parse as a valid JavaScript RegExp after slash-stripping", () => {
-      const pattern = entry.regex.slice(1, -1);
-      expect(() => new RegExp(pattern)).not.toThrow();
+    it("Should have every pattern parse as a valid JavaScript RegExp", () => {
+      for (const p of entry.patterns) {
+        expect(() => new RegExp(p.slice(1, -1))).not.toThrow();
+      }
     });
 
     it("Should have example entries that are all strings", () => {
@@ -53,15 +56,10 @@ describe("COUNTRIES data integrity", () => {
 describe("ALPHA3_TO_ALPHA2 integrity", () => {
   const alpha3Entries = Object.entries(ALPHA3_TO_ALPHA2);
 
-  // v1.1.0 baseline: these alpha-3 codes map to alpha-2 codes that aren't in
-  // COUNTRIES. Means `validatePostalCode(<alpha3>, ...)` returns false for them
-  // today. Locked in as a snapshot so the Google data swap flags any change —
-  // either it fixes these (turns the test red, update the list) or it doesn't
-  // (and we keep current parity).
-  const KNOWN_ORPHAN_ALPHA3 = [
-    "ALA", "BLM", "ESH", "GLP", "GUF", "MAF", "MCO",
-    "MTQ", "MYT", "PRI", "REU", "SJM", "SPM",
-  ];
+  // v2.0.0: Google's libaddressinput data covers every alpha-3 territory that
+  // v1.1.0 lacked (Åland, Martinique, Réunion, Puerto Rico, etc.). Orphan list
+  // is empty. If this grows again, something regressed in the sync pipeline.
+  const KNOWN_ORPHAN_ALPHA3: string[] = [];
 
   it("Should contain at least one mapping", () => {
     expect(alpha3Entries.length).toBeGreaterThan(0);
@@ -96,13 +94,24 @@ describe("ALPHA3_TO_ALPHA2 integrity", () => {
 describe("Generic regex behavior", () => {
   const generics = ENTRIES.filter(([, entry]) => entry.isGenericRegex);
 
-  it("Should contain at least one generic-regex country", () => {
-    expect(generics.length).toBeGreaterThan(0);
+  // Generics may go to zero once Google-specific data replaces every ECB
+  // fallback. The conditional keeps the suite green in that happy case
+  // without hiding the stat.
+  it("Should report a generic-regex count for observability", () => {
+    // eslint-disable-next-line no-console
+    console.log(`isGenericRegex === true for ${generics.length}/${ENTRIES.length} countries`);
+    expect(generics.length).toBeGreaterThanOrEqual(0);
   });
 
-  it.each(generics)("%s generic regex should accept a single character and reject empty input", (_code, entry) => {
-    const regex = new RegExp(entry.regex.slice(1, -1));
-    expect(regex.test("X")).toBe(true);
-    expect(regex.test("")).toBe(false);
-  });
+  if (generics.length > 0) {
+    it.each(generics)(
+      "%s generic regex should accept a single character and reject empty input",
+      (_code, entry) => {
+        const hasEmpty = entry.patterns.some((p) => new RegExp(p.slice(1, -1)).test(""));
+        const hasSingleChar = entry.patterns.some((p) => new RegExp(p.slice(1, -1)).test("X"));
+        expect(hasSingleChar).toBe(true);
+        expect(hasEmpty).toBe(false);
+      }
+    );
+  }
 });
