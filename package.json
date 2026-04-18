@@ -28,7 +28,8 @@
     "prepare": "npm run build",
     "prepublishOnly": "npm run sync:check && npm test",
     "watch": "nodemon --watch src --ext ts,tsx --exec \"npm run build\"",
-    "release": "npm run prettier && npm test && npm run sync:check && npm run build && npm publish --access public"
+    "release": "npm run prettier && npm test && npm run sync:check && npm run build && npm publish --access public",
+    "release:next": "npm run prettier && npm test && npm run sync:check && npm run build && npm publish --access public --tag next"
   },
   "keywords": [
     "postal-code",
