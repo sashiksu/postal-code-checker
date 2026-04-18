@@ -18,13 +18,21 @@
 - 📋 **Batch-friendly** — validate a single code or an array of them with the same ergonomic API.
 - ⚡️ **Dual ESM + CommonJS** — modern `import` and legacy `require()` both work out of the box.
 
+## ✨ What's New in 2.0.0
+
+- 🌐 **New data source: Google's `libaddressinput`** — replaces the ECB dataset with the same postal-code patterns Google uses in Chromium, Android, and Google Pay address forms. Patterns are more accurate and cover more territories (Åland, Martinique, Réunion, Puerto Rico, and other alpha-3 codes that previously orphaned).
+- 🧩 **`postalCodeRegex: string` → `postalCodePatterns: string[]`** — some countries (e.g. the UK) genuinely need multiple regexes. The field is now an array. **Breaking change** — see [Migration Guide](#-migration-guide).
+- 🗃️ **Country names follow Google's canonical form** — e.g. `"United States"` instead of `"United States of America"`, `"Russia"` instead of `"Russian Federation"`. Align any UI strings you pin against these.
+- 🔁 **Reproducible data pipeline** — `npm run sync:data` regenerates `src/assets/index.ts` from upstream; `npm run sync:check` runs in CI/`prepublishOnly` to block releases whose data drifted from the script's output.
+- ⏳ **`usePostalCodeValidation` removal pushed to 3.0** — v2 keeps it working so you can upgrade the data and the API separately.
+
 ## ✨ What's New in 1.1.0
 
 - 🪄 **New top-level `validatePostalCode` API** — no factory function, no destructuring.
 - 🔤 **Case-insensitive and whitespace-tolerant input** — `"k1a 0t6"` and `" K1A 0T6 "` now both validate correctly.
 - 🌐 **ISO 3166-1 alpha-3 country codes** — use `"USA"`, `"GBR"`, `"CAN"` interchangeably with 2-letter codes.
 - 📦 **Batch validation helper** — validate many postal codes against one country in a single call.
-- ⚠️ **`usePostalCodeValidation` is deprecated** — still works and will continue to work until 2.0. See [Migration Guide](#-migration-guide).
+- ⚠️ **`usePostalCodeValidation` is deprecated** — still works in 2.x; scheduled for removal in 3.0. See [Migration Guide](#-migration-guide).
 
 ## 📦 Installation
 
@@ -57,7 +65,7 @@ validatePostalCode("CA", "  K1A 0T6 "); // true
 
 // Get country information
 const country = getCountryByCode("US");
-console.log(country.countryName); // "United States of America"
+console.log(country.countryName); // "United States"
 
 // Get all available countries
 const countries = getAllCountries();
@@ -95,7 +103,7 @@ const isValid = validatePostalCode("US", "12345"); // true
 
 // Get country information
 const country = getCountryByCode("US");
-console.log(country.countryName); // "United States of America"
+console.log(country.countryName); // "United States"
 
 // Get all available countries
 const countries = getAllCountries();
@@ -218,8 +226,10 @@ index-aligned array of boolean results.
 
 ### `getCountryByCode(countryCode): Country | null`
 
-Returns the full country record (regex, example codes, name, 2-letter code)
-or `null` if the country is unknown. Accepts alpha-2 or alpha-3 codes.
+Returns the full country record (patterns, example codes, name, 2-letter
+code) or `null` if the country is unknown. Accepts alpha-2 or alpha-3 codes.
+`postalCodePatterns` is an array — most countries have one entry, some have
+several.
 
 ### `getAllCountries(): CountryOption[]`
 
@@ -229,10 +239,46 @@ country.
 ### `usePostalCodeValidation()` _(deprecated since 1.1.0)_
 
 Returns an object with a `validatePostalCode` method. Retained for backward
-compatibility; delegates to the top-level `validatePostalCode`. Will be
-removed in 2.0.
+compatibility; delegates to the top-level `validatePostalCode`. Kept
+functional in 2.x; scheduled for removal in 3.0.
 
 ## 🔄 Migration Guide
+
+### From v1.x → v2.0 (data-shape breaking change)
+
+v2.0 switches to Google's `libaddressinput` dataset and renames the regex
+field on the `Country` record. The runtime API (`validatePostalCode`,
+`validatePostalCodes`, `getCountryByCode`, `getAllCountries`) is unchanged —
+but anything that reads `country.postalCodeRegex` directly needs an update.
+
+**Before (v1.x):**
+
+```ts
+const country = getCountryByCode("US");
+const regex = new RegExp(country.postalCodeRegex.slice(1, -1));
+regex.test("12345");
+```
+
+**After (v2.0):**
+
+```ts
+const country = getCountryByCode("US");
+const ok = country.postalCodePatterns.some((wrapped) =>
+  new RegExp(wrapped.slice(1, -1)).test("12345")
+);
+```
+
+If you were only calling `validatePostalCode` / `validatePostalCodes`,
+nothing changes — the normalization (trim + uppercase) and return types are
+identical.
+
+**Also note:**
+
+- `country.countryName` values follow Google's canonical spelling, e.g.
+  `"United States"` (was `"United States of America"`), `"Russia"` (was
+  `"Russian Federation"`). Update any string pins in tests or UI copy.
+- A handful of previously-orphan alpha-3 codes (Åland, Martinique, Réunion,
+  Puerto Rico, etc.) now resolve correctly through `getCountryByCode`.
 
 ### From `usePostalCodeValidation` (v1.0.x) → `validatePostalCode` (v1.1.0+)
 
@@ -263,10 +309,11 @@ Angular, Svelte, or plain JavaScript — no hook semantics apply.
 
 ### Backward compatibility
 
-`usePostalCodeValidation` still exists in 1.1.0 and delegates to the new
+`usePostalCodeValidation` still exists in 2.x and delegates to the new
 implementation, so existing code keeps working and automatically benefits
-from 1.1.0 improvements (case-insensitive input, alpha-3 support). It will
-be removed in 2.0, giving you a full major-version window to migrate.
+from 1.1.0+ improvements (case-insensitive input, alpha-3 support) and the
+v2 data refresh. It is scheduled for removal in 3.0, giving you two full
+major-version windows to migrate.
 
 ## 🏷️ Types
 
@@ -274,7 +321,7 @@ be removed in 2.0, giving you a full major-version window to migrate.
 type CountryCode = string; // ISO 3166-1 alpha-2 (e.g. "US") or alpha-3 (e.g. "USA")
 
 type Country = {
-  postalCodeRegex: string;
+  postalCodePatterns: string[]; // each entry is a regex string wrapped in slashes, e.g. "/^\\d{5}$/"
   examplePostalCodes: string[];
   isGenericRegex: boolean;
   countryName: string;
@@ -286,6 +333,9 @@ type Country = {
 
 ### ✅ Shipped
 
+- [x] Swap data source to Google `libaddressinput` (more accurate, more territories) _(2.0.0)_
+- [x] Reproducible data pipeline — `sync:data` + `sync:check` guard against upstream drift _(2.0.0)_
+- [x] `postalCodePatterns: string[]` — support countries with multiple valid patterns _(2.0.0)_
 - [x] Add unit tests for all utility functions _(1.1.0)_
 - [x] Add batch validation for multiple postal codes _(1.1.0)_
 - [x] Case-insensitive and whitespace-tolerant input handling _(1.1.0)_
@@ -293,11 +343,10 @@ type Country = {
 
 ### 🔜 Planned
 
-- [ ] Implement more specific regex patterns for countries currently using generic patterns
-- [ ] Accept custom resource as config and override/merge inbuilt resource
-- [ ] Add support for custom regex patterns and country data
-- [ ] Optimize package size and performance (including generating examples from regex to drop hard-coded examples)
-- [ ] Create a demo website with interactive examples
+- [ ] Replace remaining generic fallback patterns with country-specific regexes
+- [ ] Accept user-supplied country data to override / merge the bundled dataset
+- [ ] Generate example postal codes from the regex to drop hard-coded examples
+- [ ] Interactive demo website
 
 ## 🤝 Contributing
 
@@ -351,12 +400,22 @@ We appreciate your contributions to making `postal-code-checker` better!
 
 ## 📊 Data Sources
 
-Postal code data used in this project is sourced from the European Central Bank (ECB).
+Postal code patterns, country names, and example codes are sourced from
+Google's [`libaddressinput`](https://github.com/google/libaddressinput)
+project (Apache-2.0), mirrored at
+`https://chromium-i18n.appspot.com/ssl-aggregate-address/data/<CC>`. The
+same dataset powers address forms in Chromium, Android, and Google Pay.
 
-Note : This data has been processed and reformatted for use in this project.
+The data is fetched and reformatted by `scripts/sync-postal-data.ts` into
+the shape this package expects (regex strings wrapped in slashes, anchored
+with `^(?:…)$`). `npm run sync:data` regenerates `src/assets/index.ts` from
+upstream; `npm run sync:check` runs in CI and in `prepublishOnly` to block
+releases whose on-disk data has drifted from the script's output.
 
-- Source: [\[ECB\]](https://www.ecb.europa.eu/)
-- Retrieved on: 4th AUG 2024
+See [`NOTICE`](./NOTICE) for the upstream Apache-2.0 attribution.
+
+Prior to v2.0.0, data was sourced from the European Central Bank (ECB),
+retrieved 4 Aug 2024.
 
 ## 📄 License
 
