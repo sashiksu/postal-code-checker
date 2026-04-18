@@ -1,5 +1,5 @@
 export type CountryPostalCode = {
-  regex: string;
+  patterns: string[];
   example: string[];
   isGenericRegex: boolean;
   country: string;

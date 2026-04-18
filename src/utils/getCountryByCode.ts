@@ -25,7 +25,7 @@ export const getCountryByCode = (countryCode: CountryCode): Country | null => {
   const country = COUNTRIES[alpha2];
   return country
     ? {
-        postalCodeRegex: country.regex,
+        postalCodePatterns: country.patterns,
         examplePostalCodes: country.example,
         isGenericRegex: country.isGenericRegex,
         countryName: country.country,

@@ -22,8 +22,10 @@ import { getCountryByCode } from "./getCountryByCode";
 export const validatePostalCode = (countryCode: CountryCode, postalCode: string): boolean => {
   const country: Country | null = getCountryByCode(countryCode);
   if (!country) return false;
+  if (country.postalCodePatterns.length === 0) return false;
   const normalized = postalCode.trim().toUpperCase();
-  const regexPattern = country.postalCodeRegex.slice(1, -1);
-  const regex = new RegExp(regexPattern);
-  return regex.test(normalized);
+  return country.postalCodePatterns.some((wrapped) => {
+    const pattern = wrapped.slice(1, -1);
+    return new RegExp(pattern).test(normalized);
+  });
 };
