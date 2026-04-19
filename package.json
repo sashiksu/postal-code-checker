@@ -26,7 +26,7 @@
     "sync:check": "ts-node -P tsconfig.cjs.json scripts/sync-postal-data.ts -- --check",
     "gen:social-preview": "ts-node -P tsconfig.cjs.json scripts/gen-social-preview.ts",
     "prepare": "npm run build",
-    "prepublishOnly": "npm run sync:check && npm test",
+    "prepublishOnly": "npm test",
     "release": "npm run prettier && npm test && npm run sync:check && npm run build && npm publish --access public",
     "release:next": "npm run prettier && npm test && npm run sync:check && npm run build && npm publish --access public --tag next"
   },
