@@ -10,6 +10,7 @@ Maintenance release. No runtime behavior changes, no public API changes. Focuses
 
 - **Demo navbar version badge.** The badge on [the live demo](https://sashiksu.github.io/postal-code-checker/) was still showing `v2.0.0-alpha.1`. Now reflects the published version.
 - **Demo page `<head>` metadata.** `<title>` is now capability-forward (`"Validate postal codes for 249 countries · postal-code-checker"`); `meta description` and `og:description` updated from "200+ countries" to the accurate "249 countries"; added `og:url`, `og:image`, `twitter:card`, `twitter:image`, and a canonical link so unfurls on Twitter/X, LinkedIn, Slack, and Facebook render the social-preview card.
+- **Demo GitHub Pages deploy.** Bumped `@vitejs/plugin-react` from `^4.3.4` to `^6.0.0` in `demo/package.json` to match the Vite 8 peer range. Previously, `npm ci` in the Pages workflow failed with ERESOLVE after Vite was upgraded to 8.x, silently leaving the live demo stale. Clean `npm ci` + build now passes end-to-end.
 
 ### Removed
 
