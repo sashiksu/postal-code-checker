@@ -1,255 +1,205 @@
-# 📮 postal-code-checker — Postal Code & ZIP Code Validator for 200+ Countries (TypeScript, ESM/CJS) 📮
+# 📮 postal-code-checker
+
+**Validate postal codes and ZIP codes for 249 countries. TypeScript-first. Zero dependencies.**
 
 [![npm version](https://img.shields.io/npm/v/postal-code-checker.svg)](https://www.npmjs.com/package/postal-code-checker)
 [![npm downloads](https://img.shields.io/npm/dm/postal-code-checker.svg)](https://www.npmjs.com/package/postal-code-checker)
 [![bundle size](https://img.shields.io/bundlephobia/minzip/postal-code-checker.svg)](https://bundlephobia.com/package/postal-code-checker)
 [![types](https://img.shields.io/npm/types/postal-code-checker.svg)](https://www.npmjs.com/package/postal-code-checker)
-[![license](https://img.shields.io/npm/l/postal-code-checker.svg)](https://github.com/sashiksu/postal-code-checker/blob/master/LICENSE)
+[![zero dependencies](https://img.shields.io/badge/dependencies-0-success.svg)](./package.json)
+[![license](https://img.shields.io/npm/l/postal-code-checker.svg)](./LICENSE)
 
-`postal-code-checker` validates postal codes and ZIP codes for **200+ countries** using ISO 3166-1 country codes. It's TypeScript-first, ships as both ESM and CommonJS, and has **zero runtime dependencies** — drop it into any React, Next.js, Vue, Angular, Node.js, or plain-JS project without dragging in a tree of transitive packages.
+<p align="center">
+  <img src="https://raw.githubusercontent.com/sashiksu/postal-code-checker/master/docs/hero.gif" alt="Validating postal codes for 249 countries in real time" width="720" />
+</p>
 
-## 💡 Why postal-code-checker?
+Powered by Google's [`libaddressinput`](https://github.com/google/libaddressinput) — the same dataset behind Chromium, Android, and Google Pay address forms.
 
-- 🪶 **Zero runtime dependencies** — one install, nothing else pulled in. Keeps your `node_modules` small and your supply-chain surface minimal. No Dependabot alerts from transitive deps you didn't ask for.
-- 🌍 **200+ countries out of the box** — validate using either ISO 3166-1 **alpha-2** (`"US"`) or **alpha-3** (`"USA"`) codes.
-- 🚀 **TypeScript-first** — ships with `.d.ts` types built in. No separate `@types/*` package to install.
-- 📦 **Works everywhere JavaScript runs** — React, Next.js, Vue, Angular, Svelte, Node.js, Deno, Bun, plain browser JS. No framework assumptions.
-- 🔤 **Forgiving input** — case-insensitive and trims surrounding whitespace, so messy user input doesn't need to be cleaned up before validation.
-- 📋 **Batch-friendly** — validate a single code or an array of them with the same ergonomic API.
-- ⚡️ **Dual ESM + CommonJS** — modern `import` and legacy `require()` both work out of the box.
+<details>
+<summary><b>Contents</b></summary>
 
-## ✨ What's New in 2.0.0
+- [Quick start](#-quick-start)
+- [Why postal-code-checker?](#-why-postal-code-checker)
+- [Use cases](#-use-cases)
+- [API Reference](#-api-reference)
+- [Types](#️-types)
+- [Migration Guide](#-migration-guide)
+- [Roadmap](#️-roadmap)
+- [Data Sources](#-data-sources)
+- [Contributing](#-contributing)
+- [License](#-license)
 
-- 🌐 **New data source: Google's `libaddressinput`** — replaces the ECB dataset with the same postal-code patterns Google uses in Chromium, Android, and Google Pay address forms. Patterns are more accurate and cover more territories (Åland, Martinique, Réunion, Puerto Rico, and other alpha-3 codes that previously orphaned).
-- 🧩 **`postalCodeRegex: string` → `postalCodePatterns: string[]`** — some countries (e.g. the UK) genuinely need multiple regexes. The field is now an array. **Breaking change** — see [Migration Guide](#-migration-guide).
-- 🗃️ **Country names follow Google's canonical form** — e.g. `"United States"` instead of `"United States of America"`, `"Russia"` instead of `"Russian Federation"`. Align any UI strings you pin against these.
-- 🔁 **Reproducible data pipeline** — `npm run sync:data` regenerates `src/assets/index.ts` from upstream; `npm run sync:check` runs in CI/`prepublishOnly` to block releases whose data drifted from the script's output.
-- ⏳ **`usePostalCodeValidation` removal pushed to 3.0** — v2 keeps it working so you can upgrade the data and the API separately.
+</details>
 
-## ✨ What's New in 1.1.0
+---
 
-- 🪄 **New top-level `validatePostalCode` API** — no factory function, no destructuring.
-- 🔤 **Case-insensitive and whitespace-tolerant input** — `"k1a 0t6"` and `" K1A 0T6 "` now both validate correctly.
-- 🌐 **ISO 3166-1 alpha-3 country codes** — use `"USA"`, `"GBR"`, `"CAN"` interchangeably with 2-letter codes.
-- 📦 **Batch validation helper** — validate many postal codes against one country in a single call.
-- ⚠️ **`usePostalCodeValidation` is deprecated** — still works in 2.x; scheduled for removal in 3.0. See [Migration Guide](#-migration-guide).
-
-## 📦 Installation
+## ⚡ Quick start
 
 ```bash
 npm install postal-code-checker
 ```
 
-## 🚀 Usage
+```ts
+import { validatePostalCode, validatePostalCodes } from "postal-code-checker";
 
-### Basic Example
+validatePostalCode("US", "90210");          // → true
+validatePostalCode("CA", "k1a 0t6");         // → true  (case + whitespace tolerant)
+validatePostalCode("GBR", "SW1A 1AA");       // → true  (alpha-3 works too)
 
-<details open>
-  <summary> 📋 Code</summary>
+validatePostalCodes("US", ["12345", "oops"]); // → [true, false]
+```
 
-```javascript
-// ES6 / TypeScript
-import { validatePostalCode, getCountryByCode, getAllCountries } from "postal-code-checker";
-// OR CommonJS
-const { validatePostalCode, getCountryByCode, getAllCountries } = require("postal-code-checker");
+Works in **React, Next.js, Vue, Svelte, Angular, Node.js, Deno, Bun, and plain browser JS** — no framework assumptions.
 
-// Validate a postal code
-const isValid = validatePostalCode("US", "12345"); // true
+---
 
-// ISO 3166-1 alpha-3 codes also work
-validatePostalCode("USA", "12345"); // true
+## 💡 Why postal-code-checker?
 
-// Input is case-insensitive and whitespace-tolerant
-validatePostalCode("CA", "k1a 0t6"); // true
-validatePostalCode("CA", "  K1A 0T6 "); // true
+- 🌍 **249 countries** — the full ISO 3166-1 list, sourced live from Google's `libaddressinput`. Regenerated per release so the regexes never drift from upstream.
+- 📋 **Batch API** — `validatePostalCodes(country, codes[])` returns an index-aligned `boolean[]`. Designed for CSV imports, bulk address uploads, and form arrays.
+- 🔤 **Alpha-2 and alpha-3 both work** — call with `"US"` or `"USA"`, `"GB"` or `"GBR"`. No branching at your call sites.
+- ✨ **Forgiving input** — case-insensitive and whitespace-tolerant. `"k1a 0t6"`, `" K1A 0T6 "`, and `"K1A0T6"` all validate equivalently where the country allows it.
+- 🪶 **Zero runtime dependencies** — one install, nothing else pulled in. Keeps `node_modules` small and supply-chain surface minimal.
+- 🧷 **TypeScript-first** — `.d.ts` bundled. No `@types/*` package to install.
+- 📦 **Dual ESM + CommonJS** — modern `import` and legacy `require()` both work out of the box.
+- 🌐 **Framework-agnostic** — React, Next.js, Vue, Svelte, Angular, Node.js, Deno, Bun, plain browser JS.
 
-// Get country information
-const country = getCountryByCode("US");
-console.log(country.countryName); // "United States"
+---
 
-// Get all available countries
-const countries = getAllCountries();
+## 🧩 Use cases
+
+<details>
+<summary><b>Ecommerce checkout — validate ZIP before hitting your address API</b></summary>
+
+```ts
+import { validatePostalCode } from "postal-code-checker";
+
+function onZipBlur(country: string, zip: string) {
+  if (!validatePostalCode(country, zip)) {
+    return "Please check your postal code.";
+  }
+  // safe to POST to /address-lookup
+}
 ```
 
 </details>
 
-### Batch Validation
+<details>
+<summary><b>React Hook Form — drop-in custom validator</b></summary>
+
+```tsx
+import { useForm } from "react-hook-form";
+import { validatePostalCode } from "postal-code-checker";
+
+const { register } = useForm<{ country: string; postal: string }>();
+
+<input
+  {...register("postal", {
+    validate: (value, { country }) =>
+      validatePostalCode(country, value) || "Invalid postal code",
+  })}
+/>
+```
+
+</details>
 
 <details>
-  <summary> 📋 Expand Code</summary>
+<summary><b>CSV / bulk import sanity check — batch API</b></summary>
 
-```javascript
+```ts
 import { validatePostalCodes } from "postal-code-checker";
 
-validatePostalCodes("US", ["12345", "90210", "abc"]);
-// → [true, true, false]
+const rows = await parseCsv("./addresses.csv");
+const postals = rows.map((r) => r.postal);
+const results = validatePostalCodes("US", postals);
+
+const bad = rows.filter((_, i) => !results[i]);
+console.log(`${bad.length} rows need review`);
 ```
 
-Useful for CSV imports, address-book uploads, or form arrays where many
-codes share the same country.
+Batch calls avoid N regex compiles — one country lookup, N matches. Index-aligned output so you can zip results back to input rows.
 
 </details>
-
-### NodeJS Example
 
 <details>
-  <summary> 📋 Expand Code</summary>
+<summary><b>Next.js server action — country-aware validation</b></summary>
 
-```javascript
-const { validatePostalCode, getCountryByCode, getAllCountries } = require("postal-code-checker");
+```ts
+"use server";
+import { validatePostalCode } from "postal-code-checker";
 
-// Validate a postal code
-const isValid = validatePostalCode("US", "12345"); // true
-
-// Get country information
-const country = getCountryByCode("US");
-console.log(country.countryName); // "United States"
-
-// Get all available countries
-const countries = getAllCountries();
+export async function submitAddress(data: FormData) {
+  const country = String(data.get("country"));
+  const postal = String(data.get("postal"));
+  if (!validatePostalCode(country, postal)) {
+    return { error: "Invalid postal code for that country" };
+  }
+  // persist…
+}
 ```
 
 </details>
-
-### React TypeScript Example (TSX)
 
 <details>
-  <summary> 📋 Expand Code</summary>
+<summary><b>Address autocomplete fallback — when no API is available</b></summary>
 
-```typescript
-import { ChangeEvent, FC, useState } from "react";
-import { validatePostalCode, getCountryByCode, getAllCountries, Country, CountryCode } from "postal-code-checker";
+```ts
+import { getCountryByCode } from "postal-code-checker";
 
-const PostalCodeValidator: FC = () => {
-  const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
-  const [postalCode, setPostalCode] = useState<string>("");
-  const [isValid, setIsValid] = useState<boolean | null>(null);
-
-  const handleCountryChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const country = getCountryByCode(e.target.value as CountryCode);
-    setSelectedCountry(country);
-    setIsValid(null);
-    setPostalCode("");
-  };
-
-  const handlePostalCodeChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const code = e.target.value;
-    setPostalCode(code);
-    if (selectedCountry) {
-      setIsValid(validatePostalCode(selectedCountry.countryCode, code));
-    }
-  };
-
-  return (
-    <div>
-      <select onChange={handleCountryChange}>
-        <option value="">Select a country</option>
-        {getAllCountries().map((country) => (
-          <option key={country.countryCode} value={country.countryCode}>
-            {country.countryName}
-          </option>
-        ))}
-      </select>
-      <input type="text" value={postalCode} onChange={handlePostalCodeChange} placeholder="Enter postal code" />
-      {isValid !== null && <p>{isValid ? "Valid postal code" : "Invalid postal code"}</p>}
-    </div>
-  );
-};
-
-export default PostalCodeValidator;
+const country = getCountryByCode("DE");
+// country.examplePostalCodes → ["10115"]  ← use as placeholder
+// country.postalCodePatterns → anchored regex strings, safe to render
 ```
 
 </details>
 
-### React Example (JSX)
-
-<details>
-  <summary> 📋 Expand Code</summary>
-
-```javascript
-import { useState } from "react";
-import { validatePostalCode, getCountryByCode, getAllCountries } from "postal-code-checker";
-
-const PostalCodeValidator = () => {
-  const [selectedCountry, setSelectedCountry] = useState(null);
-  const [postalCode, setPostalCode] = useState("");
-  const [isValid, setIsValid] = useState(null);
-
-  const handleCountryChange = (e) => {
-    const country = getCountryByCode(e.target.value);
-    setSelectedCountry(country);
-    setIsValid(null);
-    setPostalCode("");
-  };
-
-  const handlePostalCodeChange = (e) => {
-    const code = e.target.value;
-    setPostalCode(code);
-    if (selectedCountry) {
-      setIsValid(validatePostalCode(selectedCountry.countryCode, code));
-    }
-  };
-
-  return (
-    <div>
-      <select onChange={handleCountryChange}>
-        <option value="">Select a country</option>
-        {getAllCountries().map((country) => (
-          <option key={country.countryCode} value={country.countryCode}>
-            {country.countryName}
-          </option>
-        ))}
-      </select>
-      <input type="text" value={postalCode} onChange={handlePostalCodeChange} placeholder="Enter postal code" />
-      {isValid !== null && <p>{isValid ? "Valid postal code" : "Invalid postal code"}</p>}
-    </div>
-  );
-};
-
-export default PostalCodeValidator;
-```
-
-</details>
+---
 
 ## 📚 API Reference
 
 ### `validatePostalCode(countryCode, postalCode): boolean`
 
-Validates a single postal code against a country. Accepts both alpha-2 and
-alpha-3 ISO 3166-1 codes, and normalizes the postal-code input by trimming
-surrounding whitespace and uppercasing letters before matching.
+Validates a single postal code against a country. Accepts both alpha-2 and alpha-3 ISO 3166-1 codes. Input is trimmed and uppercased before matching, so `"k1a 0t6"`, `" K1A 0T6 "`, and `"K1A0T6"` all validate equivalently where the country allows it.
 
 ### `validatePostalCodes(countryCode, postalCodes): boolean[]`
 
-Validates an array of postal codes against one country and returns an
-index-aligned array of boolean results.
+Validates an array of postal codes against one country and returns an index-aligned array of results. Unique to this package — use it for CSV imports, bulk address uploads, and form arrays.
 
 ### `getCountryByCode(countryCode): Country | null`
 
-Returns the full country record (patterns, example codes, name, 2-letter
-code) or `null` if the country is unknown. Accepts alpha-2 or alpha-3 codes.
-`postalCodePatterns` is an array — most countries have one entry, some have
-several.
+Returns the full country record (patterns, example codes, name, 2-letter code) or `null` if unknown. Accepts alpha-2 or alpha-3. `postalCodePatterns` is a `string[]` — most countries have one entry, some (e.g. GB with BFPO) have several.
 
 ### `getAllCountries(): CountryOption[]`
 
-Returns an array of `{ countryName, countryCode }` for every supported
-country.
+Returns `{ countryName, countryCode }[]` for every supported country, sorted alphabetically.
 
-### `usePostalCodeValidation()` _(deprecated since 1.1.0)_
+### `usePostalCodeValidation()` — _deprecated since 1.1.0_
 
-Returns an object with a `validatePostalCode` method. Retained for backward
-compatibility; delegates to the top-level `validatePostalCode`. Kept
-functional in 2.x; scheduled for removal in 3.0.
+Retained for backward compatibility; delegates to the top-level `validatePostalCode`. Kept functional in 2.x; scheduled for removal in 3.0. Prefer the top-level exports in new code.
+
+---
+
+## 🏷️ Types
+
+```typescript
+type CountryCode = string; // ISO 3166-1 alpha-2 ("US") or alpha-3 ("USA")
+
+type Country = {
+  postalCodePatterns: string[];  // regex strings wrapped in slashes, e.g. "/^\\d{5}$/"
+  examplePostalCodes: string[];
+  isGenericRegex: boolean;
+  countryName: string;
+  countryCode: CountryCode;
+};
+```
+
+---
 
 ## 🔄 Migration Guide
 
 ### From v1.x → v2.0 (data-shape breaking change)
 
-v2.0 switches to Google's `libaddressinput` dataset and renames the regex
-field on the `Country` record. The runtime API (`validatePostalCode`,
-`validatePostalCodes`, `getCountryByCode`, `getAllCountries`) is unchanged —
-but anything that reads `country.postalCodeRegex` directly needs an update.
+v2.0 switches to Google's `libaddressinput` dataset and renames the regex field on the `Country` record. The runtime API (`validatePostalCode`, `validatePostalCodes`, `getCountryByCode`, `getAllCountries`) is unchanged — but anything reading `country.postalCodeRegex` directly needs an update.
 
 **Before (v1.x):**
 
@@ -268,155 +218,78 @@ const ok = country.postalCodePatterns.some((wrapped) =>
 );
 ```
 
-If you were only calling `validatePostalCode` / `validatePostalCodes`,
-nothing changes — the normalization (trim + uppercase) and return types are
-identical.
+If you were only calling `validatePostalCode` / `validatePostalCodes`, nothing changes — normalization and return types are identical.
 
 **Also note:**
-
-- `country.countryName` values follow Google's canonical spelling, e.g.
-  `"United States"` (was `"United States of America"`), `"Russia"` (was
-  `"Russian Federation"`). Update any string pins in tests or UI copy.
-- A handful of previously-orphan alpha-3 codes (Åland, Martinique, Réunion,
-  Puerto Rico, etc.) now resolve correctly through `getCountryByCode`.
+- `country.countryName` values follow Google's canonical spelling — e.g. `"United States"` (was `"United States of America"`), `"Russia"` (was `"Russian Federation"`). Update any string pins in tests or UI copy.
+- A handful of previously-orphan alpha-3 codes (Åland, Martinique, Réunion, Puerto Rico, etc.) now resolve correctly through `getCountryByCode`.
 
 ### From `usePostalCodeValidation` (v1.0.x) → `validatePostalCode` (v1.1.0+)
 
-**Before:**
-
 ```js
+// Before
 import { usePostalCodeValidation } from "postal-code-checker";
-
 const { validatePostalCode } = usePostalCodeValidation();
-const isValid = validatePostalCode("US", "12345");
-```
 
-**After:**
-
-```js
+// After
 import { validatePostalCode } from "postal-code-checker";
-
-const isValid = validatePostalCode("US", "12345");
 ```
 
-### Why the change?
+The `usePostalCodeValidation` name followed React's hook naming convention, which confused non-React users and tripped the `react-hooks/rules-of-hooks` lint rule even though it's not an actual hook. The new direct API works identically in React, Node.js, Vue, Angular, Svelte, or plain JavaScript.
 
-The `usePostalCodeValidation` name followed the React hook naming
-convention, which confused non-React users and could trigger React's
-`react-hooks/rules-of-hooks` lint rule even though the function is not an
-actual hook. The new direct API works identically in React, Node.js, Vue,
-Angular, Svelte, or plain JavaScript — no hook semantics apply.
+`usePostalCodeValidation` still exists in 2.x and delegates to the new implementation. Scheduled for removal in 3.0.
 
-### Backward compatibility
+---
 
-`usePostalCodeValidation` still exists in 2.x and delegates to the new
-implementation, so existing code keeps working and automatically benefits
-from 1.1.0+ improvements (case-insensitive input, alpha-3 support) and the
-v2 data refresh. It is scheduled for removal in 3.0, giving you two full
-major-version windows to migrate.
-
-## 🏷️ Types
-
-```typescript
-type CountryCode = string; // ISO 3166-1 alpha-2 (e.g. "US") or alpha-3 (e.g. "USA")
-
-type Country = {
-  postalCodePatterns: string[]; // each entry is a regex string wrapped in slashes, e.g. "/^\\d{5}$/"
-  examplePostalCodes: string[];
-  isGenericRegex: boolean;
-  countryName: string;
-  countryCode: CountryCode;
-};
-```
-
-## 🗺️ Our Roadmap
+## 🗺️ Roadmap
 
 ### ✅ Shipped
 
-- [x] Swap data source to Google `libaddressinput` (more accurate, more territories) _(2.0.0)_
-- [x] Reproducible data pipeline — `sync:data` + `sync:check` guard against upstream drift _(2.0.0)_
-- [x] `postalCodePatterns: string[]` — support countries with multiple valid patterns _(2.0.0)_
-- [x] Add unit tests for all utility functions _(1.1.0)_
-- [x] Add batch validation for multiple postal codes _(1.1.0)_
-- [x] Case-insensitive and whitespace-tolerant input handling _(1.1.0)_
-- [x] ISO 3166-1 alpha-3 country code support _(1.1.0)_
+- Swap data source to Google `libaddressinput` _(2.0.0)_
+- Reproducible data pipeline — `sync:data` + `sync:check` guard against upstream drift _(2.0.0)_
+- `postalCodePatterns: string[]` — support countries with multiple valid patterns _(2.0.0)_
+- Batch validation (`validatePostalCodes`) _(1.1.0)_
+- Case + whitespace tolerant input _(1.1.0)_
+- ISO 3166-1 alpha-3 support _(1.1.0)_
+- Full unit-test coverage of utility functions _(1.1.0)_
 
 ### 🔜 Planned
 
-- [ ] Replace remaining generic fallback patterns with country-specific regexes
-- [ ] Accept user-supplied country data to override / merge the bundled dataset
-- [ ] Generate example postal codes from the regex to drop hard-coded examples
-- [ ] Interactive demo website
+- Replace remaining generic fallback patterns with country-specific regexes
+- Accept user-supplied country data to override / merge the bundled dataset
+- Subdivision-level validation (Google's `sub_zips` prefix data)
+- Interactive demo site (in progress)
+
+---
+
+## 📊 Data Sources
+
+Postal code patterns, country names, and example codes come from Google's [`libaddressinput`](https://github.com/google/libaddressinput) project (Apache-2.0), fetched from `https://chromium-i18n.appspot.com/ssl-aggregate-address/data/<CC>`. The same dataset powers address forms in Chromium, Android, and Google Pay.
+
+`scripts/sync-postal-data.ts` regenerates `src/assets/index.ts` from upstream; `npm run sync:check` runs in CI and in `prepublishOnly` to block releases whose on-disk data has drifted from the script's output.
+
+See [`NOTICE`](./NOTICE) for the upstream Apache-2.0 attribution.
+
+Prior to v2.0.0, data was sourced from the European Central Bank (ECB), retrieved 4 Aug 2024.
+
+---
 
 ## 🤝 Contributing
 
 Pull requests are welcome.
 
-When contributing, please follow these guidelines:
+1. Branch from `master`:
+   ```
+   git checkout master && git pull
+   git checkout -b feature/your-feature   # or bugfix/your-fix
+   ```
+2. Use meaningful branch names: `bugfix/short-description` or `feature/short-description`.
+3. Add or update tests under `src/__tests__/` for any behavior change.
+4. Follow existing code style (Prettier + ESLint configs ship with the repo).
+5. Write clear, descriptive commit messages.
 
-1.  Always start by checking out from the `master` branch:
-    <details>
-       <summary> 📋 Show More</summary>
-
-    ```
-    git checkout master
-    git pull
-    git checkout -b your-branch-name
-    ```
-
-    </details>
-
-2.  Use meaningful names for your branches. Follow these patterns:
-    <details>
-      <summary> 📋 Show Examples</summary>
-
-    - For bug fixes:
-
-      ```
-      bugfix/short-description-of-the-fix
-      ```
-
-      Example: `bugfix/fix-null-return-australia-code`
-
-    - For new features or improvements:
-
-      ```
-      feature/short-description-of-feature
-      ```
-
-      Example: `feature/add-getAllCountries-unit-test`
-
-    </details>
-
-3.  Please make sure to update tests as appropriate.
-
-4.  Ensure your code follows the project's coding standards and conventions.
-
-5.  Write clear, concise commit messages describing your changes.
-
-6.  Update or add unit tests to cover your changes.
-
-We appreciate your contributions to making `postal-code-checker` better!
-
-## 📊 Data Sources
-
-Postal code patterns, country names, and example codes are sourced from
-Google's [`libaddressinput`](https://github.com/google/libaddressinput)
-project (Apache-2.0), mirrored at
-`https://chromium-i18n.appspot.com/ssl-aggregate-address/data/<CC>`. The
-same dataset powers address forms in Chromium, Android, and Google Pay.
-
-The data is fetched and reformatted by `scripts/sync-postal-data.ts` into
-the shape this package expects (regex strings wrapped in slashes, anchored
-with `^(?:…)$`). `npm run sync:data` regenerates `src/assets/index.ts` from
-upstream; `npm run sync:check` runs in CI and in `prepublishOnly` to block
-releases whose on-disk data has drifted from the script's output.
-
-See [`NOTICE`](./NOTICE) for the upstream Apache-2.0 attribution.
-
-Prior to v2.0.0, data was sourced from the European Central Bank (ECB),
-retrieved 4 Aug 2024.
+---
 
 ## 📄 License
 
-[MIT](https://choosealicense.com/licenses/mit/)
+[MIT](./LICENSE)

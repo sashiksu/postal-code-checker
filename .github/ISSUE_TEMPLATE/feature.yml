@@ -1,0 +1,45 @@
+name: Feature request
+description: Suggest a new capability or API improvement.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have an idea for making `postal-code-checker` more useful? Please describe the problem first, then the proposed solution. Good feature requests are framed around a concrete use case.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem you're trying to solve
+      description: What are you trying to do that's painful or impossible today?
+      placeholder: "I need to validate subdivision-level postal codes (e.g. the first 2 digits of a US ZIP identify a state)…"
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed API or behavior
+      description: How you'd like it to work. Sketch the function signature, types, or usage example.
+      render: ts
+      placeholder: |
+        validatePostalCode("US", "90210", { subdivision: "CA" }) // true
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Other approaches you've thought about, or workarounds you're using today.
+
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope check
+      description: Please confirm this fits the package's goals before submitting.
+      options:
+        - label: This does not require hand-maintaining per-country data in the repo (data comes from upstream libaddressinput).
+          required: true
+        - label: This works without adding runtime dependencies.
+          required: true

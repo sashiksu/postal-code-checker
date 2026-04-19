@@ -1,0 +1,52 @@
+name: Country data tracking
+description: Track a postal-code pattern issue you've already reported upstream to libaddressinput.
+labels: ["country-data", "upstream"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Postal-code patterns in this package are regenerated from [Google's `libaddressinput`](https://github.com/google/libaddressinput) on every release. We do not hand-edit the data.
+
+        **If you haven't already**, please file the data issue upstream first:
+        👉 https://github.com/google/libaddressinput/issues
+
+        Then open this issue so we can track it on our side and pick up the fix on the next sync.
+
+  - type: input
+    id: country-code
+    attributes:
+      label: ISO 3166-1 country code
+      description: Alpha-2 (e.g. DE, GB, JP). Alpha-3 is fine too.
+      placeholder: "DE"
+    validations:
+      required: true
+
+  - type: input
+    id: upstream-issue
+    attributes:
+      label: Upstream libaddressinput issue URL
+      description: Link to the issue you filed at google/libaddressinput.
+      placeholder: "https://github.com/google/libaddressinput/issues/123"
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-is-wrong
+    attributes:
+      label: What's wrong with the current pattern
+      description: Describe the specific input that should / shouldn't validate, and what the expected behavior is. Cite a postal authority source if you have one.
+      placeholder: |
+        "10115" validates, but "10115-1234" (extended form) should also validate per Deutsche Post's spec at …
+    validations:
+      required: true
+
+  - type: textarea
+    id: examples
+    attributes:
+      label: Example codes
+      description: A few real postal codes that demonstrate the issue.
+      render: text
+      placeholder: |
+        10115      (valid)
+        10115-1234 (valid, currently rejected)
+        99999      (invalid, currently accepted)
