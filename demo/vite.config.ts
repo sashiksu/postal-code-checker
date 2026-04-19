@@ -22,12 +22,4 @@ export default defineConfig({
     port: 5173,
     open: true,
   },
-  css: {
-    preprocessorOptions: {
-      scss: {
-        // Silence "legacy-js-api" spam — opts into the modern Sass JS API.
-        api: "modern-compiler",
-      },
-    },
-  },
 });
