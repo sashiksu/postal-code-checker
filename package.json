@@ -1,6 +1,6 @@
 {
   "name": "postal-code-checker",
-  "version": "2.0.0-alpha.1",
+  "version": "2.0.0",
   "description": "A package for validating postal codes from various countries.",
   "author": "Sashika Suraweera",
   "license": "MIT",
