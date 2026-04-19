@@ -1,7 +1,7 @@
 import { CountryCode } from "./CountryCode";
 
 export type Country = {
-  postalCodeRegex: string;
+  postalCodePatterns: string[];
   examplePostalCodes: string[];
   isGenericRegex: boolean;
   countryName: string;

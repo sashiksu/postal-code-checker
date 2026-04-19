@@ -1,0 +1,114 @@
+@use "variables" as *;
+@use "mixins" as *;
+@use "theme";
+
+// -- reset -------------------------------------------------------------------
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: $font-sans;
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "cv11", "ss01";
+  transition: background-color $duration-base $ease, color $duration-base $ease;
+
+  @include reduced-motion {
+    transition: none;
+  }
+}
+
+code,
+pre {
+  font-family: $font-mono;
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+
+input,
+select,
+textarea {
+  font-family: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+// -- layout primitives -------------------------------------------------------
+.container {
+  max-width: $container-max;
+  margin: 0 auto;
+  padding: 0 $container-pad;
+}
+
+// Shell — main page grid that holds the sticky sidebar + content column.
+// On mobile, collapses to a single column (sidebar becomes a sticky strip).
+.shell {
+  max-width: $container-max;
+  margin: 0 auto;
+  padding: 0 $container-pad;
+
+  @include media-lg {
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: 32px;
+    align-items: start;
+  }
+}
+
+// Skip-link: visible only when focused (tab key) for keyboard / screen-reader users.
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  padding: 10px 16px;
+  background: var(--color-accent);
+  color: var(--color-accent-contrast);
+  font-weight: 600;
+  border-radius: 0 0 8px 0;
+  z-index: $z-toast;
+
+  &:focus {
+    left: 0;
+  }
+}
+
+// Section anchor offset — scrolls stop below the sticky chrome instead of under it.
+// Mobile adds space for the sticky section-strip beneath the navbar.
+section[id] {
+  scroll-margin-top: #{$navbar-height + 64px};
+
+  @include media-lg {
+    scroll-margin-top: #{$navbar-height + 24px};
+  }
+}

@@ -13,7 +13,7 @@ import { validatePostalCode } from "./validatePostalCode";
  * import { validatePostalCode } from "postal-code-checker";
  * ```
  *
- * Will be removed in 2.0.
+ * Kept functional in 2.x; scheduled for removal in 3.0.
  *
  * @returns {Object} An object containing the validatePostalCode function.
  */

@@ -1,0 +1,62 @@
+name: Bug report
+description: Report a bug in the validator, API, or build output.
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug. The more precise the repro, the faster it gets fixed.
+
+        **Before filing:** if the issue is a wrong or missing postal-code pattern for a specific country, that data lives in [Google's `libaddressinput`](https://github.com/google/libaddressinput/issues) — please file there. This template is for validator, API, or packaging bugs.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: A clear description of the unexpected behavior.
+      placeholder: "Calling validatePostalCode('US', '12345') returned false, but…"
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      placeholder: "Should return true for a valid US ZIP."
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Minimal reproduction
+      description: Smallest code sample that reproduces the issue. A StackBlitz or runkit link is perfect.
+      render: ts
+      placeholder: |
+        import { validatePostalCode } from "postal-code-checker";
+        validatePostalCode("US", "12345"); // returns false
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: postal-code-checker version
+      placeholder: "2.0.0"
+    validations:
+      required: true
+
+  - type: input
+    id: runtime
+    attributes:
+      label: Runtime / environment
+      description: "Node / Deno / Bun / browser / Next.js / Vite — include version where relevant."
+      placeholder: "Node 20.11.0"
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Logs, screenshots, or anything else that might help.

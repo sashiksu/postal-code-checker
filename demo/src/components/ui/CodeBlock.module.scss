@@ -1,0 +1,71 @@
+@use "../../styles/variables" as *;
+
+.block {
+  position: relative;
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.pre {
+  margin: 0;
+  padding: 18px 20px;
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--color-text);
+  font-family: $font-mono;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.copy {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: var(--color-panel);
+  border: 1px solid var(--color-border);
+  padding: 4px 10px;
+  font-size: 11px;
+  color: var(--color-muted);
+  border-radius: 5px;
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity $duration-fast $ease, color $duration-fast $ease,
+    border-color $duration-fast $ease;
+  cursor: pointer;
+
+  .block:hover &,
+  &:focus-visible {
+    opacity: 1;
+  }
+
+  &:hover {
+    color: var(--color-text);
+    border-color: var(--color-border-strong);
+  }
+
+  &.copied {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+    opacity: 1;
+  }
+}
+
+// Token colors — read from theme tokens so light + dark both look tuned.
+.cmt {
+  color: var(--syntax-comment);
+  font-style: italic;
+}
+.str {
+  color: var(--syntax-string);
+}
+.kw {
+  color: var(--syntax-keyword);
+}
+.fn {
+  color: var(--syntax-function);
+}
+.tag {
+  color: var(--syntax-keyword);
+}

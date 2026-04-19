@@ -1,0 +1,47 @@
+@use "../styles/variables" as *;
+@use "../styles/mixins" as *;
+
+.button {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-accent);
+  color: var(--color-accent-contrast);
+  border: 1px solid var(--color-accent);
+  border-radius: 999px;
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition:
+    opacity $duration-base $ease,
+    transform $duration-base $ease,
+    background-color $duration-fast $ease;
+  z-index: $z-overlay;
+
+  &:hover {
+    background: var(--color-accent);
+    filter: brightness(1.05);
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  @include reduced-motion {
+    transition: opacity 0.01s;
+  }
+}
+
+.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}

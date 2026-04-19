@@ -1,0 +1,36 @@
+@use "../styles/variables" as *;
+
+.group {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  background: var(--color-panel-2);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 5px;
+  color: var(--color-muted);
+  transition: color $duration-fast $ease, background-color $duration-fast $ease;
+
+  &:hover {
+    color: var(--color-text);
+  }
+
+  &.active {
+    background: var(--color-bg);
+    color: var(--color-accent);
+    box-shadow: var(--shadow-sm);
+  }
+
+  svg {
+    width: 15px;
+    height: 15px;
+  }
+}

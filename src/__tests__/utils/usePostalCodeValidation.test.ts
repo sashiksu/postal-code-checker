@@ -48,8 +48,11 @@ describe("usePostalCodeValidation()", () => {
       },
     );
 
-    it("Should reject missing space", () => {
-      expect(validatePostalCode("CA", "K1A0T6")).toBe(false);
+    // v2.0.0: Google's CA pattern uses ` ?` (optional space), matching
+    // Canada Post's practice of accepting both "K1A 0T6" and "K1A0T6".
+    // v1.1.0 ECB data rejected the no-space form; v2 accepts it.
+    it("Should accept missing space (v2.0.0, Google data)", () => {
+      expect(validatePostalCode("CA", "K1A0T6")).toBe(true);
     });
 
     it("Should accept lowercase (normalized to uppercase in 1.1.0)", () => {
