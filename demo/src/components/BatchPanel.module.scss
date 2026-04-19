@@ -1,0 +1,147 @@
+@use "../styles/variables" as *;
+@use "../styles/mixins" as *;
+
+.panel {
+  background: var(--color-panel);
+  border: 1px solid var(--color-border);
+  border-radius: $radius-lg;
+  padding: 22px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  height: 520px;
+}
+
+.header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+
+  h3 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--color-muted);
+  }
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: 1fr 220px;
+  gap: 12px;
+  margin-bottom: 10px;
+
+  @include below-lg {
+    grid-template-columns: 1fr;
+  }
+}
+
+.textarea {
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--color-panel-2);
+  border: 1px solid var(--color-border);
+  border-radius: $radius;
+  color: var(--color-text);
+  font-family: $font-mono;
+  font-size: 13px;
+  line-height: 1.55;
+  padding: 10px 12px;
+  resize: vertical;
+  min-height: 150px;
+  transition: border-color $duration-fast $ease, box-shadow $duration-fast $ease;
+
+  &:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px var(--color-accent-soft);
+  }
+}
+
+.results {
+  margin-top: 12px;
+  border: 1px solid var(--color-border);
+  border-radius: $radius;
+  background: var(--color-panel-2);
+  flex: 1 1 auto;
+  min-height: 120px;
+  overflow: auto;
+}
+
+.empty {
+  padding: 24px 14px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 20px 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-family: $font-mono;
+
+  & + & {
+    border-top: 1px solid var(--color-border);
+  }
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+
+  &.ok {
+    color: var(--color-accent);
+  }
+
+  &.bad {
+    color: var(--color-error);
+  }
+}
+
+.code {
+  color: var(--color-text);
+  word-break: break-all;
+}
+
+.status {
+  font-family: $font-sans;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+
+  &.ok {
+    color: var(--color-accent);
+  }
+
+  &.bad {
+    color: var(--color-error);
+  }
+}
+
+.summary {
+  margin-top: 10px;
+  font-size: 12.5px;
+  color: var(--color-muted);
+
+  strong {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+}

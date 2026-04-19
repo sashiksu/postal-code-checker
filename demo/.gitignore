@@ -1,0 +1,19 @@
+node_modules
+dist
+dist-ssr
+*.local
+.vite
+.netlify
+
+# tsc -b (project references) build cache
+*.tsbuildinfo
+
+# Emitted from vite.config.ts by composite tsc — Vite reads the .ts directly.
+vite.config.js
+vite.config.d.ts
+
+# IDE
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store

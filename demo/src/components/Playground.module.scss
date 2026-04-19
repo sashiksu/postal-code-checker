@@ -1,0 +1,26 @@
+@use "../styles/variables" as *;
+@use "../styles/mixins" as *;
+
+.section {
+  padding: 48px 0 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 18px;
+  align-items: stretch;
+
+  @include below-lg {
+    grid-template-columns: 1fr;
+  }
+}
+
+.editorWrap {
+  margin-top: 16px;
+}
+
+.roadmapWrap {
+  margin-top: 16px;
+}
