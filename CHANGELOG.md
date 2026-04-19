@@ -2,6 +2,22 @@
 
 All notable changes to `postal-code-checker` are documented here. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0-alpha.1]
+
+Adds two new public APIs for working with postal codes that are valid across countries. Backward-compatible with 2.0; no migration needed.
+
+### Added
+
+- **`format(countryCode, postalCode)`** — returns the canonical form of a valid code (trimmed, uppercased), ready to store in a database. Returns `null` when the input doesn't match the country's pattern or the country has no postal code system. Accepts alpha-2 and alpha-3 country codes.
+- **`guessCountries(postalCode)`** — given a postal code with no country context, returns every country whose pattern accepts the input. Result is `{ countryName, countryCode }[]` sorted alphabetically by `countryName` — ready to render as a picker. Countries with no postal code system are naturally excluded.
+- **`CountryOption` type re-exported** from the package barrel. Previously internal; both `getAllCountries` and the new `guessCountries` return `CountryOption[]`, so consumers now have access to the shape.
+
+### Demo
+
+- Interactive `format()` and `guessCountries()` panels in the Playground section.
+- New "Format" and "Guess" tabs in the Code Examples.
+- Roadmap no longer lists either function as planned; both now ship with 2.1.
+
 ## [2.0.1]
 
 Maintenance release. No runtime behavior changes, no public API changes. Focuses on demo polish, legacy playground removal, and a devDependency cleanup.
@@ -108,6 +124,7 @@ See [`docs/SWITCHING.md`](./docs/SWITCHING.md) for the broader "coming from anot
 
 Earlier versions are documented in the [GitHub releases](https://github.com/sashiksu/postal-code-checker/releases).
 
+[2.1.0-alpha.1]: https://github.com/sashiksu/postal-code-checker/releases/tag/v2.1.0-alpha.1
 [2.0.1]: https://github.com/sashiksu/postal-code-checker/releases/tag/v2.0.1
 [2.0.0]: https://github.com/sashiksu/postal-code-checker/releases/tag/v2.0.0
 [1.1.0]: https://github.com/sashiksu/postal-code-checker/releases/tag/v1.1.0
