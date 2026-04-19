@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Country data is wrong or missing (upstream)
+    url: https://github.com/google/libaddressinput/issues
+    about: Postal-code patterns come from Google's libaddressinput. Fixes land there first and flow into this package on the next sync. Please file with them if the issue is a missing or incorrect pattern for a specific country.
+  - name: Questions and discussions
+    url: https://github.com/sashiksu/postal-code-checker/discussions
+    about: Use Discussions for usage questions, ideas, or anything that isn't clearly a bug or feature request.

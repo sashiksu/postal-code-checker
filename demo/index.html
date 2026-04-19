@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Validate postal codes for 200+ countries. TypeScript-first, zero runtime dependencies."
+    />
+    <meta name="theme-color" content="#10b981" />
+
+    <meta property="og:title" content="postal-code-checker — live demo" />
+    <meta
+      property="og:description"
+      content="Validate postal codes for 200+ countries. TypeScript-first, zero runtime dependencies."
+    />
+    <meta property="og:type" content="website" />
+
+    <title>postal-code-checker — live demo</title>
+
+    <script>
+      // Pre-hydration theme: runs synchronously before first paint to avoid FOUC.
+      (function () {
+        try {
+          var stored = localStorage.getItem("pcc-theme");
+          var mode =
+            stored === "light" || stored === "dark" || stored === "system"
+              ? stored
+              : "system";
+          var resolved =
+            mode === "system"
+              ? window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light"
+              : mode;
+          document.documentElement.setAttribute("data-theme", resolved);
+        } catch (e) {
+          /* localStorage unavailable — keep default */
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,120 @@
+// Two-layer palette architecture:
+//   Layer 1 — raw colors as SCSS vars (below). Authoring shortcuts.
+//   Layer 2 — semantic CSS custom properties (:root blocks). The themes flip these.
+//
+// Components should *always* consume Layer 2 (`var(--color-bg)` etc.).
+// SCSS vars are only used here — they disappear in the compiled CSS.
+
+// -- raw palette -------------------------------------------------------------
+// Emerald (accent)
+$emerald-500: #10b981;
+$emerald-600: #059669;
+
+// Neutrals — gray scale for both themes
+$gray-0: #ffffff;
+$gray-50: #fafafa;
+$gray-100: #f4f4f5;
+$gray-150: #f5f5f7;
+$gray-200: #e4e4e7;
+$gray-300: #d4d4d8;
+$gray-400: #a1a1aa;
+$gray-500: #71717a;
+$gray-600: #52525b;
+
+$ink-300: #8b8b93;
+$ink-500: #3a3a48;
+$ink-600: #262630;
+$ink-700: #1a1a22;
+$ink-800: #131319;
+$ink-900: #0b0b0f;
+$ink-950: #0a0a0e;
+
+// Semantic — status colors
+$rose-500: #f43f5e;
+$rose-600: #e11d48;
+$amber-500: #f59e0b;
+$amber-600: #d97706;
+
+// -- semantic tokens: DARK (default, also set explicitly) --------------------
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  // surfaces
+  --color-bg: #{$ink-900};
+  --color-panel: #{$ink-800};
+  --color-panel-2: #{$ink-700};
+  --color-code-bg: #{$ink-950};
+
+  // text
+  --color-text: #{$gray-150};
+  --color-muted: #{$ink-300};
+  --color-muted-strong: #{$gray-400};
+
+  // borders
+  --color-border: #{$ink-600};
+  --color-border-strong: #{$ink-500};
+
+  // accent (emerald)
+  --color-accent: #{$emerald-500};
+  --color-accent-contrast: #001811;
+  --color-accent-soft: rgba(16, 185, 129, 0.12);
+
+  // status
+  --color-error: #{$rose-500};
+  --color-error-soft: rgba(244, 63, 94, 0.12);
+  --color-warn: #{$amber-500};
+  --color-warn-soft: rgba(245, 158, 11, 0.12);
+
+  // elevation
+  --shadow-sm: 0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+
+  // syntax highlighting — tuned for dark surface
+  --syntax-comment: #{$ink-300};
+  --syntax-string: #7dd3a4;
+  --syntax-keyword: #c792ea;
+  --syntax-function: #82aaff;
+}
+
+// -- semantic tokens: LIGHT --------------------------------------------------
+[data-theme="light"] {
+  color-scheme: light;
+
+  // surfaces
+  --color-bg: #{$gray-50};
+  --color-panel: #{$gray-0};
+  --color-panel-2: #{$gray-100};
+  --color-code-bg: #{$gray-100};
+
+  // text
+  --color-text: #0a0a0a;
+  --color-muted: #{$gray-500};
+  --color-muted-strong: #{$gray-600};
+
+  // borders
+  --color-border: #{$gray-200};
+  --color-border-strong: #{$gray-300};
+
+  // accent — slightly deeper emerald for contrast on light bg
+  --color-accent: #{$emerald-600};
+  --color-accent-contrast: #ffffff;
+  --color-accent-soft: rgba(5, 150, 105, 0.1);
+
+  // status
+  --color-error: #{$rose-600};
+  --color-error-soft: rgba(225, 29, 72, 0.08);
+  --color-warn: #{$amber-600};
+  --color-warn-soft: rgba(217, 119, 6, 0.1);
+
+  // elevation
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 6px 24px rgba(0, 0, 0, 0.08);
+
+  // syntax highlighting — tuned for light surface
+  --syntax-comment: #6b7280;
+  --syntax-string: #047857;
+  --syntax-keyword: #8b5cf6;
+  --syntax-function: #2563eb;
+}

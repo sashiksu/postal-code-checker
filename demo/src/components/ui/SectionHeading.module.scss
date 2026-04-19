@@ -1,0 +1,38 @@
+@use "../../styles/variables" as *;
+
+.heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 0 0 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.text {
+  h2 {
+    margin: 0;
+    font-size: 24px;
+    letter-spacing: -0.01em;
+  }
+
+  p {
+    margin: 6px 0 0;
+    color: var(--color-muted);
+    font-size: 14px;
+  }
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 999px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}

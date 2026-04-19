@@ -1,0 +1,158 @@
+@use "../styles/variables" as *;
+@use "../styles/mixins" as *;
+
+.panel {
+  background: var(--color-panel);
+  border: 1px solid var(--color-border);
+  border-radius: $radius-lg;
+  padding: 22px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  height: 520px;
+}
+
+.header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+
+  h3 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--color-muted);
+  }
+}
+
+.searchWrap {
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  color: var(--color-muted);
+  pointer-events: none;
+}
+
+.search {
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--color-panel-2);
+  border: 1px solid var(--color-border);
+  border-radius: $radius;
+  color: var(--color-text);
+  font: inherit;
+  padding: 10px 12px 10px 34px;
+  transition: border-color $duration-fast $ease, box-shadow $duration-fast $ease;
+
+  &::placeholder {
+    color: var(--color-muted);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px var(--color-accent-soft);
+  }
+}
+
+.list {
+  border: 1px solid var(--color-border);
+  border-radius: $radius;
+  background: var(--color-panel-2);
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+
+.row {
+  all: unset;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-size: 13.5px;
+  transition: background-color $duration-fast $ease;
+  box-sizing: border-box;
+  width: 100%;
+
+  & + & {
+    border-top: 1px solid var(--color-border);
+  }
+
+  &:hover {
+    background: var(--color-panel);
+  }
+
+  &.selected {
+    background: var(--color-accent-soft);
+  }
+
+  @include focus-ring;
+}
+
+.name {
+  color: var(--color-text);
+  font-weight: 500;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.codeTag {
+  font-family: $font-mono;
+  font-size: 11.5px;
+  color: var(--color-muted);
+  background: var(--color-panel);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: 1px 6px;
+}
+
+.example {
+  font-family: $font-mono;
+  font-size: 12px;
+  color: var(--color-muted);
+
+  &.none {
+    color: var(--color-warn);
+    font-style: italic;
+  }
+}
+
+.empty {
+  padding: 24px 14px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.summary {
+  margin-top: 10px;
+  font-size: 12.5px;
+  color: var(--color-muted);
+
+  strong {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+}

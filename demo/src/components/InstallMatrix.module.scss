@@ -1,0 +1,28 @@
+@use "../styles/variables" as *;
+
+.section {
+  padding: 48px 0 0;
+}
+
+.panel {
+  background: var(--color-panel);
+  border: 1px solid var(--color-border);
+  border-radius: $radius-lg;
+  padding: 28px;
+  box-shadow: var(--shadow-sm);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  h2 {
+    margin: 0;
+    font-size: 20px;
+    letter-spacing: -0.01em;
+  }
+}

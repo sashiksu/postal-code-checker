@@ -1,0 +1,37 @@
+// SCSS-only variables — compile-time values that never need to swap at runtime.
+// Anything that changes per-theme lives in _theme.scss as a CSS custom property.
+
+// -- typography --------------------------------------------------------------
+$font-sans:
+  -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+  Arial, sans-serif;
+$font-mono:
+  ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono",
+  monospace;
+
+// -- spacing & shape ---------------------------------------------------------
+$radius: 10px;
+$radius-lg: 14px;
+$radius-sm: 6px;
+
+// -- layout ------------------------------------------------------------------
+$container-max: 1320px;
+$container-pad: 24px;
+$navbar-height: 60px;
+
+// -- breakpoints -------------------------------------------------------------
+$bp-sm: 640px;
+$bp-md: 760px;
+$bp-lg: 880px;
+$bp-xl: 1120px;
+
+// -- z-index scale -----------------------------------------------------------
+$z-navbar: 50;
+$z-popover: 75;
+$z-overlay: 100;
+$z-toast: 200;
+
+// -- motion ------------------------------------------------------------------
+$ease: cubic-bezier(0.4, 0, 0.2, 1);
+$duration-fast: 0.15s;
+$duration-base: 0.25s;
