@@ -1,4 +1,4 @@
-export type ExampleId = "basic" | "batch" | "react" | "nextjs" | "node" | "ts";
+export type ExampleId = "basic" | "batch" | "format" | "guess" | "react" | "nextjs" | "node" | "ts";
 
 export type Example = {
   id: ExampleId;
@@ -40,6 +40,49 @@ const results = validatePostalCodes("US", [
 
 // Index-aligned with the input — useful for CSV imports
 const cleanRows = rows.filter((_, i) => results[i]);`,
+  },
+  {
+    id: "format",
+    label: "Format",
+    code: `import { format } from "postal-code-checker";
+
+// Canonicalize before writing to the database
+format("US", "  12345 ");    // → "12345"
+format("CA", "k1a 0t6");     // → "K1A 0T6"
+format("GB", "sw1a 1aa");    // → "SW1A 1AA"
+
+// Returns null when the code isn't valid for that country
+format("US", "ABC12");        // → null
+format("AE", "1234");         // → null (no postal system)
+
+// Shorthand pattern: validate + normalize in one step
+const canonical = format(country, userInput);
+if (canonical) await db.save({ postalCode: canonical });`,
+  },
+  {
+    id: "guess",
+    label: "Guess",
+    code: `import { guessCountries } from "postal-code-checker";
+
+// Country-less input — who could this belong to?
+guessCountries("K1A 0T6");
+// → [{ countryName: "Canada", countryCode: "CA" }]
+
+guessCountries("SW1A 1AA");
+// → [{ countryName: "United Kingdom", countryCode: "GB" }]
+
+// Generic formats match many countries
+guessCountries("12345");
+// → [
+//     { countryName: "Algeria", countryCode: "DZ" },
+//     { countryName: "Croatia", countryCode: "HR" },
+//     { countryName: "France", countryCode: "FR" },
+//     { countryName: "Germany", countryCode: "DE" },
+//     { countryName: "United States of America", countryCode: "US" },
+//     ... more
+//   ]
+
+// Sorted alphabetically, ready to render as a picker`,
   },
   {
     id: "react",
@@ -152,9 +195,4 @@ bun add postal-code-checker
 bun add postal-code-checker@next`,
 };
 
-export const PACKAGE_MANAGERS: readonly PackageManager[] = [
-  "npm",
-  "yarn",
-  "pnpm",
-  "bun",
-] as const;
+export const PACKAGE_MANAGERS: readonly PackageManager[] = ["npm", "yarn", "pnpm", "bun"] as const;

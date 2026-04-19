@@ -1,6 +1,8 @@
 import { type RefObject } from "react";
 import { BatchPanel } from "./BatchPanel";
 import { DatasetPanel } from "./DatasetPanel";
+import { FormatPanel } from "./FormatPanel";
+import { GuessPanel } from "./GuessPanel";
 import { LiveEditor } from "./LiveEditor";
 import { Roadmap } from "./Roadmap";
 import { SectionHeading } from "./ui/SectionHeading";
@@ -14,23 +16,19 @@ type Props = {
 
 export function Playground({ activeCountry, onPickCountry, searchRef }: Props) {
   return (
-    <section
-      id="playground"
-      className={styles.section}
-      aria-labelledby="playground-heading"
-    >
+    <section id="playground" className={styles.section} aria-labelledby="playground-heading">
       <SectionHeading
         headingId="playground-heading"
         title="Playground"
-        subtitle="Explore the full API — batch validation, dataset browser, roadmap."
+        subtitle="Explore the full API — batch validation, canonical formatting, country guessing, dataset browser."
       />
       <div className={styles.grid}>
         <BatchPanel />
-        <DatasetPanel
-          activeCountry={activeCountry}
-          onPickCountry={onPickCountry}
-          searchRef={searchRef}
-        />
+        <DatasetPanel activeCountry={activeCountry} onPickCountry={onPickCountry} searchRef={searchRef} />
+      </div>
+      <div className={styles.grid}>
+        <FormatPanel />
+        <GuessPanel onPickCountry={onPickCountry} />
       </div>
       <div className={styles.editorWrap}>
         <LiveEditor />
