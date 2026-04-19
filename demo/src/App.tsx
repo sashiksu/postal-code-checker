@@ -2,8 +2,10 @@ import { useCallback, useRef, useState } from "react";
 import { Navbar } from "./components/Navbar";
 import { Sidebar } from "./components/Sidebar";
 import { Hero } from "./components/Hero";
+import { WhyChoose } from "./components/WhyChoose";
 import { InstallMatrix } from "./components/InstallMatrix";
 import { CodeExamples } from "./components/CodeExamples";
+import { UseCases } from "./components/UseCases";
 import { WhatsNew } from "./components/WhatsNew";
 import { MigrationGuide } from "./components/MigrationGuide";
 import { Playground } from "./components/Playground";
@@ -48,8 +50,10 @@ export function App() {
         <Sidebar />
         <main id="main">
           <Hero countryCode={countryCode} onCountryChange={setCountryCode} />
+          <WhyChoose />
           <InstallMatrix />
           <CodeExamples />
+          <UseCases />
           <WhatsNew />
           <MigrationGuide />
           <Playground
