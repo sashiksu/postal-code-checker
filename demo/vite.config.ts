@@ -6,6 +6,10 @@ import { fileURLToPath } from "node:url";
 const root = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
+  // Deployed at https://sashiksu.github.io/postal-code-checker/ — the GitHub
+  // Pages workflow sets VITE_BASE=/postal-code-checker/ at build time.
+  // Dev server falls through to "/".
+  base: process.env.VITE_BASE ?? "/",
   plugins: [react()],
   resolve: {
     alias: {

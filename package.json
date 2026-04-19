@@ -56,7 +56,7 @@
   "bugs": {
     "url": "https://github.com/sashiksu/postal-code-checker/issues"
   },
-  "homepage": "https://github.com/sashiksu/postal-code-checker#readme",
+  "homepage": "https://sashiksu.github.io/postal-code-checker/",
   "devDependencies": {
     "@ant-design/icons": "^5.4.0",
     "@babel/core": "^7.24.9",
