@@ -4,15 +4,11 @@ import styles from "./WhatsNew.module.scss";
 
 export function WhatsNew() {
   return (
-    <section
-      id="whats-new"
-      className={styles.section}
-      aria-labelledby="whats-new-heading"
-    >
+    <section id="whats-new" className={styles.section} aria-labelledby="whats-new-heading">
       <SectionHeading
         headingId="whats-new-heading"
-        title="What's new in 2.0"
-        subtitle="Data pipeline rebuilt on Google libaddressinput — the same source Chromium, Android and Google Pay use."
+        title="What's new"
+        subtitle="2.1 adds format() and guessCountries() on top of the 2.0 data pipeline rebuilt on Google libaddressinput."
       />
       <div className={styles.grid}>
         {WHATS_NEW.map((item) => (

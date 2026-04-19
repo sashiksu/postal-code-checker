@@ -9,6 +9,18 @@ export type Feature = {
 
 export const WHATS_NEW: readonly Feature[] = [
   {
+    icon: "fx",
+    title: "format()",
+    description:
+      "Canonicalize any valid postal code — trim, uppercase, ready to store. Returns null when the code doesn't fit the country's pattern.",
+  },
+  {
+    icon: "?",
+    title: "guessCountries()",
+    description:
+      "Hand it a postal code with no context and get back every country whose pattern accepts it — sorted alphabetically, ready to render as a picker.",
+  },
+  {
     icon: "G",
     title: "Google libaddressinput",
     description:
@@ -29,8 +41,7 @@ export const WHATS_NEW: readonly Feature[] = [
   {
     icon: "↻",
     title: "Reproducible sync",
-    description:
-      "`npm run sync:data` regenerates the bundled dataset. Releases run `sync:check` so drift can't ship.",
+    description: "`npm run sync:data` regenerates the bundled dataset. Releases run `sync:check` so drift can't ship.",
   },
 ];
 
@@ -90,43 +101,24 @@ export type RoadmapItem = {
 
 export const ROADMAP: readonly RoadmapItem[] = [
   {
-    milestone: "v2.1",
-    title: "format()",
-    description:
-      "Return the canonical form of a valid code — ready to store in your database.",
-    snippet: `format("CA", "k1a0t6")
-// → "K1A 0T6"`,
-  },
-  {
-    milestone: "v2.1",
+    milestone: "v2.2",
     title: "parse()",
-    description:
-      "Break a structured code into its parts. UK outward/inward, Brazilian prefix/suffix, etc.",
+    description: "Break a structured code into its parts. UK outward/inward, Brazilian prefix/suffix, etc.",
     snippet: `parse("GB", "SW1A 1AA")
 // → { outward: "SW1A", inward: "1AA",
 //     area: "SW", district: "1A" }`,
   },
   {
-    milestone: "v2.2",
-    title: "guessCountries()",
-    description:
-      "Given a postal code with no country, list the countries whose patterns accept it.",
-    snippet: `guessCountries("12345")
-// → ["US", "DE", "IT", "RU", ...]`,
-  },
-  {
     milestone: "v3",
     title: "Subdivision lookup",
-    description:
-      "Resolve a postal code to its state / province / region. Uses Google's sub_zips data.",
+    description: "Resolve a postal code to its state / province / region. Uses Google's sub_zips data.",
     snippet: `classify("US", "95014")
 // → { subdivision: "CA" }`,
   },
   {
     milestone: "v3",
     title: "Custom overrides",
-    description:
-      "Merge your own patterns on top of the bundled dataset — for internal / private codes.",
+    description: "Merge your own patterns on top of the bundled dataset — for internal / private codes.",
     snippet: `createValidator({
   overrides: { X1: { patterns: [...] } }
 })`,
