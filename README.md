@@ -53,6 +53,8 @@ Works in **React, Next.js, Vue, Svelte, Angular, Node.js, Deno, Bun, and plain b
 
 **Prefer to try before installing?**
 
+👉 **[Live interactive demo](https://sashiksu.github.io/postal-code-checker/)** — browse the dataset, run single + batch validations, edit code in the browser.
+
 [![Try on RunKit](https://img.shields.io/badge/try_on-runkit-491757?style=flat&labelColor=171717)](https://npm.runkit.com/postal-code-checker)
 [![Open in StackBlitz](https://img.shields.io/badge/open_in-stackblitz-1389FD?style=flat&labelColor=171717)](https://stackblitz.com/fork/github/sashiksu/postal-code-checker)
 
@@ -257,6 +259,8 @@ The `usePostalCodeValidation` name followed React's hook naming convention, whic
 - Swap data source to Google `libaddressinput` _(2.0.0)_
 - Reproducible data pipeline — `sync:data` + `sync:check` guard against upstream drift _(2.0.0)_
 - `postalCodePatterns: string[]` — support countries with multiple valid patterns _(2.0.0)_
+- Interactive demo site at [sashiksu.github.io/postal-code-checker](https://sashiksu.github.io/postal-code-checker/) _(2.0.0)_
+- Full ISO 3166-1 coverage (249 countries, zero generic fallbacks) _(2.0.0)_
 - Batch validation (`validatePostalCodes`) _(1.1.0)_
 - Case + whitespace tolerant input _(1.1.0)_
 - ISO 3166-1 alpha-3 support _(1.1.0)_
@@ -264,10 +268,9 @@ The `usePostalCodeValidation` name followed React's hook naming convention, whic
 
 ### 🔜 Planned
 
-- Replace remaining generic fallback patterns with country-specific regexes
 - Accept user-supplied country data to override / merge the bundled dataset
 - Subdivision-level validation (Google's `sub_zips` prefix data)
-- Interactive demo site (in progress)
+- Removal of deprecated `usePostalCodeValidation` _(3.0.0)_
 
 ---
 
@@ -285,17 +288,16 @@ Prior to v2.0.0, data was sourced from the European Central Bank (ECB), retrieve
 
 ## 🤝 Contributing
 
-Pull requests are welcome.
+Pull requests welcome. See **[`CONTRIBUTING.md`](./CONTRIBUTING.md)** for local setup, the country-data workflow (upstream-first via `libaddressinput`), and maintainer sync steps.
 
-1. Branch from `master`:
-   ```
-   git checkout master && git pull
-   git checkout -b feature/your-feature   # or bugfix/your-fix
-   ```
-2. Use meaningful branch names: `bugfix/short-description` or `feature/short-description`.
-3. Add or update tests under `src/__tests__/` for any behavior change.
-4. Follow existing code style (Prettier + ESLint configs ship with the repo).
-5. Write clear, descriptive commit messages.
+Quick start:
+
+1. Branch from `master`: `git checkout -b feature/<short-desc>` or `bugfix/<short-desc>`.
+2. Add or update tests under `src/__tests__/` for any behavior change.
+3. Follow existing style — `npm run prettier` and `npm run lint` ship configs.
+4. Open a PR targeting `master`.
+
+Found a bug, missing country, or want to propose a feature? Use the [structured issue templates](./.github/ISSUE_TEMPLATE). For security issues, see [`SECURITY.md`](./SECURITY.md).
 
 ---
 
