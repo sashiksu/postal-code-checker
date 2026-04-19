@@ -2,6 +2,28 @@
 
 All notable changes to `postal-code-checker` are documented here. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.1]
+
+Maintenance release. No runtime behavior changes, no public API changes. Focuses on demo polish, legacy playground removal, and a devDependency cleanup.
+
+### Fixed
+
+- **Demo navbar version badge.** The badge on [the live demo](https://sashiksu.github.io/postal-code-checker/) was still showing `v2.0.0-alpha.1`. Now reflects the published version.
+- **Demo page `<head>` metadata.** `<title>` is now capability-forward (`"Validate postal codes for 249 countries · postal-code-checker"`); `meta description` and `og:description` updated from "200+ countries" to the accurate "249 countries"; added `og:url`, `og:image`, `twitter:card`, `twitter:image`, and a canonical link so unfurls on Twitter/X, LinkedIn, Slack, and Facebook render the social-preview card.
+
+### Removed
+
+- **Legacy `dev/` playground.** The antd + webpack playground behind `npm start` is gone — the [interactive demo](https://sashiksu.github.io/postal-code-checker/) fully replaces it. Contributors now use `cd demo && npm run dev`.
+- **`scripts.start` and `scripts.watch`** from `package.json` (both only served the removed playground).
+- **`webpack.config.js` and `.babelrc`** — no longer needed with no local webpack build.
+- **16 devDependencies** that only the legacy playground consumed: `@ant-design/icons`, `antd`, `webpack`, `webpack-cli`, `webpack-dev-server`, `ts-loader`, `html-webpack-plugin`, `babel-loader`, `@babel/core`, `@babel/preset-env`, `@babel/preset-typescript`, `nodemon`, `react`, `react-dom`, `@types/react`, `@types/react-dom`. Root `node_modules` shrinks by ~505 packages; contributor `npm install` is noticeably faster and `npm audit` noise drops accordingly.
+
+### Internal
+
+- Root `prettier` script glob simplified from `"{src,tests,example/src}/**/*.{js,ts}"` to `"src/**/*.{js,ts}"` — the `tests/` and `example/src/` paths referenced in the old glob did not exist in this repo.
+- Root ESLint ignore list swapped `dev/**` (deleted) for `demo/**`. The demo is a standalone package with its own TypeScript + ESLint setup and should not be linted by the root config.
+- `CLAUDE.md` updated to reflect the playground removal, the trimmed workflow list, and the corrected `prettier` glob.
+
 ## [2.0.0]
 
 First general-availability release of the v2 line. Swaps the underlying postal-code dataset from the ECB-derived tables used in v1 to [Google's `libaddressinput`](https://github.com/google/libaddressinput) — the same source that powers address forms in Chromium, Android, and Google Pay. Data is now regenerated per release from a reproducible script, with a release-time freshness gate.
@@ -85,5 +107,6 @@ See [`docs/SWITCHING.md`](./docs/SWITCHING.md) for the broader "coming from anot
 
 Earlier versions are documented in the [GitHub releases](https://github.com/sashiksu/postal-code-checker/releases).
 
+[2.0.1]: https://github.com/sashiksu/postal-code-checker/releases/tag/v2.0.1
 [2.0.0]: https://github.com/sashiksu/postal-code-checker/releases/tag/v2.0.0
 [1.1.0]: https://github.com/sashiksu/postal-code-checker/releases/tag/v1.1.0

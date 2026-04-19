@@ -1,7 +1,7 @@
 import { ThemeToggle } from "./ThemeToggle";
 import styles from "./Navbar.module.scss";
 
-const VERSION = "2.0.0-alpha.1";
+const VERSION = "2.0.1";
 
 export function Navbar() {
   return (
