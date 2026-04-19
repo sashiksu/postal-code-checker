@@ -51,6 +51,13 @@ validatePostalCodes("US", ["12345", "oops"]); // → [true, false]
 
 Works in **React, Next.js, Vue, Svelte, Angular, Node.js, Deno, Bun, and plain browser JS** — no framework assumptions.
 
+**Prefer to try before installing?**
+
+[![Try on RunKit](https://img.shields.io/badge/try_on-runkit-491757?style=flat&labelColor=171717)](https://npm.runkit.com/postal-code-checker)
+[![Open in StackBlitz](https://img.shields.io/badge/open_in-stackblitz-1389FD?style=flat&labelColor=171717)](https://stackblitz.com/fork/github/sashiksu/postal-code-checker)
+
+RunKit spins up a Node.js REPL with the package preloaded. StackBlitz forks the full repo and opens it in a web IDE — good for exploring the source.
+
 ---
 
 ## 💡 Why postal-code-checker?
@@ -196,6 +203,8 @@ type Country = {
 ---
 
 ## 🔄 Migration Guide
+
+> **Coming from a different postal-code library?** See [`docs/SWITCHING.md`](./docs/SWITCHING.md) — covers the common one-line equivalents, batch API migration, and the argument-order gotcha that trips most swaps.
 
 ### From v1.x → v2.0 (data-shape breaking change)
 
