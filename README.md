@@ -174,6 +174,28 @@ Validates a single postal code against a country. Accepts both alpha-2 and alpha
 
 Validates an array of postal codes against one country and returns an index-aligned array of results. Unique to this package — use it for CSV imports, bulk address uploads, and form arrays.
 
+### `format(countryCode, postalCode): string | null` — _new in 2.1_
+
+Returns the canonical form of a valid postal code (trimmed, uppercased), ready to store in a database. Returns `null` when the input doesn't match the country's pattern or the country has no postal code system. Accepts alpha-2 and alpha-3.
+
+```ts
+format("CA", "k1a 0t6"); // → "K1A 0T6"
+format("US", "  12345 "); // → "12345"
+format("US", "ABC12");    // → null
+```
+
+### `guessCountries(postalCode): CountryOption[]` — _new in 2.1_
+
+Given a postal code with no country context, returns every country whose pattern accepts the input. Sorted alphabetically by `countryName` — ready to render as a picker. Countries with no postal code system are excluded.
+
+```ts
+guessCountries("K1A 0T6");
+// → [{ countryName: "Canada", countryCode: "CA" }]
+
+guessCountries("12345");
+// → [{ countryName: "Algeria", ... }, { countryName: "Germany", ... }, ...]
+```
+
 ### `getCountryByCode(countryCode): Country | null`
 
 Returns the full country record (patterns, example codes, name, 2-letter code) or `null` if unknown. Accepts alpha-2 or alpha-3. `postalCodePatterns` is a `string[]` — most countries have one entry, some (e.g. GB with BFPO) have several.
@@ -256,6 +278,8 @@ The `usePostalCodeValidation` name followed React's hook naming convention, whic
 
 ### ✅ Shipped
 
+- `format()` — canonical storable form, or `null` if invalid _(2.1.0)_
+- `guessCountries()` — countries whose pattern accepts an input _(2.1.0)_
 - Swap data source to Google `libaddressinput` _(2.0.0)_
 - Reproducible data pipeline — `sync:data` + `sync:check` guard against upstream drift _(2.0.0)_
 - `postalCodePatterns: string[]` — support countries with multiple valid patterns _(2.0.0)_
