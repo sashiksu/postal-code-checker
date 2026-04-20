@@ -173,26 +173,14 @@ validatePostalCode(code, "SW1A 1AA"); // → true`,
 export type PackageManager = "npm" | "yarn" | "pnpm" | "bun";
 
 export const INSTALL_COMMANDS: Record<PackageManager, string> = {
-  npm: `# Stable (recommended) — 2.0.0
-npm install postal-code-checker
-
-# Preview the 2.1.0 alpha (configure() + resetConfig())
-npm install postal-code-checker@next`,
-  yarn: `# Stable (recommended) — 2.0.0
-yarn add postal-code-checker
-
-# Preview the 2.1.0 alpha (configure() + resetConfig())
-yarn add postal-code-checker@next`,
-  pnpm: `# Stable (recommended) — 2.0.0
-pnpm add postal-code-checker
-
-# Preview the 2.1.0 alpha (configure() + resetConfig())
-pnpm add postal-code-checker@next`,
-  bun: `# Stable (recommended) — 2.0.0
-bun add postal-code-checker
-
-# Preview the 2.1.0 alpha (configure() + resetConfig())
-bun add postal-code-checker@next`,
+  npm: `# 2.1.0 — latest
+npm install postal-code-checker`,
+  yarn: `# 2.1.0 — latest
+yarn add postal-code-checker`,
+  pnpm: `# 2.1.0 — latest
+pnpm add postal-code-checker`,
+  bun: `# 2.1.0 — latest
+bun add postal-code-checker`,
 };
 
 export const PACKAGE_MANAGERS: readonly PackageManager[] = ["npm", "yarn", "pnpm", "bun"] as const;

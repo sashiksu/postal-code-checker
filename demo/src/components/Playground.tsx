@@ -38,7 +38,7 @@ export function Playground({ activeCountry, onPickCountry, searchRef }: Props) {
         <SectionHeading
           title="Configuration"
           subtitle="Layer custom country data on top of the bundled dataset with a single configure() call. Replace an existing country's patterns, or register one the dataset doesn't ship — like Kosovo (XK)."
-          badge="2.1.0-alpha.2"
+          badge="2.1.0"
         />
         <div className={styles.configPanelWrap}>
           <ConfigurationPanel />
