@@ -32,14 +32,16 @@ export function CustomCountryCta() {
       </div>
       <div className={styles.copy}>
         <h3 id="custom-country-cta-heading">
-          Don't see your country? <em>Add your own.</em> Or tighten an existing
-          one.
+          Missing a country? <em>Add your own.</em> Rules changed?{" "}
+          <em>Patch it in place.</em>
         </h3>
         <p>
-          Add brand-new entries (internal codes, Kosovo, a dev sandbox) or
-          replace a bundled pattern when your business rules are stricter than
-          the defaults. One <code>configure()</code> call at app boot and every
-          utility reads the merged dataset.{" "}
+          Add brand-new entries (internal codes, Kosovo, a dev sandbox), tighten
+          a bundled pattern when your business rules are stricter than the
+          defaults, or drop in an updated regex the moment a postal authority
+          changes its format — no need to wait for the next{" "}
+          <code>postal-code-checker</code> release. One <code>configure()</code>{" "}
+          call at app boot and every utility reads the merged dataset.{" "}
           <span className={styles.badge}>new in 2.1.0</span>
         </p>
       </div>
