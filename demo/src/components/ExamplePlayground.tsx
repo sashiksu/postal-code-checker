@@ -13,8 +13,6 @@ import {
   validatePostalCode,
   validatePostalCodes,
 } from "postal-code-checker";
-import { readShareParam } from "../data/share";
-import { ShareButton } from "./ui/ShareButton";
 import styles from "./ExamplePlayground.module.scss";
 
 type RunResult = { output: string; isError: boolean };
@@ -83,19 +81,14 @@ function runSnippet(code: string): RunResult {
 }
 
 type Props = {
-  shareKey: string;
   title: string;
   description?: string;
   initialCode: string;
 };
 
-export function ExamplePlayground({ shareKey, title, description, initialCode }: Props) {
-  const startingCode = useMemo(
-    () => readShareParam(shareKey) ?? initialCode,
-    [shareKey, initialCode],
-  );
-  const [code, setCode] = useState(startingCode);
-  const [result, setResult] = useState<RunResult>(() => runSnippet(startingCode));
+export function ExamplePlayground({ title, description, initialCode }: Props) {
+  const [code, setCode] = useState(initialCode);
+  const [result, setResult] = useState<RunResult>(() => runSnippet(initialCode));
   const [pending, setPending] = useState(false);
   const firstRun = useRef(true);
 
@@ -117,13 +110,6 @@ export function ExamplePlayground({ shareKey, title, description, initialCode }:
 
   return (
     <div className={styles.panel}>
-      <div className={styles.shareCorner}>
-        <ShareButton
-          paramName={shareKey}
-          getValue={() => code}
-          ariaLabel={`Share ${title}`}
-        />
-      </div>
       <div className={styles.header}>
         <div>
           <h3>{title}</h3>

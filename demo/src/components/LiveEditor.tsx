@@ -2,7 +2,7 @@ import { ExamplePlayground } from "./ExamplePlayground";
 import styles from "./LiveEditor.module.scss";
 
 type Example = {
-  shareKey: string;
+  id: string;
   title: string;
   description: string;
   code: string;
@@ -10,7 +10,7 @@ type Example = {
 
 const EXAMPLES: Example[] = [
   {
-    shareKey: "ex-validate",
+    id: "validate",
     title: "Validate a single postal code",
     description: "validatePostalCode(countryCode, postalCode) → boolean",
     code: `// Case and surrounding spaces are tolerated.
@@ -22,7 +22,7 @@ console.log(validatePostalCode("US", "NOPE"));
 `,
   },
   {
-    shareKey: "ex-batch",
+    id: "batch",
     title: "Batch validation",
     description: "validatePostalCodes(countryCode, codes[]) — results align with input order",
     code: `const codes = ["K1A 0T6", "90210", "BAD", "H0H 0H0"];
@@ -34,7 +34,7 @@ codes.forEach((code, i) => {
 `,
   },
   {
-    shareKey: "ex-country-lookup",
+    id: "country-lookup",
     title: "Country lookup — alpha-2 and alpha-3",
     description: "getCountryByCode accepts both ISO forms and returns the same record",
     code: `const byAlpha2 = getCountryByCode("DE");
@@ -49,7 +49,7 @@ console.log("examples:", byAlpha2?.examplePostalCodes);
 `,
   },
   {
-    shareKey: "ex-case-whitespace",
+    id: "case-whitespace",
     title: "Case and whitespace tolerance",
     description: "Input is trimmed and uppercased before matching",
     code: `// Lowercase + extra spaces — still valid
@@ -61,7 +61,7 @@ console.log(validatePostalCode("CA", "k1a0t6"));
 `,
   },
   {
-    shareKey: "ex-list-all",
+    id: "list-all",
     title: "List every supported country",
     description: "getAllCountries() → { countryName, countryCode }[]",
     code: `const all = getAllCountries();
@@ -81,8 +81,7 @@ export function LiveEditor() {
     <div className={styles.stack}>
       {EXAMPLES.map((ex) => (
         <ExamplePlayground
-          key={ex.shareKey}
-          shareKey={ex.shareKey}
+          key={ex.id}
           title={ex.title}
           description={ex.description}
           initialCode={ex.code}
