@@ -2,21 +2,36 @@
 
 All notable changes to `postal-code-checker` are documented here. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.1.0-alpha.1]
+## [2.1.0]
 
-Adds two new public APIs for working with postal codes that are valid across countries. Backward-compatible with 2.0; no migration needed.
+Adds three new public APIs built on the existing 2.0 dataset: `format()` returns the canonical storable form of a postal code, `guessCountries()` lists every country whose pattern accepts an input, and `configure()` + `resetConfig()` let you override built-in country data or register brand-new countries at runtime — every utility in the package honors the override. Backward-compatible with 2.0; no migration needed.
 
 ### Added
 
 - **`format(countryCode, postalCode)`** — returns the canonical form of a valid code (trimmed, uppercased), ready to store in a database. Returns `null` when the input doesn't match the country's pattern or the country has no postal code system. Accepts alpha-2 and alpha-3 country codes.
 - **`guessCountries(postalCode)`** — given a postal code with no country context, returns every country whose pattern accepts the input. Result is `{ countryName, countryCode }[]` sorted alphabetically by `countryName` — ready to render as a picker. Countries with no postal code system are naturally excluded.
-- **`CountryOption` type re-exported** from the package barrel. Previously internal; both `getAllCountries` and the new `guessCountries` return `CountryOption[]`, so consumers now have access to the shape.
+- **`configure(config)`** — register a user-supplied country dataset in one call, typically at app boot. Each entry either replaces a built-in country (when the alpha-2 key matches an existing one) or adds a brand-new country. Replace semantics per country — patterns are not merged field-by-field. Runtime validation throws `ConfigurationError` with a field-specific message on bad input (missing keys, malformed regex, non-uppercase codes, etc.). Calls are idempotent: each call starts from the bundled defaults and layers the given overrides on top, so prior calls don't accumulate.
+- **`resetConfig()`** — discards any active override and restores the bundled defaults. Designed for test teardown (`afterEach`), scenario switching in demos, and HMR during development.
+- **`ConfigurationError`** class — thrown by `configure()` on validation failure. Exported so consumers can `catch (err) { if (err instanceof ConfigurationError) … }`.
+- **`PostalCodeConfig`, `AnyCountryCode`, and `CountryOption`** types exported from the package barrel. `PostalCodeConfig` describes the shape `configure()` accepts; `AnyCountryCode` is `CountryCode | (string & {})` and preserves autocomplete for known countries while accepting any string for runtime-added codes; `CountryOption` is the return shape of both `getAllCountries` and `guessCountries`.
+- **Kosovo (XK) as the reference example.** Kosovo is the canonical "country the default dataset doesn't cover" case — it's not in ISO 3166-1, so Google's libaddressinput doesn't ship it, but it has a working 5-digit postal code system and is used as `XK` by most shipping APIs. The docs and demo walk through registering it.
+
+### Changed
+
+- **Every existing utility now reads through a single active-data accessor.** `validatePostalCode`, `validatePostalCodes`, `getCountryByCode`, `getAllCountries`, `guessCountries`, and `format` all see the merged dataset after `configure()` is called. No call-site changes required.
+- **Public country-code input type widened to `AnyCountryCode`.** Runtime behavior is unchanged. The narrow `CountryCode` union is still exported for users who want strict typing against known alpha-2 codes. The one theoretical break: code that assigned `getCountryByCode(...).countryCode` back to a `CountryCode`-typed variable now needs either `AnyCountryCode` or a cast.
+
+### SSR / multi-tenant note
+
+`configure()` is a module-level singleton: call it once at app boot and every downstream utility sees the merged dataset without extra wiring. Per-request configuration for SSR or multi-tenant servers isn't supported in this release — if you need it, [open an issue](https://github.com/sashiksu/postal-code-checker/issues/new) describing your use case and we'll consider a `createValidator()` factory for a future release.
 
 ### Demo
 
-- Interactive `format()` and `guessCountries()` panels in the Playground section.
-- New "Format" and "Guess" tabs in the Code Examples.
-- Roadmap no longer lists either function as planned; both now ship with 2.1.
+- Interactive `format()` and `guessCountries()` panels in the Playground section, plus new "Format" and "Guess" tabs in the Code Examples.
+- New **Configuration** tab with an editable JSON textarea seeded with the Kosovo example, Apply/Reset buttons, and a live validator that updates in place as the config changes.
+- The Reset button includes a short note explaining *when* you'd use `resetConfig()` — test teardown, scenario switching, HMR.
+- Shareable URL encoding the current config in the page hash, so a config can be linked to colleagues without copy-pasting JSON.
+- Roadmap trimmed — `format()`, `guessCountries()`, and `configure()` no longer appear as planned work; all three ship in this release.
 
 ## [2.0.1]
 

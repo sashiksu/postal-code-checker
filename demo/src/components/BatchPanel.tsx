@@ -1,13 +1,33 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { validatePostalCodes } from "postal-code-checker";
+import { readShareParam } from "../data/share";
 import { CountryCombobox } from "./ui/CountryCombobox";
+import { ShareButton } from "./ui/ShareButton";
 import styles from "./BatchPanel.module.scss";
 
 const DEFAULT_BATCH = ["K1A 0T6", "90210", "BAD-CODE", "SW1A 1AA"].join("\n");
 
+type Shared = { country: string; codes: string };
+
+function loadInitial(): Shared {
+  const raw = readShareParam("batch");
+  if (raw) {
+    try {
+      const parsed = JSON.parse(raw) as Partial<Shared>;
+      if (typeof parsed.country === "string" && typeof parsed.codes === "string") {
+        return { country: parsed.country, codes: parsed.codes };
+      }
+    } catch {
+      // fall through to defaults
+    }
+  }
+  return { country: "CA", codes: DEFAULT_BATCH };
+}
+
 export function BatchPanel() {
-  const [countryCode, setCountryCode] = useState("CA");
-  const [raw, setRaw] = useState(DEFAULT_BATCH);
+  const initial = useMemo(loadInitial, []);
+  const [countryCode, setCountryCode] = useState(initial.country);
+  const [raw, setRaw] = useState(initial.codes);
 
   const lines = useMemo(
     () => raw.split("\n").map((l) => l.trim()).filter(Boolean),
@@ -22,8 +42,16 @@ export function BatchPanel() {
   const validCount = results.filter(Boolean).length;
   const total = results.length;
 
+  const getShareValue = useCallback(
+    () => JSON.stringify({ country: countryCode, codes: raw }),
+    [countryCode, raw],
+  );
+
   return (
     <div className={styles.panel}>
+      <div className={styles.shareCorner}>
+        <ShareButton paramName="batch" getValue={getShareValue} ariaLabel="Share this batch example" />
+      </div>
       <div className={styles.header}>
         <div>
           <h3>Batch validation</h3>

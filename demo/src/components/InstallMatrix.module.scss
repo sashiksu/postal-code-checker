@@ -12,6 +12,13 @@
   box-shadow: var(--shadow-sm);
 }
 
+.headerRight {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
 .header {
   display: flex;
   justify-content: space-between;

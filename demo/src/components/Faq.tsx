@@ -1,7 +1,20 @@
-import { useState } from "react";
+import { Fragment, useState, type ReactNode } from "react";
 import { FAQS } from "../data/content";
 import { SectionHeading } from "./ui/SectionHeading";
 import styles from "./Faq.module.scss";
+
+// Render inline `backtick` spans as <code>; leave everything else alone.
+// ReactNode values pass through untouched so richer answers still work.
+function renderAnswer(answer: ReactNode): ReactNode {
+  if (typeof answer !== "string") return answer;
+  const parts = answer.split(/(`[^`]+`)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith("`") && part.endsWith("`") && part.length > 1) {
+      return <code key={i}>{part.slice(1, -1)}</code>;
+    }
+    return <Fragment key={i}>{part}</Fragment>;
+  });
+}
 
 export function Faq() {
   const [open, setOpen] = useState<string | null>(FAQS[0]?.id ?? null);
@@ -54,7 +67,7 @@ export function Faq() {
               >
                 <div className={styles.panelInner}>
                   <div className={styles.answer}>
-                    <p>{item.answer}</p>
+                    <p>{renderAnswer(item.answer)}</p>
                   </div>
                 </div>
               </div>

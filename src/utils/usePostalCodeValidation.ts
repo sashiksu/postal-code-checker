@@ -1,4 +1,4 @@
-import { CountryCode } from "../types/CountryCode";
+import { AnyCountryCode } from "../types/AnyCountryCode";
 
 import { validatePostalCode } from "./validatePostalCode";
 
@@ -19,7 +19,7 @@ import { validatePostalCode } from "./validatePostalCode";
  */
 export const usePostalCodeValidation = () => {
   return {
-    validatePostalCode: (countryCode: CountryCode, postalCode: string): boolean =>
+    validatePostalCode: (countryCode: AnyCountryCode, postalCode: string): boolean =>
       validatePostalCode(countryCode, postalCode),
   };
 };

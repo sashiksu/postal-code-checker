@@ -46,8 +46,8 @@ export function MigrationGuide() {
       <div className={styles.block}>
         <SectionHeading
           title="usePostalCodeValidation is deprecated"
-          subtitle="The u-prefix tripped React's rules-of-hooks lint for non-React consumers. Still works in 2.x — removal scheduled for 3.0."
-          badge="removal in 3.0"
+          subtitle="The u-prefix tripped React's rules-of-hooks lint for non-React consumers. Still works in 2.x — removal scheduled for 3.0.0."
+          badge="removal in 3.0.0"
         />
         <p className={styles.note}>
           Replace any call to <code>usePostalCodeValidation()(code, postal)</code> with a

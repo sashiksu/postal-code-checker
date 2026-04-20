@@ -1,5 +1,8 @@
+import { useCallback, useEffect, useRef, useState } from "react";
+import { readShareParam } from "../data/share";
 import { SectionHeading } from "./ui/SectionHeading";
 import { CodeBlock } from "./ui/CodeBlock";
+import { ShareButton } from "./ui/ShareButton";
 import styles from "./UseCases.module.scss";
 
 type UseCase = {
@@ -92,7 +95,26 @@ validatePostalCode("usa", "90210");    // true — case-insensitive`,
   },
 ];
 
+function slugify(tag: string): string {
+  return tag.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+}
+
 export function UseCases() {
+  const [highlighted, setHighlighted] = useState<string | null>(null);
+  const cardRefs = useRef<Map<string, HTMLElement>>(new Map());
+
+  useEffect(() => {
+    const slug = readShareParam("usecase");
+    if (!slug) return;
+    setHighlighted(slug);
+    const node = cardRefs.current.get(slug);
+    if (node) {
+      node.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+    const t = window.setTimeout(() => setHighlighted(null), 2400);
+    return () => window.clearTimeout(t);
+  }, []);
+
   return (
     <section
       id="use-cases"
@@ -105,17 +127,53 @@ export function UseCases() {
         subtitle="Five-line drop-ins for the places this package earns its keep."
       />
       <div className={styles.grid}>
-        {USE_CASES.map((uc) => (
-          <article key={uc.title} className={styles.card}>
-            <div className={styles.cardHead}>
-              <h3>{uc.title}</h3>
-              <span className={styles.tag}>{uc.tag}</span>
-            </div>
-            <p className={styles.cardBody}>{uc.description}</p>
-            <CodeBlock code={uc.code} ariaLabel={`${uc.title} snippet`} />
-          </article>
-        ))}
+        {USE_CASES.map((uc) => {
+          const slug = slugify(uc.tag);
+          return (
+            <UseCaseCard
+              key={uc.title}
+              uc={uc}
+              slug={slug}
+              isHighlighted={highlighted === slug}
+              registerRef={(el) => {
+                if (el) cardRefs.current.set(slug, el);
+                else cardRefs.current.delete(slug);
+              }}
+            />
+          );
+        })}
       </div>
     </section>
+  );
+}
+
+type CardProps = {
+  uc: UseCase;
+  slug: string;
+  isHighlighted: boolean;
+  registerRef: (el: HTMLElement | null) => void;
+};
+
+function UseCaseCard({ uc, slug, isHighlighted, registerRef }: CardProps) {
+  const getShareValue = useCallback(() => slug, [slug]);
+  return (
+    <article
+      ref={registerRef}
+      className={`${styles.card} ${isHighlighted ? styles.highlight : ""}`}
+    >
+      <div className={styles.shareCorner}>
+        <ShareButton
+          paramName="usecase"
+          getValue={getShareValue}
+          ariaLabel={`Share ${uc.title}`}
+        />
+      </div>
+      <div className={styles.cardHead}>
+        <h3>{uc.title}</h3>
+        <span className={styles.tag}>{uc.tag}</span>
+      </div>
+      <p className={styles.cardBody}>{uc.description}</p>
+      <CodeBlock code={uc.code} ariaLabel={`${uc.title} snippet`} />
+    </article>
   );
 }

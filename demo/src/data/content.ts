@@ -9,6 +9,12 @@ export type Feature = {
 
 export const WHATS_NEW: readonly Feature[] = [
   {
+    icon: "⚙",
+    title: "configure()",
+    description:
+      "Add your own countries or replace bundled patterns at app boot. One call, module-level singleton — every utility picks it up without per-call wiring.",
+  },
+  {
     icon: "fx",
     title: "format()",
     description:
@@ -57,31 +63,31 @@ export const FAQS: readonly FaqItem[] = [
     id: "source",
     question: "Where does the postal code data come from?",
     answer:
-      "Patterns, examples and country names are sourced from Google's libaddressinput — the same dataset backing Chromium's autofill, Android's address picker and Google Pay. It's Apache-2.0 licensed; attribution lives in NOTICE. We snapshot the dataset at release time rather than calling out to the network at runtime.",
+      "Patterns, examples and country names are sourced from Google's libaddressinput — the same dataset backing Chromium's autofill, Android's address picker and Google Pay. It's Apache-2.0 licensed; attribution lives in `NOTICE`. We snapshot the dataset at release time rather than calling out to the network at runtime.",
   },
   {
     id: "empty",
     question: "Why do some countries show no postal codes?",
     answer:
-      "A handful of countries genuinely have no postal code system — UAE, Zimbabwe, Ireland until 2015, and others. Their entry stores `patterns: []`, and validatePostalCode() returns false for any input against them. This is intentional: it matches the behavior for unknown countries and prevents false positives.",
+      "A handful of countries genuinely have no postal code system — UAE, Zimbabwe, Ireland until 2015, and others. Their entry stores `patterns: []`, and `validatePostalCode()` returns false for any input against them. This is intentional: it matches the behavior for unknown countries and prevents false positives.",
   },
   {
     id: "freshness",
     question: "How up-to-date is the bundled data?",
     answer:
-      "The snapshot date is stamped at the top of src/assets/index.ts on every sync. Maintainer runs `npm run sync:data` before each release; CI blocks publish on drift via `sync:check`. In practice the upstream data changes a few times a year — we pick the delta up on the next cut.",
+      "The snapshot date is stamped at the top of `src/assets/index.ts` on every sync. Maintainer runs `npm run sync:data` before each release; CI blocks publish on drift via `sync:check`. In practice the upstream data changes a few times a year — we pick the delta up on the next cut.",
   },
   {
     id: "custom",
     question: "Can I add custom country patterns?",
     answer:
-      "Not yet — the dataset is read-only in 2.x. A `createValidator({ overrides })` API is on the v3 roadmap for internal / private codes. If you need it sooner, a thin wrapper around validatePostalCode() that checks your own patterns first works well today.",
+      "Yes — since 2.1.0, call `configure({ countries: { ... } })` at app boot. You can add brand-new entries (Kosovo, internal test codes) or replace bundled patterns when your rules are stricter than the defaults. Every utility — `validatePostalCode`, `format`, `guessCountries`, `getCountryByCode`, `getAllCountries` — reads from the merged dataset, no per-call wiring. See the Configuration tab above for a runnable example.",
   },
   {
     id: "geo",
     question: "Does this look up cities or do geolocation?",
     answer:
-      "No. This library validates format only — it tells you whether a string could be a valid postal code for a country, not whether it actually resolves to a real address. Subdivision-level classification (postal code → state / region) is planned for v3 using Google's sub_zips prefix data.",
+      "No. This library validates format only — it tells you whether a string could be a valid postal code for a country, not whether it actually resolves to a real address. Subdivision-level classification (postal code → state / region) is planned for v3.0.0 using Google's `sub_zips` prefix data.",
   },
   {
     id: "edge",
@@ -101,7 +107,7 @@ export type RoadmapItem = {
 
 export const ROADMAP: readonly RoadmapItem[] = [
   {
-    milestone: "v2.2",
+    milestone: "v2.2.0",
     title: "parse()",
     description: "Break a structured code into its parts. UK outward/inward, Brazilian prefix/suffix, etc.",
     snippet: `parse("GB", "SW1A 1AA")
@@ -109,19 +115,18 @@ export const ROADMAP: readonly RoadmapItem[] = [
 //     area: "SW", district: "1A" }`,
   },
   {
-    milestone: "v3",
+    milestone: "v3.0.0",
     title: "Subdivision lookup",
     description: "Resolve a postal code to its state / province / region. Uses Google's sub_zips data.",
     snippet: `classify("US", "95014")
 // → { subdivision: "CA" }`,
   },
   {
-    milestone: "v3",
-    title: "Custom overrides",
-    description: "Merge your own patterns on top of the bundled dataset — for internal / private codes.",
-    snippet: `createValidator({
-  overrides: { X1: { patterns: [...] } }
-})`,
+    milestone: "v3.0.0",
+    title: "createValidator()",
+    description: "Per-request / multi-tenant validator instances for SSR and edge runtimes, when singleton configure() isn't a fit.",
+    snippet: `const v = createValidator({ countries: { ... } });
+v.validate("XK", "10000");`,
   },
 ];
 

@@ -11,6 +11,7 @@ export const SECTIONS: readonly Section[] = [
   { id: "whats-new", label: "What's new" },
   { id: "migration", label: "Migration" },
   { id: "playground", label: "Playground" },
+  { id: "configuration", label: "Configuration" },
   { id: "faq", label: "FAQ" },
 ] as const;
 

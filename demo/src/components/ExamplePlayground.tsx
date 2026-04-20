@@ -3,10 +3,15 @@ import CodeMirror from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
 import { darcula } from "@uiw/codemirror-theme-darcula";
 import {
+  ConfigurationError,
+  configure,
+  format,
+  getAllCountries,
+  getCountryByCode,
+  guessCountries,
+  resetConfig,
   validatePostalCode,
   validatePostalCodes,
-  getCountryByCode,
-  getAllCountries,
 } from "postal-code-checker";
 import styles from "./ExamplePlayground.module.scss";
 
@@ -36,16 +41,32 @@ function runSnippet(code: string): RunResult {
       "validatePostalCodes",
       "getCountryByCode",
       "getAllCountries",
+      "guessCountries",
+      "format",
+      "configure",
+      "resetConfig",
+      "ConfigurationError",
       "console",
       `"use strict";\n${code}`,
     );
-    fn(
-      validatePostalCode,
-      validatePostalCodes,
-      getCountryByCode,
-      getAllCountries,
-      fakeConsole,
-    );
+    try {
+      fn(
+        validatePostalCode,
+        validatePostalCodes,
+        getCountryByCode,
+        getAllCountries,
+        guessCountries,
+        format,
+        configure,
+        resetConfig,
+        ConfigurationError,
+        fakeConsole,
+      );
+    } finally {
+      // Snippets may call configure() — drop overrides so they don't leak
+      // into the rest of the playground (dataset, batch, format panels).
+      resetConfig();
+    }
     return {
       output: logs.join("\n") || "// no output — use console.log(...) to print",
       isError: false,
@@ -94,14 +115,6 @@ export function ExamplePlayground({ title, description, initialCode }: Props) {
           <h3>{title}</h3>
           {description && <p>{description}</p>}
         </div>
-        <button
-          type="button"
-          className={styles.reset}
-          onClick={() => setCode(initialCode)}
-          aria-label={`Reset ${title} snippet`}
-        >
-          Reset
-        </button>
       </div>
 
       <div className={styles.grid}>
@@ -134,9 +147,19 @@ export function ExamplePlayground({ title, description, initialCode }: Props) {
                 />
               )}
             </span>
-            {result.isError && !pending && (
-              <span className={styles.errorBadge}>error</span>
-            )}
+            <div className={styles.outputActions}>
+              {result.isError && !pending && (
+                <span className={styles.errorBadge}>error</span>
+              )}
+              <button
+                type="button"
+                className={styles.reset}
+                onClick={() => setCode(initialCode)}
+                aria-label={`Reset ${title} snippet`}
+              >
+                Reset
+              </button>
+            </div>
           </div>
           <pre
             className={`${styles.output} ${result.isError ? styles.outputError : ""}`}
