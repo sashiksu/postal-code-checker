@@ -21,10 +21,6 @@ export class ConfigurationError extends Error {
   constructor(message: string) {
     super(message);
     this.name = "ConfigurationError";
-    // Preserve the original constructor in the stack trace (V8).
-    if (typeof (Error as unknown as { captureStackTrace?: unknown }).captureStackTrace === "function") {
-      (Error as unknown as { captureStackTrace: (t: object, c: Function) => void }).captureStackTrace(this, ConfigurationError);
-    }
     // Ensure `instanceof` works across down-level compile targets (TS extends-Error gotcha).
     Object.setPrototypeOf(this, ConfigurationError.prototype);
   }

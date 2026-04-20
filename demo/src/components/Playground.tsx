@@ -1,5 +1,6 @@
 import { type RefObject } from "react";
 import { BatchPanel } from "./BatchPanel";
+import { ConfigurationPanel } from "./ConfigurationPanel";
 import { DatasetPanel } from "./DatasetPanel";
 import { FormatPanel } from "./FormatPanel";
 import { GuessPanel } from "./GuessPanel";
@@ -32,6 +33,16 @@ export function Playground({ activeCountry, onPickCountry, searchRef }: Props) {
       </div>
       <div className={styles.editorWrap}>
         <LiveEditor />
+      </div>
+      <div id="configuration" className={styles.configWrap}>
+        <SectionHeading
+          title="Configuration"
+          subtitle="Layer custom country data on top of the bundled dataset with a single configure() call. Replace an existing country's patterns, or register one the dataset doesn't ship — like Kosovo (XK)."
+          badge="2.1.0-alpha.2"
+        />
+        <div className={styles.configPanelWrap}>
+          <ConfigurationPanel />
+        </div>
       </div>
       <div className={styles.roadmapWrap}>
         <Roadmap />
