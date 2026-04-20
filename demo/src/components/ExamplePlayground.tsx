@@ -3,11 +3,18 @@ import CodeMirror from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
 import { darcula } from "@uiw/codemirror-theme-darcula";
 import {
+  ConfigurationError,
+  configure,
+  format,
+  getAllCountries,
+  getCountryByCode,
+  guessCountries,
+  resetConfig,
   validatePostalCode,
   validatePostalCodes,
-  getCountryByCode,
-  getAllCountries,
 } from "postal-code-checker";
+import { readShareParam } from "../data/share";
+import { ShareButton } from "./ui/ShareButton";
 import styles from "./ExamplePlayground.module.scss";
 
 type RunResult = { output: string; isError: boolean };
@@ -36,16 +43,32 @@ function runSnippet(code: string): RunResult {
       "validatePostalCodes",
       "getCountryByCode",
       "getAllCountries",
+      "guessCountries",
+      "format",
+      "configure",
+      "resetConfig",
+      "ConfigurationError",
       "console",
       `"use strict";\n${code}`,
     );
-    fn(
-      validatePostalCode,
-      validatePostalCodes,
-      getCountryByCode,
-      getAllCountries,
-      fakeConsole,
-    );
+    try {
+      fn(
+        validatePostalCode,
+        validatePostalCodes,
+        getCountryByCode,
+        getAllCountries,
+        guessCountries,
+        format,
+        configure,
+        resetConfig,
+        ConfigurationError,
+        fakeConsole,
+      );
+    } finally {
+      // Snippets may call configure() — drop overrides so they don't leak
+      // into the rest of the playground (dataset, batch, format panels).
+      resetConfig();
+    }
     return {
       output: logs.join("\n") || "// no output — use console.log(...) to print",
       isError: false,
@@ -60,14 +83,19 @@ function runSnippet(code: string): RunResult {
 }
 
 type Props = {
+  shareKey: string;
   title: string;
   description?: string;
   initialCode: string;
 };
 
-export function ExamplePlayground({ title, description, initialCode }: Props) {
-  const [code, setCode] = useState(initialCode);
-  const [result, setResult] = useState<RunResult>(() => runSnippet(initialCode));
+export function ExamplePlayground({ shareKey, title, description, initialCode }: Props) {
+  const startingCode = useMemo(
+    () => readShareParam(shareKey) ?? initialCode,
+    [shareKey, initialCode],
+  );
+  const [code, setCode] = useState(startingCode);
+  const [result, setResult] = useState<RunResult>(() => runSnippet(startingCode));
   const [pending, setPending] = useState(false);
   const firstRun = useRef(true);
 
@@ -89,19 +117,18 @@ export function ExamplePlayground({ title, description, initialCode }: Props) {
 
   return (
     <div className={styles.panel}>
+      <div className={styles.shareCorner}>
+        <ShareButton
+          paramName={shareKey}
+          getValue={() => code}
+          ariaLabel={`Share ${title}`}
+        />
+      </div>
       <div className={styles.header}>
         <div>
           <h3>{title}</h3>
           {description && <p>{description}</p>}
         </div>
-        <button
-          type="button"
-          className={styles.reset}
-          onClick={() => setCode(initialCode)}
-          aria-label={`Reset ${title} snippet`}
-        >
-          Reset
-        </button>
       </div>
 
       <div className={styles.grid}>
@@ -134,9 +161,19 @@ export function ExamplePlayground({ title, description, initialCode }: Props) {
                 />
               )}
             </span>
-            {result.isError && !pending && (
-              <span className={styles.errorBadge}>error</span>
-            )}
+            <div className={styles.outputActions}>
+              {result.isError && !pending && (
+                <span className={styles.errorBadge}>error</span>
+              )}
+              <button
+                type="button"
+                className={styles.reset}
+                onClick={() => setCode(initialCode)}
+                aria-label={`Reset ${title} snippet`}
+              >
+                Reset
+              </button>
+            </div>
           </div>
           <pre
             className={`${styles.output} ${result.isError ? styles.outputError : ""}`}

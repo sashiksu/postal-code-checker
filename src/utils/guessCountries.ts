@@ -1,9 +1,11 @@
-import { COUNTRIES } from "../assets/index";
 import { CountryOption } from "../types/CountryOption";
+
+import { getActiveData } from "./activeData";
 
 /**
  * Given a postal code with no country context, returns every country whose
- * postal code pattern accepts the input.
+ * postal code pattern accepts the input. Honors custom countries registered
+ * via `configure()`.
  *
  * Input is normalized before matching: surrounding whitespace is trimmed and
  * letters are uppercased. Countries with no postal code system are skipped.
@@ -22,8 +24,9 @@ export const guessCountries = (postalCode: string): CountryOption[] => {
   const normalized = postalCode.trim().toUpperCase();
   if (normalized === "") return [];
 
+  const { countries } = getActiveData();
   const matches: CountryOption[] = [];
-  for (const [code, country] of Object.entries(COUNTRIES)) {
+  for (const [code, country] of Object.entries(countries)) {
     if (country.patterns.length === 0) continue;
     const hit = country.patterns.some((wrapped) => {
       const pattern = wrapped.slice(1, -1);

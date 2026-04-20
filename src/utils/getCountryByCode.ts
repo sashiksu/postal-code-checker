@@ -1,16 +1,16 @@
+import { AnyCountryCode } from "../types/AnyCountryCode";
 import { Country } from "../types/Country";
 
-import { ALPHA3_TO_ALPHA2 } from "../assets/alpha3Map";
-import { COUNTRIES } from "../assets/index";
-import { CountryCode } from "../types/CountryCode";
+import { getActiveData } from "./activeData";
 
 /**
  * Retrieves country information based on the provided country code.
  *
  * Accepts ISO 3166-1 alpha-2 (`"US"`) and alpha-3 (`"USA"`) codes, as well
- * as lowercase variants (`"us"`, `"usa"`).
+ * as lowercase variants (`"us"`, `"usa"`). Custom codes registered via
+ * `configure()` are also resolvable.
  *
- * @param {CountryCode} countryCode - ISO 3166-1 alpha-2 or alpha-3 country code.
+ * @param {AnyCountryCode} countryCode - ISO 3166-1 alpha-2 or alpha-3 country code.
  * @returns {Country | null} Country information if found, or null.
  *
  * @example
@@ -18,11 +18,12 @@ import { CountryCode } from "../types/CountryCode";
  * getCountryByCode('USA');  // → same as above (alpha-3 resolved to alpha-2)
  * getCountryByCode('us');   // → same as above (case-insensitive)
  */
-export const getCountryByCode = (countryCode: CountryCode): Country | null => {
+export const getCountryByCode = (countryCode: AnyCountryCode): Country | null => {
+  const { countries, alpha3Map } = getActiveData();
   const upper = countryCode.toUpperCase();
-  const alpha2 = upper.length === 3 ? ALPHA3_TO_ALPHA2[upper] : upper;
+  const alpha2 = upper.length === 3 ? alpha3Map[upper] : upper;
   if (!alpha2) return null;
-  const country = COUNTRIES[alpha2];
+  const country = countries[alpha2];
   return country
     ? {
         postalCodePatterns: country.patterns,

@@ -1,5 +1,5 @@
+import { AnyCountryCode } from "../types/AnyCountryCode";
 import { Country } from "../types/Country";
-import { CountryCode } from "../types/CountryCode";
 
 import { getCountryByCode } from "./getCountryByCode";
 
@@ -8,9 +8,10 @@ import { getCountryByCode } from "./getCountryByCode";
  *
  * Input is normalized before validation: surrounding whitespace is trimmed
  * and letters are uppercased, so `"  k1a 0t6  "` and `"K1A 0T6"` are
- * treated identically.
+ * treated identically. Custom countries registered via `configure()` are
+ * validated the same way.
  *
- * @param {CountryCode} countryCode - The ISO 3166-1 country code (alpha-2 or alpha-3).
+ * @param {AnyCountryCode} countryCode - The ISO 3166-1 country code (alpha-2 or alpha-3).
  * @param {string} postalCode - The postal code to validate.
  * @returns {boolean} True if the postal code is valid for the given country, false otherwise.
  *
@@ -19,7 +20,7 @@ import { getCountryByCode } from "./getCountryByCode";
  * validatePostalCode("CA", "K1A 0T6"); // true
  * validatePostalCode("CA", "k1a 0t6"); // true (case-insensitive)
  */
-export const validatePostalCode = (countryCode: CountryCode, postalCode: string): boolean => {
+export const validatePostalCode = (countryCode: AnyCountryCode, postalCode: string): boolean => {
   const country: Country | null = getCountryByCode(countryCode);
   if (!country) return false;
   if (country.postalCodePatterns.length === 0) return false;

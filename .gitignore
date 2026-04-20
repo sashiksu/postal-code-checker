@@ -1,2 +1,4 @@
 node_modules
 dist
+# Claude Code per-project settings (personal allow list, machine-local)
+.claude/settings.local.json

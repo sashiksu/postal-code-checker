@@ -81,6 +81,14 @@
   box-shadow: var(--shadow-sm);
   min-width: 0;
   overflow: hidden;
+  position: relative;
+}
+
+.shareCorner {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 1;
 }
 
 .cardEyebrow {

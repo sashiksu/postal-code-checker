@@ -53,12 +53,13 @@ Works in **React, Next.js, Vue, Svelte, Angular, Node.js, Deno, Bun, and plain b
 
 **Prefer to try before installing?**
 
-👉 **[Live interactive demo](https://sashiksu.github.io/postal-code-checker/)** — browse the dataset, run single + batch validations, edit code in the browser.
+<p align="center">
+  <a href="https://sashiksu.github.io/postal-code-checker/">
+    <img src="https://img.shields.io/badge/%F0%9F%9A%80%20Launch%20the%20Live%20Demo-171717?style=for-the-badge" alt="Launch the Live Demo" height="44" />
+  </a>
+</p>
 
-[![Try on RunKit](https://img.shields.io/badge/try_on-runkit-491757?style=flat&labelColor=171717)](https://npm.runkit.com/postal-code-checker)
-[![Open in StackBlitz](https://img.shields.io/badge/open_in-stackblitz-1389FD?style=flat&labelColor=171717)](https://stackblitz.com/fork/github/sashiksu/postal-code-checker)
-
-RunKit spins up a Node.js REPL with the package preloaded. StackBlitz forks the full repo and opens it in a web IDE — good for exploring the source.
+Browse the full 249-country dataset, run single and batch validations, and edit live code right in the browser — no install required.
 
 ---
 
@@ -204,6 +205,43 @@ Returns the full country record (patterns, example codes, name, 2-letter code) o
 
 Returns `{ countryName, countryCode }[]` for every supported country, sorted alphabetically.
 
+### `configure(config): void` — _new in 2.1_
+
+Registers a user-supplied country dataset in one call, typically at app boot. Each entry either replaces a built-in country (when the alpha-2 key matches) or adds a brand-new country. Every utility in the package honors the override immediately — no call-site changes needed.
+
+```ts
+import { configure, validatePostalCode } from "postal-code-checker";
+
+configure({
+  countries: {
+    // Kosovo — not in ISO 3166-1, so not in the bundled dataset
+    XK: {
+      patterns: ["/^(?:[1-7]\\d{4})$/"],
+      example: ["10000", "20000"],
+      country: "Kosovo",
+      alpha3: "XKX",
+    },
+  },
+});
+
+validatePostalCode("XK", "10000");  // → true
+validatePostalCode("XKX", "10000"); // → true (alpha-3 works)
+```
+
+Replace semantics per country, idempotent across calls, and a fail-fast `ConfigurationError` on bad input. Full guide: [`docs/CONFIGURATION.md`](./docs/CONFIGURATION.md).
+
+> **SSR / multi-tenant:** `configure()` is a module-level singleton and isn't designed for per-request overrides. If you need that, [open an issue](https://github.com/sashiksu/postal-code-checker/issues/new) describing your use case.
+
+### `resetConfig(): void` — _new in 2.1_
+
+Discards any active `configure()` override and restores the bundled defaults. Primary use cases: test teardown (`afterEach(resetConfig)`), scenario switching, HMR.
+
+```ts
+afterEach(() => {
+  resetConfig();
+});
+```
+
 ### `usePostalCodeValidation()` — _deprecated since 1.1.0_
 
 Retained for backward compatibility; delegates to the top-level `validatePostalCode`. Kept functional in 2.x; scheduled for removal in 3.0. Prefer the top-level exports in new code.
@@ -215,12 +253,27 @@ Retained for backward compatibility; delegates to the top-level `validatePostalC
 ```typescript
 type CountryCode = string; // ISO 3166-1 alpha-2 ("US") or alpha-3 ("USA")
 
+type AnyCountryCode = CountryCode | (string & {});
+// preserves autocomplete for known codes while accepting runtime-added ones
+
 type Country = {
   postalCodePatterns: string[];  // regex strings wrapped in slashes, e.g. "/^\\d{5}$/"
   examplePostalCodes: string[];
   isGenericRegex: boolean;
   countryName: string;
-  countryCode: CountryCode;
+  countryCode: AnyCountryCode;
+};
+
+// Shape accepted by configure()
+type PostalCodeConfig = {
+  countries: {
+    [countryCode: string]: {
+      patterns: string[];   // each entry wrapped in slashes, e.g. "/^\\d{5}$/"
+      example: string[];
+      country: string;
+      alpha3?: string;      // optional 3-letter uppercase alpha-3 code
+    };
+  };
 };
 ```
 
@@ -278,6 +331,7 @@ The `usePostalCodeValidation` name followed React's hook naming convention, whic
 
 ### ✅ Shipped
 
+- `configure()` + `resetConfig()` — user-supplied country overrides and brand-new countries via a single-place config _(2.1.0)_
 - `format()` — canonical storable form, or `null` if invalid _(2.1.0)_
 - `guessCountries()` — countries whose pattern accepts an input _(2.1.0)_
 - Swap data source to Google `libaddressinput` _(2.0.0)_
@@ -292,8 +346,8 @@ The `usePostalCodeValidation` name followed React's hook naming convention, whic
 
 ### 🔜 Planned
 
-- Accept user-supplied country data to override / merge the bundled dataset
 - Subdivision-level validation (Google's `sub_zips` prefix data)
+- `createValidator()` factory for SSR / multi-tenant use cases (if demand shows up)
 - Removal of deprecated `usePostalCodeValidation` _(3.0.0)_
 
 ---

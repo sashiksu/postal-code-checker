@@ -8,7 +8,7 @@ export function WhatsNew() {
       <SectionHeading
         headingId="whats-new-heading"
         title="What's new"
-        subtitle="2.1 adds format() and guessCountries() on top of the 2.0 data pipeline rebuilt on Google libaddressinput."
+        subtitle="2.1.0 adds configure(), format() and guessCountries() on top of the 2.0.0 data pipeline rebuilt on Google libaddressinput."
       />
       <div className={styles.grid}>
         {WHATS_NEW.map((item) => (

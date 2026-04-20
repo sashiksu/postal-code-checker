@@ -10,6 +10,14 @@
   border-radius: $radius-lg;
   padding: 28px;
   box-shadow: var(--shadow-sm);
+  position: relative;
+}
+
+.shareCorner {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 1;
 }
 
 .header {

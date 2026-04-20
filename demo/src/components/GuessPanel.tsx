@@ -1,18 +1,38 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { guessCountries } from "postal-code-checker";
+import { readShareParam } from "../data/share";
+import { ShareButton } from "./ui/ShareButton";
 import styles from "./BatchPanel.module.scss";
 
 type Props = {
   onPickCountry?: (code: string) => void;
 };
 
+function loadInitialInput(): string {
+  const raw = readShareParam("guess");
+  if (raw) {
+    try {
+      const parsed = JSON.parse(raw) as { input?: unknown };
+      if (typeof parsed.input === "string") return parsed.input;
+    } catch {
+      // fall through
+    }
+  }
+  return "12345";
+}
+
 export function GuessPanel({ onPickCountry }: Props) {
-  const [raw, setRaw] = useState("12345");
+  const [raw, setRaw] = useState(() => loadInitialInput());
   const matches = useMemo(() => guessCountries(raw), [raw]);
   const hasInput = raw.trim() !== "";
 
+  const getShareValue = useCallback(() => JSON.stringify({ input: raw }), [raw]);
+
   return (
     <div className={styles.panel}>
+      <div className={styles.shareCorner}>
+        <ShareButton paramName="guess" getValue={getShareValue} ariaLabel="Share this guess example" />
+      </div>
       <div className={styles.header}>
         <div>
           <h3>Country guessing</h3>
