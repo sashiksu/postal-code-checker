@@ -81,7 +81,7 @@ export const FAQS: readonly FaqItem[] = [
     id: "custom",
     question: "Can I add custom country patterns?",
     answer:
-      "Yes — in 2.1, call `configure({ countries: { ... } })` at app boot. You can add brand-new entries (Kosovo, internal test codes) or replace bundled patterns for a country. Every utility — validatePostalCode, format, guessCountries, getCountryByCode, getAllCountries — reads from the merged dataset, no per-call wiring. See the Configuration tab above for a runnable example.",
+      "Yes — since 2.1.0, call `configure({ countries: { ... } })` at app boot. You can add brand-new entries (Kosovo, internal test codes) or replace bundled patterns when your rules are stricter than the defaults. Every utility — validatePostalCode, format, guessCountries, getCountryByCode, getAllCountries — reads from the merged dataset, no per-call wiring. See the Configuration tab above for a runnable example.",
   },
   {
     id: "geo",
@@ -107,7 +107,7 @@ export type RoadmapItem = {
 
 export const ROADMAP: readonly RoadmapItem[] = [
   {
-    milestone: "shipped in 2.1",
+    milestone: "shipped in 2.1.0",
     title: "configure()",
     description: "User-supplied country overrides and brand-new countries. Merge into the bundled dataset once at app boot — every utility picks it up automatically.",
     snippet: `configure({
@@ -120,7 +120,7 @@ export const ROADMAP: readonly RoadmapItem[] = [
 })`,
   },
   {
-    milestone: "v2.2",
+    milestone: "v2.2.0",
     title: "parse()",
     description: "Break a structured code into its parts. UK outward/inward, Brazilian prefix/suffix, etc.",
     snippet: `parse("GB", "SW1A 1AA")
@@ -128,14 +128,14 @@ export const ROADMAP: readonly RoadmapItem[] = [
 //     area: "SW", district: "1A" }`,
   },
   {
-    milestone: "v3",
+    milestone: "v3.0.0",
     title: "Subdivision lookup",
     description: "Resolve a postal code to its state / province / region. Uses Google's sub_zips data.",
     snippet: `classify("US", "95014")
 // → { subdivision: "CA" }`,
   },
   {
-    milestone: "v3",
+    milestone: "v3.0.0",
     title: "createValidator()",
     description: "Per-request / multi-tenant validator instances for SSR and edge runtimes, when singleton configure() isn't a fit.",
     snippet: `const v = createValidator({ countries: { ... } });

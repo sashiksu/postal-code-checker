@@ -8,7 +8,7 @@ export function Roadmap() {
       <div className={styles.header}>
         <div>
           <h3>What's next</h3>
-          <p>Shipping order for 2.x and 3.0. Feedback welcome on issues.</p>
+          <p>Shipping order for 2.x and 3.0.0. Feedback welcome on issues.</p>
         </div>
       </div>
       <ol className={styles.list}>

@@ -32,13 +32,15 @@ export function CustomCountryCta() {
       </div>
       <div className={styles.copy}>
         <h3 id="custom-country-cta-heading">
-          Don't see your country? <em>Add your own.</em>
+          Don't see your country? <em>Add your own.</em> Or tighten an existing
+          one.
         </h3>
         <p>
-          Ship internal codes, Kosovo, a dev sandbox — anything the bundled
-          249 don't cover. One <code>configure()</code> call at app boot and
-          every utility reads the merged dataset.{" "}
-          <span className={styles.badge}>new in 2.1</span>
+          Add brand-new entries (internal codes, Kosovo, a dev sandbox) or
+          replace a bundled pattern when your business rules are stricter than
+          the defaults. One <code>configure()</code> call at app boot and every
+          utility reads the merged dataset.{" "}
+          <span className={styles.badge}>new in 2.1.0</span>
         </p>
       </div>
       <a

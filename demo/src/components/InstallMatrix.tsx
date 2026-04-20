@@ -28,22 +28,22 @@ export function InstallMatrix() {
   return (
     <section id="install" className={styles.section} aria-labelledby="install-heading">
       <div className={styles.panel}>
-        <div className={styles.shareCorner}>
-          <ShareButton
-            paramName="install"
-            getValue={getShareValue}
-            ariaLabel="Share this install tab"
-          />
-        </div>
         <div className={styles.header}>
           <h2 id="install-heading">Install</h2>
-          <Tabs
-            tabs={TABS}
-            active={active}
-            onChange={setActive}
-            variant="pill"
-            ariaLabel="Package manager"
-          />
+          <div className={styles.headerRight}>
+            <Tabs
+              tabs={TABS}
+              active={active}
+              onChange={setActive}
+              variant="pill"
+              ariaLabel="Package manager"
+            />
+            <ShareButton
+              paramName="install"
+              getValue={getShareValue}
+              ariaLabel="Share this install tab"
+            />
+          </div>
         </div>
         <CodeBlock code={code} ariaLabel={`${active} install command`} />
       </div>

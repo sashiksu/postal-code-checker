@@ -154,28 +154,27 @@ export function ConfigurationPanel() {
       <div className={styles.shareCorner}>
         <ShareButton paramName="config" getValue={getShareValue} ariaLabel="Share this config" />
       </div>
-      <div className={styles.header}>
-        <div>
+      <div className={styles.intro}>
+        <div className={styles.introCopy}>
           <h3>configure() — custom country data</h3>
           <p>
-            Drop in a JSON config and every utility in the package picks it up — one call at app
-            boot, no per-call wiring. The config lives in a module-level singleton, so the same
-            three-line setup works in React, Vue, Angular, Svelte, Node, Bun, Deno, and plain
-            browser JS.
+            Drop in a JSON config and every utility in the package picks it up —
+            one call at app boot, no per-call wiring. The config lives in a
+            module-level singleton, so the same three-line setup works in
+            React, Vue, Angular, Svelte, Node, Bun, Deno, and plain browser JS.
           </p>
         </div>
-      </div>
-
-      <div className={styles.wiringBlock}>
-        <div className={styles.wiringIntro}>
-          <strong>How it wires into your app</strong>
-          <span>
-            Three steps, one file. The JSON on the left is shorthand for this —
-            call configure() once and every utility in the package reads the
-            merged dataset.
-          </span>
+        <div className={styles.wiringBlock}>
+          <div className={styles.wiringIntro}>
+            <strong>How it wires into your app</strong>
+            <span>
+              Three steps, one file. The JSON on the left is shorthand for
+              this — call <code>configure()</code> once and every utility reads
+              the merged dataset.
+            </span>
+          </div>
+          <CodeBlock code={WIRING_EXAMPLE} ariaLabel="configure() wiring example" />
         </div>
-        <CodeBlock code={WIRING_EXAMPLE} ariaLabel="configure() wiring example" />
       </div>
 
       <ol className={styles.steps} aria-label="How to try a custom configuration">
