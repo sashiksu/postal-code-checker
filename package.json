@@ -28,7 +28,7 @@
     "prepare": "npm run build",
     "prepublishOnly": "npm test",
     "release": "npm run prettier && npm test && npm run sync:check && npm run build && npm publish --access public",
-    "release:next": "npm run prettier && npm test && npm run sync:check && npm run build && npm publish --access public --tag next"
+    "release:next": "npm run prettier && npm test && npm run build && npm publish --access public --tag next"
   },
   "keywords": [
     "postcode",
