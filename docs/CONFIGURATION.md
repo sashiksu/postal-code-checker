@@ -178,7 +178,7 @@ Example patterns:
 
 ## SSR / multi-tenant limitation
 
-`configure()` is a module-level singleton. It matches how `i18next` and most "configure once at app boot" libraries work, and keeps the common-case DX trivial — one call, every downstream consumer is covered.
+`configure()` is a module-level singleton. Call it once at app boot and every downstream consumer — utilities, React components, server routes — sees the merged dataset without extra wiring.
 
 Per-request configuration (SSR, multi-tenant servers where each tenant needs its own dataset) is **not supported** in this release. If you need it, [open an issue](https://github.com/sashiksu/postal-code-checker/issues/new) describing your use case. A `createValidator()` factory that returns bound, instance-scoped functions is on the roadmap — we're waiting for real demand before designing it.
 

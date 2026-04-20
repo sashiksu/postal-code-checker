@@ -21,7 +21,7 @@ Adds a single-place configuration API that lets you override built-in country da
 
 ### SSR / multi-tenant note
 
-`configure()` is a module-level singleton. That matches how `i18next` and most config-at-boot packages work, and keeps the common-case DX trivial. Per-request configuration for SSR or multi-tenant servers isn't supported in this release — if you need it, [open an issue](https://github.com/sashiksu/postal-code-checker/issues/new) describing your use case and we'll consider a `createValidator()` factory for a future release.
+`configure()` is a module-level singleton: call it once at app boot and every downstream utility sees the merged dataset without extra wiring. Per-request configuration for SSR or multi-tenant servers isn't supported in this release — if you need it, [open an issue](https://github.com/sashiksu/postal-code-checker/issues/new) describing your use case and we'll consider a `createValidator()` factory for a future release.
 
 ### Demo
 

@@ -7,6 +7,14 @@
   border-radius: $radius-lg;
   padding: 22px;
   box-shadow: var(--shadow-sm);
+  position: relative;
+}
+
+.shareCorner {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 1;
 }
 
 .header {
@@ -28,14 +36,16 @@
     margin: 4px 0 0;
     font-size: 13px;
     color: var(--color-muted);
-    max-width: 62ch;
+    max-width: 72ch;
   }
 }
 
-.actions {
+.editorActions {
   display: flex;
-  gap: 8px;
   flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  padding: 10px 0 2px;
 }
 
 .button {
@@ -72,6 +82,93 @@
     background: var(--color-accent-hover, var(--color-accent));
     border-color: var(--color-accent-hover, var(--color-accent));
   }
+}
+
+.wiringBlock {
+  margin: 0 0 16px;
+  padding: 14px 14px 12px;
+  border: 1px solid var(--color-border);
+  background: var(--color-panel-2);
+  border-radius: $radius;
+}
+
+.wiringIntro {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 10px;
+
+  strong {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-text);
+    letter-spacing: -0.01em;
+  }
+
+  span {
+    font-size: 12.5px;
+    color: var(--color-muted);
+  }
+}
+
+.steps {
+  list-style: none;
+  margin: 0 0 18px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+
+  @include below-lg {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (max-width: 520px) {
+    grid-template-columns: 1fr;
+  }
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px;
+    background: var(--color-panel-2);
+    border: 1px solid var(--color-border);
+    border-radius: $radius;
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: var(--color-muted);
+  }
+
+  strong {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+
+  code {
+    font-family: $font-mono;
+    font-size: 11.5px;
+    padding: 1px 4px;
+    border-radius: 3px;
+    background: var(--color-panel);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+  }
+}
+
+.stepNum {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  font-family: $font-mono;
+  font-size: 11.5px;
+  font-weight: 700;
+  background: var(--color-accent);
+  color: var(--color-accent-contrast);
 }
 
 .grid {

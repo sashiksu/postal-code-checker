@@ -1,17 +1,45 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { format } from "postal-code-checker";
+import { readShareParam } from "../data/share";
 import { CountryCombobox } from "./ui/CountryCombobox";
+import { ShareButton } from "./ui/ShareButton";
 import styles from "./BatchPanel.module.scss";
 
+type Shared = { country: string; input: string };
+
+function loadInitial(): Shared {
+  const raw = readShareParam("format");
+  if (raw) {
+    try {
+      const parsed = JSON.parse(raw) as Partial<Shared>;
+      if (typeof parsed.country === "string" && typeof parsed.input === "string") {
+        return { country: parsed.country, input: parsed.input };
+      }
+    } catch {
+      // fall through to defaults
+    }
+  }
+  return { country: "CA", input: "k1a0t6" };
+}
+
 export function FormatPanel() {
-  const [countryCode, setCountryCode] = useState("CA");
-  const [raw, setRaw] = useState("k1a0t6");
+  const initial = useMemo(loadInitial, []);
+  const [countryCode, setCountryCode] = useState(initial.country);
+  const [raw, setRaw] = useState(initial.input);
 
   const formatted = useMemo(() => format(countryCode, raw), [countryCode, raw]);
   const ok = formatted !== null;
 
+  const getShareValue = useCallback(
+    () => JSON.stringify({ country: countryCode, input: raw }),
+    [countryCode, raw],
+  );
+
   return (
     <div className={styles.panel}>
+      <div className={styles.shareCorner}>
+        <ShareButton paramName="format" getValue={getShareValue} ariaLabel="Share this format example" />
+      </div>
       <div className={styles.header}>
         <div>
           <h3>Canonical formatting</h3>

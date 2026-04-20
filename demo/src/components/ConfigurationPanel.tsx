@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   COUNTRIES,
   ConfigurationError,
@@ -9,6 +9,9 @@ import {
   validatePostalCode,
   type PostalCodeConfig,
 } from "postal-code-checker";
+import { readShareParam } from "../data/share";
+import { CodeBlock } from "./ui/CodeBlock";
+import { ShareButton } from "./ui/ShareButton";
 import styles from "./ConfigurationPanel.module.scss";
 
 const DEFAULT_CONFIG_JSON = `{
@@ -28,6 +31,20 @@ const DEFAULT_CONFIG_JSON = `{
 }
 `;
 
+const WIRING_EXAMPLE = `// 1. Put your overrides in a JSON file (or inline object).
+import customCountries from "./custom-countries.json";
+
+// 2. At app boot — call once; the config is a module-level singleton
+//    so every downstream import picks it up without extra wiring.
+import { configure } from "postal-code-checker";
+configure(customCountries);
+
+// 3. Every utility in the package now reads the merged dataset.
+import { validatePostalCode, guessCountries } from "postal-code-checker";
+validatePostalCode("XK", "10000");   // → true
+guessCountries("10000").length;      // now includes Kosovo
+`;
+
 type DiffEntry = {
   code: string;
   kind: "added" | "replaced";
@@ -38,25 +55,6 @@ type AppliedState =
   | { kind: "idle" }
   | { kind: "applied"; diff: DiffEntry[]; at: number }
   | { kind: "reset"; at: number };
-
-function encodeConfigToHash(text: string): string {
-  try {
-    return "#config=" + btoa(unescape(encodeURIComponent(text)));
-  } catch {
-    return "";
-  }
-}
-
-function decodeConfigFromHash(): string | null {
-  const hash = window.location.hash;
-  if (!hash.startsWith("#config=")) return null;
-  try {
-    const raw = hash.slice("#config=".length);
-    return decodeURIComponent(escape(atob(raw)));
-  } catch {
-    return null;
-  }
-}
 
 function computeDiff(config: PostalCodeConfig): DiffEntry[] {
   const entries: DiffEntry[] = [];
@@ -73,15 +71,13 @@ function computeDiff(config: PostalCodeConfig): DiffEntry[] {
 
 export function ConfigurationPanel() {
   const [text, setText] = useState<string>(
-    () => decodeConfigFromHash() ?? DEFAULT_CONFIG_JSON,
+    () => readShareParam("config") ?? DEFAULT_CONFIG_JSON,
   );
   const [error, setError] = useState<string | null>(null);
   const [applied, setApplied] = useState<AppliedState>({ kind: "idle" });
   const [testCode, setTestCode] = useState("XK");
   const [testInput, setTestInput] = useState("10000");
   const [guessInput, setGuessInput] = useState("10000");
-  const [shareState, setShareState] = useState<"idle" | "copied">("idle");
-  const shareTimer = useRef<number | null>(null);
 
   // Reset any leftover config from prior sessions when the tab mounts.
   useEffect(() => {
@@ -127,28 +123,9 @@ export function ConfigurationPanel() {
     setApplied({ kind: "reset", at: Date.now() });
   }, []);
 
-  const handleShare = useCallback(async () => {
-    const base = `${window.location.origin}${window.location.pathname}${window.location.search}`;
-    const hash = encodeConfigToHash(text);
-    const url = `${base}${hash}`;
-    history.replaceState(null, "", url);
-    try {
-      await navigator.clipboard.writeText(url);
-    } catch {
-      // Ignore — URL is still in the address bar.
-    }
-    setShareState("copied");
-    if (shareTimer.current) window.clearTimeout(shareTimer.current);
-    shareTimer.current = window.setTimeout(() => setShareState("idle"), 1400);
-  }, [text]);
+  const getShareValue = useCallback(() => text, [text]);
 
-  useEffect(() => {
-    return () => {
-      if (shareTimer.current) window.clearTimeout(shareTimer.current);
-    };
-  }, []);
-
-  // Reactive values — re-read the live dataset whenever `applied` changes so
+  // Reactive values re-read the live dataset whenever `applied` changes, so
   // the right-pane cards reflect what `configure()` / `resetConfig()` just did.
   const validatorResult = useMemo(() => {
     const country = getCountryByCode(testCode);
@@ -168,31 +145,62 @@ export function ConfigurationPanel() {
 
   return (
     <div className={styles.panel}>
+      <div className={styles.shareCorner}>
+        <ShareButton paramName="config" getValue={getShareValue} ariaLabel="Share this config" />
+      </div>
       <div className={styles.header}>
         <div>
           <h3>configure() — custom country data</h3>
           <p>
             Drop in a JSON config and every utility in the package picks it up — one call at app
-            boot, no per-call wiring. Same idea as an <code>i18next.init()</code> but for postal
-            codes.
+            boot, no per-call wiring. The config lives in a module-level singleton, so the same
+            three-line setup works in React, Vue, Angular, Svelte, Node, Bun, Deno, and plain
+            browser JS.
           </p>
         </div>
-        <div className={styles.actions}>
-          <button
-            type="button"
-            className={`${styles.button} ${styles.apply}`}
-            onClick={handleApply}
-          >
-            Apply config
-          </button>
-          <button type="button" className={styles.button} onClick={handleReset}>
-            resetConfig()
-          </button>
-          <button type="button" className={styles.button} onClick={handleShare}>
-            {shareState === "copied" ? "Link copied" : "Share"}
-          </button>
-        </div>
       </div>
+
+      <div className={styles.wiringBlock}>
+        <div className={styles.wiringIntro}>
+          <strong>How it wires into your app</strong>
+          <span>
+            Three lines at startup — the JSON document you edit below is exactly the shape you
+            pass to <code>configure()</code>.
+          </span>
+        </div>
+        <CodeBlock code={WIRING_EXAMPLE} ariaLabel="configure() wiring example" />
+      </div>
+
+      <ol className={styles.steps} aria-label="How to try a custom configuration">
+        <li>
+          <span className={styles.stepNum}>1</span>
+          <div>
+            <strong>Edit the JSON</strong> on the left. Add a new country code, or replace an
+            existing one's patterns.
+          </div>
+        </li>
+        <li>
+          <span className={styles.stepNum}>2</span>
+          <div>
+            Click <strong>Apply config</strong>. The panel calls <code>configure()</code> for real;
+            invalid configs throw <code>ConfigurationError</code> and show inline.
+          </div>
+        </li>
+        <li>
+          <span className={styles.stepNum}>3</span>
+          <div>
+            Test it on the right — <strong>validatePostalCode()</strong> and{" "}
+            <strong>guessCountries()</strong> read from the live dataset.
+          </div>
+        </li>
+        <li>
+          <span className={styles.stepNum}>4</span>
+          <div>
+            Click <strong>Share</strong> to copy a URL with this config baked in, or{" "}
+            <strong>resetConfig()</strong> to revert to the 249 bundled countries.
+          </div>
+        </li>
+      </ol>
 
       <div className={styles.grid}>
         <div className={styles.editorWrap}>
@@ -208,6 +216,18 @@ export function ConfigurationPanel() {
             data-state={error ? "error" : undefined}
             aria-label="Postal code configuration JSON"
           />
+          <div className={styles.editorActions}>
+            <button
+              type="button"
+              className={`${styles.button} ${styles.apply}`}
+              onClick={handleApply}
+            >
+              Apply config
+            </button>
+            <button type="button" className={styles.button} onClick={handleReset}>
+              resetConfig()
+            </button>
+          </div>
           {error ? (
             <div className={styles.errorBanner} role="alert">
               {error}
