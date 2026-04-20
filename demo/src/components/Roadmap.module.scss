@@ -66,9 +66,14 @@
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--color-accent-contrast);
+  color: var(--color-accent);
   background: var(--color-accent-soft);
   border-radius: 999px;
+}
+
+.shipped {
+  color: #fff;
+  background: var(--color-accent);
 }
 
 .title {

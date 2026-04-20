@@ -10,7 +10,7 @@ import {
   type PostalCodeConfig,
 } from "postal-code-checker";
 import { readShareParam } from "../data/share";
-import { ExamplePlayground } from "./ExamplePlayground";
+import { CodeBlock } from "./ui/CodeBlock";
 import { ShareButton } from "./ui/ShareButton";
 import styles from "./ConfigurationPanel.module.scss";
 
@@ -31,29 +31,24 @@ const DEFAULT_CONFIG_JSON = `{
 }
 `;
 
-const WIRING_EXAMPLE = `// 1. In your app you'd import the JSON (or inline an object):
-//      import customCountries from "./custom-countries.json";
-//      import { configure } from "postal-code-checker";
-//    Here the dependencies are already in scope — edit freely, hit Run.
+const WIRING_EXAMPLE = `// 1. Load your config — usually a JSON file imported at app boot.
+import customCountries from "./custom-countries.json";
+import { configure } from "postal-code-checker";
 
-// 2. At app boot — call once. The config is a module-level singleton
-//    so every downstream import reads the merged dataset.
-configure({
-  countries: {
-    XK: {
-      patterns: ["/^(?:[1-7]\\\\d{4})$/"],
-      example: ["10000", "20000"],
-      country: "Kosovo",
-      alpha3: "XKX",
-    },
-  },
-});
+// 2. Call once. configure() is a module-level singleton, so every
+//    downstream import reads the merged dataset without extra wiring.
+configure(customCountries);
 
-// 3. Validate + guess run against the new dataset.
-console.log("XK validates 10000:", validatePostalCode("XK", "10000"));
+// 3. Everything else just works — validate, format, guess, lookups
+//    all read the new patterns with no per-call threading.
+import {
+  validatePostalCode,
+  guessCountries,
+} from "postal-code-checker";
 
-const matches = guessCountries("10000").map(c => c.countryCode);
-console.log("guessCountries('10000'):", matches.slice(0, 8).join(", "));
+validatePostalCode("XK", "10000");         // true
+guessCountries("10000").map(c => c.countryCode);
+// → ["FR", "IT", "XK", …]
 `;
 
 type DiffEntry = {
@@ -172,12 +167,15 @@ export function ConfigurationPanel() {
       </div>
 
       <div className={styles.wiringBlock}>
-        <ExamplePlayground
-          shareKey="ex-configure"
-          title="How it wires into your app"
-          description="Runnable — edit the config, hit Run, watch configure() + validate + guess update in place."
-          initialCode={WIRING_EXAMPLE}
-        />
+        <div className={styles.wiringIntro}>
+          <strong>How it wires into your app</strong>
+          <span>
+            Three steps, one file. The JSON on the left is shorthand for this —
+            call configure() once and every utility in the package reads the
+            merged dataset.
+          </span>
+        </div>
+        <CodeBlock code={WIRING_EXAMPLE} ariaLabel="configure() wiring example" />
       </div>
 
       <ol className={styles.steps} aria-label="How to try a custom configuration">

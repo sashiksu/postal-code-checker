@@ -2,6 +2,7 @@ import { useCallback, useRef, useState } from "react";
 import { Navbar } from "./components/Navbar";
 import { Sidebar } from "./components/Sidebar";
 import { Hero } from "./components/Hero";
+import { CustomCountryCta } from "./components/CustomCountryCta";
 import { WhyChoose } from "./components/WhyChoose";
 import { InstallMatrix } from "./components/InstallMatrix";
 import { CodeExamples } from "./components/CodeExamples";
@@ -50,6 +51,7 @@ export function App() {
         <Sidebar />
         <main id="main">
           <Hero countryCode={countryCode} onCountryChange={setCountryCode} />
+          <CustomCountryCta />
           <WhyChoose />
           <InstallMatrix />
           <CodeExamples />

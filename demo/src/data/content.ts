@@ -9,6 +9,12 @@ export type Feature = {
 
 export const WHATS_NEW: readonly Feature[] = [
   {
+    icon: "⚙",
+    title: "configure()",
+    description:
+      "Add your own countries or replace bundled patterns at app boot. One call, module-level singleton — every utility picks it up without per-call wiring.",
+  },
+  {
     icon: "fx",
     title: "format()",
     description:
@@ -75,7 +81,7 @@ export const FAQS: readonly FaqItem[] = [
     id: "custom",
     question: "Can I add custom country patterns?",
     answer:
-      "Not yet — the dataset is read-only in 2.x. A `createValidator({ overrides })` API is on the v3 roadmap for internal / private codes. If you need it sooner, a thin wrapper around validatePostalCode() that checks your own patterns first works well today.",
+      "Yes — in 2.1, call `configure({ countries: { ... } })` at app boot. You can add brand-new entries (Kosovo, internal test codes) or replace bundled patterns for a country. Every utility — validatePostalCode, format, guessCountries, getCountryByCode, getAllCountries — reads from the merged dataset, no per-call wiring. See the Configuration tab above for a runnable example.",
   },
   {
     id: "geo",
@@ -101,6 +107,19 @@ export type RoadmapItem = {
 
 export const ROADMAP: readonly RoadmapItem[] = [
   {
+    milestone: "shipped in 2.1",
+    title: "configure()",
+    description: "User-supplied country overrides and brand-new countries. Merge into the bundled dataset once at app boot — every utility picks it up automatically.",
+    snippet: `configure({
+  countries: {
+    XK: { patterns: ["/^[1-7]\\\\d{4}$/"],
+          example: ["10000"],
+          country: "Kosovo",
+          alpha3: "XKX" },
+  },
+})`,
+  },
+  {
     milestone: "v2.2",
     title: "parse()",
     description: "Break a structured code into its parts. UK outward/inward, Brazilian prefix/suffix, etc.",
@@ -117,11 +136,10 @@ export const ROADMAP: readonly RoadmapItem[] = [
   },
   {
     milestone: "v3",
-    title: "Custom overrides",
-    description: "Merge your own patterns on top of the bundled dataset — for internal / private codes.",
-    snippet: `createValidator({
-  overrides: { X1: { patterns: [...] } }
-})`,
+    title: "createValidator()",
+    description: "Per-request / multi-tenant validator instances for SSR and edge runtimes, when singleton configure() isn't a fit.",
+    snippet: `const v = createValidator({ countries: { ... } });
+v.validate("XK", "10000");`,
   },
 ];
 

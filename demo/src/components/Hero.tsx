@@ -1,11 +1,13 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   getAllCountries,
   getCountryByCode,
   validatePostalCode,
   type Country,
 } from "postal-code-checker";
+import { readShareParam } from "../data/share";
 import { CountryCombobox } from "./ui/CountryCombobox";
+import { ShareButton } from "./ui/ShareButton";
 import styles from "./Hero.module.scss";
 
 type Verdict = "idle" | "valid" | "invalid" | "none";
@@ -37,14 +39,51 @@ type HeroProps = {
   onCountryChange: (code: string) => void;
 };
 
+type Shared = { country?: string; code?: string };
+
+function loadInitial(): Shared {
+  const raw = readShareParam("hero");
+  if (!raw) return {};
+  try {
+    const parsed = JSON.parse(raw) as Partial<Shared>;
+    return {
+      country: typeof parsed.country === "string" ? parsed.country : undefined,
+      code: typeof parsed.code === "string" ? parsed.code : undefined,
+    };
+  } catch {
+    return {};
+  }
+}
+
 export function Hero({ countryCode, onCountryChange }: HeroProps) {
   const countries = useCountries();
-  const [code, setCode] = useState<string>("");
+  const initial = useMemo(loadInitial, []);
+  const [code, setCode] = useState<string>(initial.code ?? "");
+
+  // When we boot from a shared URL that set a code, the reset effect below
+  // would wipe it on the initial-mount fire (and again when onCountryChange
+  // runs). Track the country we're hydrating into so we can skip that reset.
+  const hydrationTargetRef = useRef<string | null>(
+    initial.code ? (initial.country ?? countryCode) : null,
+  );
 
   const country: Country | null = useMemo(
     () => getCountryByCode(countryCode),
     [countryCode],
   );
+
+  const getShareValue = useCallback(
+    () => JSON.stringify({ country: countryCode, code }),
+    [countryCode, code],
+  );
+
+  useEffect(() => {
+    if (initial.country && initial.country !== countryCode) {
+      onCountryChange(initial.country);
+    }
+    // Only apply shared state on first mount.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const hasPatterns = (country?.postalCodePatterns.length ?? 0) > 0;
 
@@ -73,7 +112,12 @@ export function Hero({ countryCode, onCountryChange }: HeroProps) {
   }, [country, hasPatterns, code, countryCode]);
 
   // Reset the input whenever the country changes — format almost always differs.
+  // Skip the one change we trigger ourselves to hydrate a shared URL.
   useEffect(() => {
+    if (hydrationTargetRef.current === countryCode) {
+      hydrationTargetRef.current = null;
+      return;
+    }
     setCode("");
   }, [countryCode]);
 
@@ -112,6 +156,13 @@ export function Hero({ countryCode, onCountryChange }: HeroProps) {
       </div>
 
       <div className={styles.card}>
+        <div className={styles.shareCorner}>
+          <ShareButton
+            paramName="hero"
+            getValue={getShareValue}
+            ariaLabel="Share this validator state"
+          />
+        </div>
         <div className={styles.cardEyebrow}>Live validator</div>
         <div className={styles.row}>
           <div>
