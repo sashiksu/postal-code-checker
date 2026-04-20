@@ -107,19 +107,6 @@ export type RoadmapItem = {
 
 export const ROADMAP: readonly RoadmapItem[] = [
   {
-    milestone: "shipped in 2.1.0",
-    title: "configure()",
-    description: "User-supplied country overrides and brand-new countries. Merge into the bundled dataset once at app boot — every utility picks it up automatically.",
-    snippet: `configure({
-  countries: {
-    XK: { patterns: ["/^[1-7]\\\\d{4}$/"],
-          example: ["10000"],
-          country: "Kosovo",
-          alpha3: "XKX" },
-  },
-})`,
-  },
-  {
     milestone: "v2.2.0",
     title: "parse()",
     description: "Break a structured code into its parts. UK outward/inward, Brazilian prefix/suffix, etc.",

@@ -10,8 +10,18 @@
 [![license](https://img.shields.io/npm/l/postal-code-checker.svg)](./LICENSE)
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/sashiksu/postal-code-checker/master/docs/hero.gif" alt="Validating postal codes for 249 countries in real time" width="720" />
+  <img src="https://raw.githubusercontent.com/sashiksu/postal-code-checker/master/docs/hero.gif" alt="Validating postal codes for 249 countries in real time" width="480" />
 </p>
+
+**Prefer to try before installing?**
+
+<p align="center">
+  <a href="https://sashiksu.github.io/postal-code-checker/">
+    <img src="https://img.shields.io/badge/%F0%9F%9A%80%20%20Launch%20the%20Live%20Demo-171717?style=for-the-badge&labelColor=171717&color=ff6b35" alt="Launch the Live Demo" height="56" />
+  </a>
+</p>
+
+Browse the full 249-country dataset, run single and batch validations, and edit live code right in the browser — no install required.
 
 Powered by Google's [`libaddressinput`](https://github.com/google/libaddressinput) — the same dataset behind Chromium, Android, and Google Pay address forms.
 
@@ -50,16 +60,6 @@ validatePostalCodes("US", ["12345", "oops"]); // → [true, false]
 ```
 
 Works in **React, Next.js, Vue, Svelte, Angular, Node.js, Deno, Bun, and plain browser JS** — no framework assumptions.
-
-**Prefer to try before installing?**
-
-<p align="center">
-  <a href="https://sashiksu.github.io/postal-code-checker/">
-    <img src="https://img.shields.io/badge/%F0%9F%9A%80%20Launch%20the%20Live%20Demo-171717?style=for-the-badge" alt="Launch the Live Demo" height="44" />
-  </a>
-</p>
-
-Browse the full 249-country dataset, run single and batch validations, and edit live code right in the browser — no install required.
 
 ---
 
