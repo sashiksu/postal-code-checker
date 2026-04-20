@@ -1,9 +1,11 @@
-import { useMemo, useState, type RefObject } from "react";
+import { useCallback, useEffect, useMemo, useState, type RefObject } from "react";
 import {
   getAllCountries,
   getCountryByCode,
   type Country,
 } from "postal-code-checker";
+import { readShareParam } from "../data/share";
+import { ShareButton } from "./ui/ShareButton";
 import styles from "./DatasetPanel.module.scss";
 
 type Props = {
@@ -33,13 +35,45 @@ function buildRows(): Row[] {
     .sort((a, b) => a.name.localeCompare(b.name));
 }
 
+type Shared = { query: string; country?: string };
+
+function loadInitial(): Shared {
+  const raw = readShareParam("dataset");
+  if (raw) {
+    try {
+      const parsed = JSON.parse(raw) as Partial<Shared>;
+      return {
+        query: typeof parsed.query === "string" ? parsed.query : "",
+        country: typeof parsed.country === "string" ? parsed.country : undefined,
+      };
+    } catch {
+      // fall through to defaults
+    }
+  }
+  return { query: "" };
+}
+
 export function DatasetPanel({
   activeCountry,
   onPickCountry,
   searchRef,
 }: Props) {
   const rows = useMemo(buildRows, []);
-  const [query, setQuery] = useState("");
+  const initial = useMemo(loadInitial, []);
+  const [query, setQuery] = useState(initial.query);
+
+  useEffect(() => {
+    if (initial.country && initial.country !== activeCountry) {
+      onPickCountry?.(initial.country);
+    }
+    // Only run once on mount — activeCountry changes shouldn't re-trigger.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const getShareValue = useCallback(
+    () => JSON.stringify({ query, country: activeCountry ?? "" }),
+    [query, activeCountry],
+  );
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -54,6 +88,13 @@ export function DatasetPanel({
 
   return (
     <div className={styles.panel}>
+      <div className={styles.shareCorner}>
+        <ShareButton
+          paramName="dataset"
+          getValue={getShareValue}
+          ariaLabel="Share this dataset view"
+        />
+      </div>
       <div className={styles.header}>
         <div>
           <h3>Dataset browser</h3>

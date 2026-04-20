@@ -10,7 +10,7 @@ import {
   type PostalCodeConfig,
 } from "postal-code-checker";
 import { readShareParam } from "../data/share";
-import { CodeBlock } from "./ui/CodeBlock";
+import { ExamplePlayground } from "./ExamplePlayground";
 import { ShareButton } from "./ui/ShareButton";
 import styles from "./ConfigurationPanel.module.scss";
 
@@ -31,18 +31,29 @@ const DEFAULT_CONFIG_JSON = `{
 }
 `;
 
-const WIRING_EXAMPLE = `// 1. Put your overrides in a JSON file (or inline object).
-import customCountries from "./custom-countries.json";
+const WIRING_EXAMPLE = `// 1. In your app you'd import the JSON (or inline an object):
+//      import customCountries from "./custom-countries.json";
+//      import { configure } from "postal-code-checker";
+//    Here the dependencies are already in scope — edit freely, hit Run.
 
-// 2. At app boot — call once; the config is a module-level singleton
-//    so every downstream import picks it up without extra wiring.
-import { configure } from "postal-code-checker";
-configure(customCountries);
+// 2. At app boot — call once. The config is a module-level singleton
+//    so every downstream import reads the merged dataset.
+configure({
+  countries: {
+    XK: {
+      patterns: ["/^(?:[1-7]\\\\d{4})$/"],
+      example: ["10000", "20000"],
+      country: "Kosovo",
+      alpha3: "XKX",
+    },
+  },
+});
 
-// 3. Every utility in the package now reads the merged dataset.
-import { validatePostalCode, guessCountries } from "postal-code-checker";
-validatePostalCode("XK", "10000");   // → true
-guessCountries("10000").length;      // now includes Kosovo
+// 3. Validate + guess run against the new dataset.
+console.log("XK validates 10000:", validatePostalCode("XK", "10000"));
+
+const matches = guessCountries("10000").map(c => c.countryCode);
+console.log("guessCountries('10000'):", matches.slice(0, 8).join(", "));
 `;
 
 type DiffEntry = {
@@ -161,14 +172,12 @@ export function ConfigurationPanel() {
       </div>
 
       <div className={styles.wiringBlock}>
-        <div className={styles.wiringIntro}>
-          <strong>How it wires into your app</strong>
-          <span>
-            Three lines at startup — the JSON document you edit below is exactly the shape you
-            pass to <code>configure()</code>.
-          </span>
-        </div>
-        <CodeBlock code={WIRING_EXAMPLE} ariaLabel="configure() wiring example" />
+        <ExamplePlayground
+          shareKey="ex-configure"
+          title="How it wires into your app"
+          description="Runnable — edit the config, hit Run, watch configure() + validate + guess update in place."
+          initialCode={WIRING_EXAMPLE}
+        />
       </div>
 
       <ol className={styles.steps} aria-label="How to try a custom configuration">
