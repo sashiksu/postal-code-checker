@@ -63,31 +63,31 @@ export const FAQS: readonly FaqItem[] = [
     id: "source",
     question: "Where does the postal code data come from?",
     answer:
-      "Patterns, examples and country names are sourced from Google's libaddressinput — the same dataset backing Chromium's autofill, Android's address picker and Google Pay. It's Apache-2.0 licensed; attribution lives in NOTICE. We snapshot the dataset at release time rather than calling out to the network at runtime.",
+      "Patterns, examples and country names are sourced from Google's libaddressinput — the same dataset backing Chromium's autofill, Android's address picker and Google Pay. It's Apache-2.0 licensed; attribution lives in `NOTICE`. We snapshot the dataset at release time rather than calling out to the network at runtime.",
   },
   {
     id: "empty",
     question: "Why do some countries show no postal codes?",
     answer:
-      "A handful of countries genuinely have no postal code system — UAE, Zimbabwe, Ireland until 2015, and others. Their entry stores `patterns: []`, and validatePostalCode() returns false for any input against them. This is intentional: it matches the behavior for unknown countries and prevents false positives.",
+      "A handful of countries genuinely have no postal code system — UAE, Zimbabwe, Ireland until 2015, and others. Their entry stores `patterns: []`, and `validatePostalCode()` returns false for any input against them. This is intentional: it matches the behavior for unknown countries and prevents false positives.",
   },
   {
     id: "freshness",
     question: "How up-to-date is the bundled data?",
     answer:
-      "The snapshot date is stamped at the top of src/assets/index.ts on every sync. Maintainer runs `npm run sync:data` before each release; CI blocks publish on drift via `sync:check`. In practice the upstream data changes a few times a year — we pick the delta up on the next cut.",
+      "The snapshot date is stamped at the top of `src/assets/index.ts` on every sync. Maintainer runs `npm run sync:data` before each release; CI blocks publish on drift via `sync:check`. In practice the upstream data changes a few times a year — we pick the delta up on the next cut.",
   },
   {
     id: "custom",
     question: "Can I add custom country patterns?",
     answer:
-      "Yes — since 2.1.0, call `configure({ countries: { ... } })` at app boot. You can add brand-new entries (Kosovo, internal test codes) or replace bundled patterns when your rules are stricter than the defaults. Every utility — validatePostalCode, format, guessCountries, getCountryByCode, getAllCountries — reads from the merged dataset, no per-call wiring. See the Configuration tab above for a runnable example.",
+      "Yes — since 2.1.0, call `configure({ countries: { ... } })` at app boot. You can add brand-new entries (Kosovo, internal test codes) or replace bundled patterns when your rules are stricter than the defaults. Every utility — `validatePostalCode`, `format`, `guessCountries`, `getCountryByCode`, `getAllCountries` — reads from the merged dataset, no per-call wiring. See the Configuration tab above for a runnable example.",
   },
   {
     id: "geo",
     question: "Does this look up cities or do geolocation?",
     answer:
-      "No. This library validates format only — it tells you whether a string could be a valid postal code for a country, not whether it actually resolves to a real address. Subdivision-level classification (postal code → state / region) is planned for v3 using Google's sub_zips prefix data.",
+      "No. This library validates format only — it tells you whether a string could be a valid postal code for a country, not whether it actually resolves to a real address. Subdivision-level classification (postal code → state / region) is planned for v3.0.0 using Google's `sub_zips` prefix data.",
   },
   {
     id: "edge",
