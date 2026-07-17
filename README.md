@@ -218,6 +218,48 @@ guessCountries("12345");
 // → [{ countryName: "Algeria", ... }, { countryName: "Germany", ... }, ...]
 ```
 
+### `inferSubdivision(countryCode, postalCode): Subdivision[]` — _new in 2.3_
+
+Resolves a postal code to the state or province it belongs to — for auto-filling a region field from a ZIP, offline, with no API call. The postal code is validated first, so an invalid code never returns a wrong guess. Always an array sorted by code: subdivision prefixes overlap, so some codes genuinely belong to more than one region.
+
+```ts
+inferSubdivision("US", "90210");   // → [{ code: "CA", name: "California" }]
+inferSubdivision("CA", "K1A 0T6"); // → [{ code: "ON", name: "Ontario" }, { code: "QC", name: "Quebec" }]
+inferSubdivision("US", "999999");  // → []  (not a valid US ZIP)
+```
+
+`code` is the ISO 3166-2 subdivision code without the country prefix (`"CA"`, not `"US-CA"`).
+
+### `getSubdivisions(countryCode): Subdivision[]` — _new in 2.3_
+
+Every subdivision the dataset knows for a country, sorted by code — ready to render as a picker. `[]` when there is no data.
+
+### `hasSubdivisionData(countryCode): boolean` — _new in 2.3_
+
+Whether subdivision data exists for a country. Use it to tell "no data for this country" apart from "the code matched nothing" — both make `inferSubdivision` return `[]`.
+
+### `isInSubdivision(countryCode, postalCode, subdivision): boolean` — _new in 2.3_
+
+Whether a postal code is valid **and** belongs to a specific subdivision (the unprefixed ISO 3166-2 code). Kept separate from `validatePostalCode` so consumers who only validate never bundle the subdivision dataset.
+
+```ts
+isInSubdivision("US", "90210", "CA"); // → true
+isInSubdivision("US", "90210", "NY"); // → false
+```
+
+### `getPostalLabel(countryCode): string` — _new in 2.3_
+
+The name a country uses for its postal code, for labelling a form field per country instead of showing "ZIP code" worldwide. Defaults to `"postal code"`.
+
+```ts
+getPostalLabel("US"); // → "ZIP code"
+getPostalLabel("IN"); // → "PIN code"
+getPostalLabel("IE"); // → "Eircode"
+getPostalLabel("DE"); // → "postal code"
+```
+
+> **Subdivision coverage.** The upstream dataset publishes subdivision postal prefixes for **24 of 249 countries** — including the US, Canada, Brazil, India, Japan, Australia and Mexico, but **not** the UK, Germany, France or China. `inferSubdivision` returns `[]` for the rest; use `hasSubdivisionData()` to tell that apart from a validation failure. Subdivision data is tree-shaken out of the default import, so consumers who only validate pay nothing for it.
+
 ### `getCountryByCode(countryCode): Country | null`
 
 Returns the full country record (patterns, example codes, name, 2-letter code) or `null` if unknown. Accepts alpha-2 or alpha-3. `postalCodePatterns` is a `string[]` — most countries have one entry, some (e.g. GB with BFPO) have several.
