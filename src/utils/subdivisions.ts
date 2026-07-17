@@ -3,7 +3,7 @@ import { AnyCountryCode } from "../types/AnyCountryCode";
 import { Subdivision } from "../types/Subdivision";
 
 import { getCountryByCode } from "./getCountryByCode";
-import { validatePostalCode } from "./validatePostalCode";
+import { matchesPostalCode } from "./matchesPostalCode";
 
 /**
  * Resolves the input to the alpha-2 key used by the subdivision asset, or
@@ -73,7 +73,7 @@ export const inferSubdivision = (countryCode: AnyCountryCode, postalCode: string
   if (!entries || entries.length === 0) return [];
 
   // Validate BEFORE matching — prefixes accept invalid codes otherwise.
-  if (!validatePostalCode(countryCode, postalCode)) return [];
+  if (!matchesPostalCode(countryCode, postalCode)) return [];
 
   const normalized = postalCode.trim().toUpperCase();
   return entries
