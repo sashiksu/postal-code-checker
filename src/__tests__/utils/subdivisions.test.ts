@@ -1,4 +1,5 @@
-import { getSubdivisions, hasSubdivisionData, inferSubdivision } from "../../utils/subdivisions";
+import { getSubdivisions, hasSubdivisionData, inferSubdivision, isInSubdivision } from "../../utils/subdivisions";
+import { configure, resetConfig } from "../../index";
 
 describe("hasSubdivisionData", () => {
   it("is true for a country upstream publishes sub_zips for", () => {
@@ -100,5 +101,56 @@ describe("inferSubdivision", () => {
   it("returns [] for an unknown country and for empty input", () => {
     expect(inferSubdivision("ZZ", "90210")).toEqual([]);
     expect(inferSubdivision("US", "")).toEqual([]);
+  });
+});
+
+describe("isInSubdivision", () => {
+  it("passes when the code belongs to the given subdivision", () => {
+    expect(isInSubdivision("US", "90210", "CA")).toBe(true);
+  });
+
+  it("fails when the code is valid but belongs to a different subdivision", () => {
+    expect(isInSubdivision("US", "90210", "NY")).toBe(false);
+  });
+
+  it("passes when the code is ambiguous and matches one of its subdivisions", () => {
+    expect(isInSubdivision("CA", "K1A 0T6", "ON")).toBe(true);
+    expect(isInSubdivision("CA", "K1A 0T6", "QC")).toBe(true);
+  });
+
+  it("is case-insensitive on the subdivision code", () => {
+    expect(isInSubdivision("US", "90210", "ca")).toBe(true);
+  });
+
+  it("fails for an invalid postal code even if the prefix would match", () => {
+    expect(isInSubdivision("US", "999999", "AK")).toBe(false);
+  });
+
+  it("fails for a country with no subdivision data", () => {
+    expect(isInSubdivision("GB", "SW1A 1AA", "ENG")).toBe(false);
+  });
+});
+
+describe("subdivisions under configure()", () => {
+  afterEach(() => resetConfig());
+
+  it("reports no subdivision data for a user-registered country", () => {
+    configure({
+      countries: {
+        XK: { patterns: ["/^(?:[1-7]\\d{4})$/"], example: ["10000"], country: "Kosovo" },
+      },
+    });
+    expect(hasSubdivisionData("XK")).toBe(false);
+    expect(inferSubdivision("XK", "10000")).toEqual([]);
+  });
+
+  it("restores subdivision lookups after resetConfig", () => {
+    configure({
+      countries: {
+        XK: { patterns: ["/^(?:[1-7]\\d{4})$/"], example: ["10000"], country: "Kosovo" },
+      },
+    });
+    resetConfig();
+    expect(inferSubdivision("US", "90210")).toEqual([{ code: "CA", name: "California" }]);
   });
 });

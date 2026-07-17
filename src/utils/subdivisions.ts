@@ -81,3 +81,25 @@ export const inferSubdivision = (countryCode: AnyCountryCode, postalCode: string
     .map((s) => ({ code: s.code, name: s.name }))
     .sort((a, b) => a.code.localeCompare(b.code));
 };
+
+/**
+ * Whether a postal code is valid for a country **and** belongs to a specific
+ * subdivision — the unprefixed ISO 3166-2 code (`"CA"`, not `"US-CA"`).
+ *
+ * This lives here, not as an option on `validatePostalCode`, on purpose:
+ * reaching it pulls in the subdivision dataset, so only consumers who opt into
+ * subdivisions pay for it. Callers who merely validate stay dataset-free.
+ *
+ * Returns `false` for a country with no subdivision data rather than ignoring
+ * the constraint — the caller believes they checked something.
+ *
+ * @example
+ * isInSubdivision("US", "90210", "CA"); // true
+ * isInSubdivision("US", "90210", "NY"); // false
+ * isInSubdivision("CA", "K1A 0T6", "ON"); // true (also matches "QC")
+ * isInSubdivision("GB", "SW1A 1AA", "ENG"); // false — no subdivision data
+ */
+export const isInSubdivision = (countryCode: AnyCountryCode, postalCode: string, subdivision: string): boolean => {
+  const wanted = subdivision.toUpperCase();
+  return inferSubdivision(countryCode, postalCode).some((s) => s.code.toUpperCase() === wanted);
+};

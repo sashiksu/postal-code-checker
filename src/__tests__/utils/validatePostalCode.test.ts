@@ -128,33 +128,3 @@ describe("usePostalCodeValidation() → validatePostalCode delegation", () => {
     }
   });
 });
-
-describe("validatePostalCode with a subdivision constraint", () => {
-  it("passes when the code belongs to the given subdivision", () => {
-    expect(validatePostalCode("US", "90210", { subdivision: "CA" })).toBe(true);
-  });
-
-  it("fails when the code is valid but belongs to a different subdivision", () => {
-    expect(validatePostalCode("US", "90210", { subdivision: "NY" })).toBe(false);
-  });
-
-  it("passes when the code is ambiguous and matches one of its subdivisions", () => {
-    expect(validatePostalCode("CA", "K1A 0T6", { subdivision: "ON" })).toBe(true);
-    expect(validatePostalCode("CA", "K1A 0T6", { subdivision: "QC" })).toBe(true);
-  });
-
-  it("fails a subdivision constraint for a country with no subdivision data", () => {
-    // The caller believes they checked something. Silently ignoring the
-    // constraint would pass a check that never happened.
-    expect(validatePostalCode("GB", "SW1A 1AA", { subdivision: "ENG" })).toBe(false);
-  });
-
-  it("is unchanged when no options are passed", () => {
-    expect(validatePostalCode("US", "90210")).toBe(true);
-    expect(validatePostalCode("US", "abc")).toBe(false);
-  });
-
-  it("ignores an empty options object", () => {
-    expect(validatePostalCode("US", "90210", {})).toBe(true);
-  });
-});
