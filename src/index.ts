@@ -15,6 +15,7 @@ export * from "./utils/configure";
 export * from "./utils/format";
 export * from "./utils/getAllCountries";
 export * from "./utils/getCountryByCode";
+export * from "./utils/getPostalLabel";
 export * from "./utils/guessCountries";
 export * from "./utils/resetConfig";
 export * from "./utils/subdivisions";
