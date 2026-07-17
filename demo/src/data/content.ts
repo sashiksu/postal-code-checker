@@ -9,6 +9,12 @@ export type Feature = {
 
 export const WHATS_NEW: readonly Feature[] = [
   {
+    icon: "◇",
+    title: "inferSubdivision()",
+    description:
+      "Resolve a postal code to its state or province — 90210 → California, offline. Always an array (K1A 0T6 is both Ontario and Quebec), and empty for the 225 of 249 countries with no upstream subdivision data.",
+  },
+  {
     icon: "⚙",
     title: "configure()",
     description:
@@ -113,13 +119,6 @@ export const ROADMAP: readonly RoadmapItem[] = [
     snippet: `parse("GB", "SW1A 1AA")
 // → { outward: "SW1A", inward: "1AA",
 //     area: "SW", district: "1A" }`,
-  },
-  {
-    milestone: "v3.0.0",
-    title: "Subdivision lookup",
-    description: "Resolve a postal code to its state / province / region. Uses Google's sub_zips data.",
-    snippet: `classify("US", "95014")
-// → { subdivision: "CA" }`,
   },
   {
     milestone: "v3.0.0",

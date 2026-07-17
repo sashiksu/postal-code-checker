@@ -1,4 +1,13 @@
-export type ExampleId = "basic" | "batch" | "format" | "guess" | "react" | "nextjs" | "node" | "ts";
+export type ExampleId =
+  | "basic"
+  | "batch"
+  | "format"
+  | "guess"
+  | "subdivision"
+  | "react"
+  | "nextjs"
+  | "node"
+  | "ts";
 
 export type Example = {
   id: ExampleId;
@@ -83,6 +92,36 @@ guessCountries("12345");
 //   ]
 
 // Sorted alphabetically, ready to render as a picker`,
+  },
+  {
+    id: "subdivision",
+    label: "Subdivision",
+    code: `import {
+  inferSubdivision,
+  hasSubdivisionData,
+  isInSubdivision,
+} from "postal-code-checker";
+
+// Auto-fill the state field from a ZIP — no API call, no key
+inferSubdivision("US", "90210");
+// → [{ code: "CA", name: "California" }]
+
+// Always an array: prefixes overlap, so some codes are genuinely ambiguous
+inferSubdivision("CA", "K1A 0T6");
+// → [{ code: "ON", name: "Ontario" }, { code: "QC", name: "Quebec" }]
+
+// Invalid codes resolve to nothing, never to a wrong guess
+inferSubdivision("US", "999999");   // → []
+
+// 24 of 249 countries have subdivision data upstream — check before you show
+// the field, so [] never gets mistaken for a validation failure
+hasSubdivisionData("US");           // → true
+hasSubdivisionData("GB");           // → false
+inferSubdivision("GB", "SW1A 1AA"); // → []
+
+// Or constrain validation to a subdivision directly
+isInSubdivision("US", "90210", "CA"); // → true
+isInSubdivision("US", "90210", "NY"); // → false`,
   },
   {
     id: "react",

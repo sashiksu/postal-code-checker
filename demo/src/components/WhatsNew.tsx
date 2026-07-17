@@ -8,7 +8,7 @@ export function WhatsNew() {
       <SectionHeading
         headingId="whats-new-heading"
         title="What's new"
-        subtitle="2.1.0 adds configure(), format() and guessCountries() on top of the 2.0.0 data pipeline rebuilt on Google libaddressinput."
+        subtitle="2.3.0 adds inferSubdivision() — resolve a postal code to its state or province — on top of configure(), format() and guessCountries() and the Google libaddressinput data pipeline."
       />
       <div className={styles.grid}>
         {WHATS_NEW.map((item) => (

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState, type RefObject } from "react
 import {
   getAllCountries,
   getCountryByCode,
+  getSubdivisions,
   type Country,
 } from "postal-code-checker";
 import { readShareParam } from "../data/share";
@@ -19,6 +20,7 @@ type Row = {
   name: string;
   example: string;
   hasPostal: boolean;
+  subdivisions: number;
 };
 
 function buildRows(): Row[] {
@@ -30,6 +32,7 @@ function buildRows(): Row[] {
         name: c.countryName,
         example: full?.examplePostalCodes[0] ?? "",
         hasPostal: (full?.postalCodePatterns.length ?? 0) > 0,
+        subdivisions: getSubdivisions(c.countryCode).length,
       };
     })
     .sort((a, b) => a.name.localeCompare(b.name));
@@ -150,6 +153,11 @@ export function DatasetPanel({
                   className={`${styles.example} ${!r.hasPostal ? styles.none : ""}`}
                 >
                   {r.hasPostal ? r.example || "—" : "no postal codes"}
+                  {r.subdivisions > 0 && (
+                    <span className={styles.codeTag} style={{ marginLeft: 8 }}>
+                      {r.subdivisions} subdivisions
+                    </span>
+                  )}
                 </span>
               </button>
             );

@@ -4,6 +4,7 @@ import { ConfigurationPanel } from "./ConfigurationPanel";
 import { DatasetPanel } from "./DatasetPanel";
 import { FormatPanel } from "./FormatPanel";
 import { GuessPanel } from "./GuessPanel";
+import { SubdivisionPanel } from "./SubdivisionPanel";
 import { LiveEditor } from "./LiveEditor";
 import { Roadmap } from "./Roadmap";
 import { SectionHeading } from "./ui/SectionHeading";
@@ -30,6 +31,9 @@ export function Playground({ activeCountry, onPickCountry, searchRef }: Props) {
       <div className={styles.grid}>
         <FormatPanel />
         <GuessPanel onPickCountry={onPickCountry} />
+      </div>
+      <div className={styles.grid}>
+        <SubdivisionPanel />
       </div>
       <div className={styles.editorWrap}>
         <LiveEditor />
