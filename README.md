@@ -394,6 +394,9 @@ The `usePostalCodeValidation` name followed React's hook naming convention, whic
 
 ### ✅ Shipped
 
+- `inferSubdivision()` + `getSubdivisions()` + `hasSubdivisionData()` + `isInSubdivision()` — resolve a postal code to its state/province from Google's `sub_zips` prefixes (24 countries) _(2.3.0)_
+- `getPostalLabel()` — the name a country uses for its postal code, for per-country form labels _(2.3.0)_
+- `exports` map + native `.mjs` ESM build; `NOTICE` data license corrected to CC-BY 4.0 _(2.2.0)_
 - `configure()` + `resetConfig()` — user-supplied country overrides and brand-new countries via a single-place config _(2.1.0)_
 - `format()` — canonical storable form, or `null` if invalid _(2.1.0)_
 - `guessCountries()` — countries whose pattern accepts an input _(2.1.0)_
@@ -409,7 +412,6 @@ The `usePostalCodeValidation` name followed React's hook naming convention, whic
 
 ### 🔜 Planned
 
-- Subdivision-level validation (Google's `sub_zips` prefix data)
 - `createValidator()` factory for SSR / multi-tenant use cases (if demand shows up)
 - Removal of deprecated `usePostalCodeValidation` _(3.0.0)_
 
@@ -417,11 +419,11 @@ The `usePostalCodeValidation` name followed React's hook naming convention, whic
 
 ## 📊 Data Sources
 
-Postal code patterns, country names, and example codes come from Google's [`libaddressinput`](https://github.com/google/libaddressinput) project (Apache-2.0), fetched from `https://chromium-i18n.appspot.com/ssl-aggregate-address/data/<CC>`. The same dataset powers address forms in Chromium, Android, and Google Pay.
+Postal code patterns, country names, example codes, and subdivision prefixes come from Google's [`libaddressinput`](https://github.com/google/libaddressinput) project, fetched from `https://chromium-i18n.appspot.com/ssl-aggregate-address/data/<CC>`. The same dataset powers address forms in Chromium, Android, and Google Pay. `libaddressinput` licenses its source code under Apache-2.0 and its **data under CC-BY 4.0**; only the data is used here, so CC-BY 4.0 applies.
 
 `scripts/sync-postal-data.ts` regenerates `src/assets/index.ts` from upstream; `npm run sync:check` runs in CI and in `prepublishOnly` to block releases whose on-disk data has drifted from the script's output.
 
-See [`NOTICE`](./NOTICE) for the upstream Apache-2.0 attribution.
+See [`NOTICE`](./NOTICE) for the upstream CC-BY 4.0 data attribution.
 
 Prior to v2.0.0, data was sourced from the European Central Bank (ECB), retrieved 4 Aug 2024.
 

@@ -98,8 +98,10 @@ guessCountries("12345");
     label: "Subdivision",
     code: `import {
   inferSubdivision,
+  getSubdivisions,
   hasSubdivisionData,
   isInSubdivision,
+  getPostalLabel,
 } from "postal-code-checker";
 
 // Auto-fill the state field from a ZIP — no API call, no key
@@ -113,6 +115,10 @@ inferSubdivision("CA", "K1A 0T6");
 // Invalid codes resolve to nothing, never to a wrong guess
 inferSubdivision("US", "999999");   // → []
 
+// Render a state/province picker from the full list
+getSubdivisions("US");
+// → [{ code: "AK", name: "Alaska" }, { code: "AL", name: "Alabama" }, ...]
+
 // 24 of 249 countries have subdivision data upstream — check before you show
 // the field, so [] never gets mistaken for a validation failure
 hasSubdivisionData("US");           // → true
@@ -121,7 +127,12 @@ inferSubdivision("GB", "SW1A 1AA"); // → []
 
 // Or constrain validation to a subdivision directly
 isInSubdivision("US", "90210", "CA"); // → true
-isInSubdivision("US", "90210", "NY"); // → false`,
+isInSubdivision("US", "90210", "NY"); // → false
+
+// Label the field the way each country does
+getPostalLabel("US"); // → "ZIP code"
+getPostalLabel("IN"); // → "PIN code"
+getPostalLabel("DE"); // → "postal code"`,
   },
   {
     id: "react",
