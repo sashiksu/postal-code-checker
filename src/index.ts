@@ -7,6 +7,7 @@ export * from "./types/Country";
 export * from "./types/CountryCode";
 export * from "./types/CountryOption";
 export * from "./types/PostalCodeConfig";
+export * from "./types/Subdivision";
 
 // Export utilities
 export * from "./utils/ConfigurationError";
