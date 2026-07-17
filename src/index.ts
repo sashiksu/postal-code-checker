@@ -17,6 +17,7 @@ export * from "./utils/getAllCountries";
 export * from "./utils/getCountryByCode";
 export * from "./utils/guessCountries";
 export * from "./utils/resetConfig";
+export * from "./utils/subdivisions";
 export * from "./utils/validatePostalCode";
 export * from "./utils/validatePostalCodes";
 export * from "./utils/usePostalCodeValidation";
