@@ -21,6 +21,9 @@
     "./package.json": "./package.json"
   },
   "sideEffects": false,
+  "engines": {
+    "node": ">=18"
+  },
   "files": [
     "dist/index.cjs.js",
     "dist/index.mjs",
