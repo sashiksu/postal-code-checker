@@ -2,6 +2,27 @@
 
 All notable changes to `postal-code-checker` are documented here. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.0]
+
+Adds subdivision awareness, built from data Google's `libaddressinput` has always returned and this package previously discarded. Backward-compatible with 2.2.0; no migration needed. The subdivision dataset is tree-shaken out of the default import, so consumers who only validate pay nothing for it.
+
+### Added
+
+- **`inferSubdivision(countryCode, postalCode)`** — resolves a postal code to the state/province it belongs to (`"90210"` → California), offline. Validates the code first, so an invalid code returns `[]` rather than a wrong guess. Returns an array sorted by ISO 3166-2 code because subdivision prefixes overlap — `"K1A 0T6"` is both Ontario and Quebec. Accepts alpha-2 and alpha-3.
+- **`getSubdivisions(countryCode)`** — every subdivision the dataset knows for a country, sorted, ready to render as a picker.
+- **`hasSubdivisionData(countryCode)`** — whether subdivision data exists for a country, so an empty `inferSubdivision` result caused by missing data is distinguishable from one caused by no match.
+- **`isInSubdivision(countryCode, postalCode, subdivision)`** — whether a code is valid and belongs to a given subdivision (unprefixed ISO 3166-2 code). Kept separate from `validatePostalCode` so the subdivision dataset stays off the default validation path.
+- **`getPostalLabel(countryCode)`** — the name a country uses for its postal code (`"ZIP code"`, `"PIN code"`, `"Eircode"`, default `"postal code"`), for labelling form fields per country.
+- **`Subdivision`** type — `{ code: string; name: string }`.
+
+### Coverage
+
+- Subdivision features cover **24 of 249 countries** — the ones for which upstream publishes `sub_zips` prefix data, including the US, Canada, Brazil, India, Japan, Australia and Mexico. The UK, Germany, France and China are not among them; `inferSubdivision` returns `[]` there. This limit is inherent to the upstream data, not a package restriction.
+
+### Data pipeline
+
+- The sync script now emits two additional generated assets — `src/assets/subdivisions.ts` and `src/assets/postalLabels.ts` — from `sub_zips`/`sub_isoids`/`sub_lnames` and `zip_name_type`. Both are gated by the same release-time `sync:check` drift check as the country data, so they cannot go stale without blocking a publish.
+
 ## [2.2.0]
 
 Packaging and licensing correctness. No API changes and no data changes — every export behaves exactly as it did in 2.1.0. Upgrading is safe for all consumers, and the `exports` map is the only change with any resolution impact.

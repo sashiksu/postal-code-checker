@@ -7,6 +7,7 @@ export * from "./types/Country";
 export * from "./types/CountryCode";
 export * from "./types/CountryOption";
 export * from "./types/PostalCodeConfig";
+export * from "./types/Subdivision";
 
 // Export utilities
 export * from "./utils/ConfigurationError";
@@ -14,8 +15,10 @@ export * from "./utils/configure";
 export * from "./utils/format";
 export * from "./utils/getAllCountries";
 export * from "./utils/getCountryByCode";
+export * from "./utils/getPostalLabel";
 export * from "./utils/guessCountries";
 export * from "./utils/resetConfig";
+export * from "./utils/subdivisions";
 export * from "./utils/validatePostalCode";
 export * from "./utils/validatePostalCodes";
 export * from "./utils/usePostalCodeValidation";
