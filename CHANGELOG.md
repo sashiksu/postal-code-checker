@@ -2,6 +2,25 @@
 
 All notable changes to `postal-code-checker` are documented here. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.0]
+
+Packaging and licensing correctness. No API changes and no data changes — every export behaves exactly as it did in 2.1.0. Upgrading is safe for all consumers, and the `exports` map is the only change with any resolution impact.
+
+### Fixed
+
+- **`NOTICE` cited the wrong license for the bundled country data.** Google's `libaddressinput` splits licensing by component — its *source code* is Apache-2.0, its *data* is CC-BY 4.0. This package incorporates only the data, so CC-BY 4.0 is the applicable license. `NOTICE` and the generated header in `src/assets/index.ts` now say so. This is a documentation correction; no data or code changed as a result of it.
+- **The ESM build was not resolvable as ESM by Node.** `dist/index.esm.js` used a `.js` extension in a package with no `"type"` field, so Node classified it as CommonJS and only loaded it by falling back to syntax detection, emitting a `MODULE_TYPELESS_PACKAGE_JSON` performance warning. The ESM bundle is now emitted as `dist/index.mjs` and loads natively with no warning.
+
+### Added
+
+- **`exports` map** with correct `import` / `require` conditions and per-condition type declarations (`dist/index.d.mts` for ESM, `dist/index.d.ts` for CJS). Verified to resolve from `require()`, `import`, and TypeScript under `moduleResolution: "node16"` from both `.mts` and `.cts` call sites.
+- **`sideEffects: false`**, letting bundlers tree-shake the package.
+
+### Changed
+
+- **ESM bundle renamed** `dist/index.esm.js` → `dist/index.mjs`; the `module` field points at the new path. Consumers using `import`, `require()`, or a bundler are unaffected. Only code deep-importing `postal-code-checker/dist/index.esm.js` directly — never a documented entry point — needs updating to the package name.
+- **Country data re-synced** against upstream (snapshot `2026-07-17`). Upstream returned no pattern changes: 178 countries with a postal system, 71 without, zero drift from the 2026-04-18 snapshot.
+
 ## [2.1.0]
 
 Adds three new public APIs built on the existing 2.0 dataset: `format()` returns the canonical storable form of a postal code, `guessCountries()` lists every country whose pattern accepts an input, and `configure()` + `resetConfig()` let you override built-in country data or register brand-new countries at runtime — every utility in the package honors the override. Backward-compatible with 2.0; no migration needed.

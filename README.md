@@ -65,13 +65,34 @@ Works in **React, Next.js, Vue, Svelte, Angular, Node.js, Deno, Bun, and plain b
 
 ## 💡 Why postal-code-checker?
 
-- 🌍 **249 countries** — the full ISO 3166-1 list, sourced live from Google's `libaddressinput`. Regenerated per release so the regexes never drift from upstream.
+Most postal-code libraries ship a hand-written list of regexes. Someone typed
+them in once, and they drift quietly as postal authorities change formats.
+
+**This one is generated, not typed.** Every pattern is regenerated from Google's
+first-party [`libaddressinput`](https://github.com/google/libaddressinput)
+Address Data Service — the dataset behind Chromium, Android, and Google Pay
+address forms — and the release is **blocked if the bundled data has drifted
+from upstream**. `src/assets/index.ts` carries a snapshot date, and
+`npm run sync:check` fails the publish if it is stale. The data is not a
+one-time import; it is a build output with a provenance trail.
+
+That is what the rest of the feature list rests on:
+
+- 🌍 **249 countries** — the full ISO 3166-1 alpha-2 and alpha-3 list, including
+  the countries that have **no postal system at all**, where the correct answer
+  is "this field does not apply" rather than a false rejection.
+- 🔄 **Regenerated per release, drift-gated** — a stale dataset cannot ship.
 - 📋 **Batch API** — `validatePostalCodes(country, codes[])` returns an index-aligned `boolean[]`. Designed for CSV imports, bulk address uploads, and form arrays.
+- 🧩 **Extensible at runtime** — `configure()` registers your own countries or
+  overrides a bundled one. Codes outside ISO 3166-1 (Kosovo, internal region
+  codes) work without forking the package.
+- 🔎 **More than a boolean** — `format()` returns the canonical storable form,
+  `guessCountries()` infers candidates from a bare code.
 - 🔤 **Alpha-2 and alpha-3 both work** — call with `"US"` or `"USA"`, `"GB"` or `"GBR"`. No branching at your call sites.
 - ✨ **Forgiving input** — case-insensitive and whitespace-tolerant. `"k1a 0t6"`, `" K1A 0T6 "`, and `"K1A0T6"` all validate equivalently where the country allows it.
-- 🪶 **Zero runtime dependencies** — one install, nothing else pulled in. Keeps `node_modules` small and supply-chain surface minimal.
-- 🧷 **TypeScript-first** — `.d.ts` bundled. No `@types/*` package to install.
-- 📦 **Dual ESM + CommonJS** — modern `import` and legacy `require()` both work out of the box.
+- 🪶 **Zero dependencies, TypeScript-first, dual ESM + CommonJS** — bundled
+  `.d.ts`, no `@types/*` install, `import` and `require()` both resolve through
+  a strict `exports` map.
 - 🌐 **Framework-agnostic** — React, Next.js, Vue, Svelte, Angular, Node.js, Deno, Bun, plain browser JS.
 
 ---
